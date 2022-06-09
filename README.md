@@ -10,3 +10,6 @@ rats pit data science
 
 <h2> Icaro Andrade Souza Bacelar </h2>
 <p>Hey all! My name is Icaro, I'm a rising Sophomore at Columbia College of Columbia University. I'm probably majoring in Financial Econ and Computer Science. I'm Brazilian and I love comedies, food, and animals! </p>
+
+<h2>Hi im Mariana </h2>
+<p> A senior in computer science at lehman and dipping my toes into public interest technology. Im a New York native and want to contribute to my community. :)  </p>
