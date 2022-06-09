@@ -1,6 +1,19 @@
-# RatsData
+# RatsData in NYC Team for PIT-DSC fellowship 2022
 
-rats pit data science
+<h3> Estimating the number of rats in New York City [Rats]
+</h3>
+
+<h3>Project Outline: </h3>
+<p> 
+You do not have a genuine New York City experience if you have not spotted a rat on the street or in the subway. It has been reported that, due to increased outdoor dining, there has been an increase in rat sightings. There is a saying that there are more rats than humans in NYC. Is that true? An alum of the Department of Statistics at Columbia, Dr. Jonathan Auerbach, examined this question using available open data in 2014. In this project, we would like to use data from recent years to examine trends and distributions of rats in NYC using Dr. Auerbach’s published methods and validate the estimates using potential other indirect indicators. 
+</p>
+<h3>Desired Outline: </h3>
+<p>
+We would like students to reproduce the 2014 analysis based on Dr. Auerbach’s published method. Then we would like students to apply the method to data from 2015-2022 and create an R/Shiny dashboard that would allow a user to explore and compare estimated number of rats by neighborhoods and by year. A data story, such as a blog, would also be a potential good way to summarize the project’s findings. 
+</p>
+
+<h3>Short Bios about contributors/ Team members</h3>
+
 
 <h2> Chris Kevin Basa Andrade </h2>
 <p> Hello fellow humans! I'm Chris, I'm gonna be a senior at Lehman College this coming Fall. I'm a Computer Science major and am planning to tack on some Minors but I keep forgetting to talk to my academic advisor. People tend to think I don't like talk much or socialize, but I prefer looking at it as I listen more than I talk. I'm from the Philippines and I've been watching anime and reading manga even when it was cool to bully people who like those. I like to talk and listen about Minecraft, Politics, Marvel, Building PCs, to reminiscing what a disappointment the last season of Game of Thrones was, and everything in between. </p>
