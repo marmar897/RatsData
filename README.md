@@ -12,7 +12,7 @@ You do not have a genuine New York City experience if you have not spotted a rat
 We would like students to reproduce the 2014 analysis based on Dr. Auerbach’s published method. Then we would like students to apply the method to data from 2015-2022 and create an R/Shiny dashboard that would allow a user to explore and compare estimated number of rats by neighborhoods and by year. A data story, such as a blog, would also be a potential good way to summarize the project’s findings. 
 </p>
 
-<h3>Short Bios about contributors/ Team members</h3>
+<h3>Short Bios about contributors/ Team members: </h3>
 
 
 <h2> Chris Kevin Basa Andrade </h2>
