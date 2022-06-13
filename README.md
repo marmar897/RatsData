@@ -2,6 +2,7 @@
 
 <h3> Estimating the number of rats in New York City [Rats]
 </h3>
+<p>https://github.com/jauerbach/estimating-nyc-rat-populationß </p> 
 
 <h3>Project Outline: </h3>
 <p> 
