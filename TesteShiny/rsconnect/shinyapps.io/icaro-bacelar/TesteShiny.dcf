@@ -1,0 +1,13 @@
+name: TesteShiny
+title: TesteShiny
+username:
+account: icaro-bacelar
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 6488466
+bundleId: 6007142
+url: https://icaro-bacelar.shinyapps.io/TesteShiny/
+when: 1655223576.22794
+lastSyncTime: 1655223576.22795
+asMultiple: FALSE
+asStatic: FALSE
