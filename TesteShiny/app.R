@@ -10,21 +10,12 @@
 library(shiny)
 library("tidyverse")
 
-calls <- read_csv("nyc_rodent_compliantsReduced.csv")
-
-# select "Rat Sightings" with year and BBL (lot) not missing
-df <-
-  calls %>%
-  mutate(Date = as.Date(`Created Date`, format = "%m/%d/%Y"),
-         Year = format(Date, "%y")) %>%
-
-  group_by(BBL, Year) %>%
-  summarize(count = n())
+calls <- read_csv("nyc_rodent_compliantsReduced2.csv")
 
 # Function to estimate number of rats in any year (%y between 11 and 21) 
 capture_recapture <- function(year) {
-  lots_year_1 <- df %>% filter(Year == year - 1) %>% pull(BBL)
-  lots_year_2 <- df %>% filter(Year == year) %>% pull(BBL)
+  lots_year_1 <- calls %>% filter(Year == year - 1) %>% pull(BBL)
+  lots_year_2 <- calls %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
   number_in_year_2 <- length(lots_year_2)
   number_in_year_1_and_2 <- sum(lots_year_1 %in% lots_year_2)
