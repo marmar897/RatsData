@@ -11,7 +11,6 @@ library(tigris)
 #modzcta shapefiles from NYC open data
 unzip("Modified Zip Code Tabulation Areas (MODZCTA).zip")
 modzcta <- st_read("geo_export_9d592ba8-7629-4558-9e78-e1e536b453d9.shp")
-head(modzcta)
 
 df1 <- read.csv("rats_cleaned.csv")
 df <- df1 %>%
