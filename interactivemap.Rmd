@@ -22,9 +22,11 @@ modzcta <- st_read("geo_export_3978893c-1fb8-4e9c-b3b7-93c7014999d4.shp")
 head(modzcta)
 
 df1 <- read.csv("Data/rats_cleaned.csv")
-total <- sum(df1$count) #total 311 calls
-#percent of calls in each zip code
 df <- df1 %>%
+      filter(Year > 2014)
+#percent of calls in each zip code
+total <- sum(df$count) #total 311 calls
+df <- df %>%
       group_by(zip) %>%
       summarize(percent = (sum(count)/total)*100) 
 df$zip<-as.character(df$zip)
@@ -41,7 +43,6 @@ labels <-sprintf(
   lapply(htmltools::HTML)
 
 pal <-colorBin(palette="Reds", 9, domain = all_modzcta$percent)
-#OrRd
 
 #build interactive map
 map_interactive <-all_modzcta %>%
@@ -60,6 +61,7 @@ map_interactive <-all_modzcta %>%
                     fillOpacity = 1,
                     opacity = 1,
                     bringToFront = TRUE))%>%
+addLegend("topleft",
           pal = pal,
           values = ~percent,
           title = "% of Total 311 Rat Sightings Reported",
