@@ -16,6 +16,7 @@ head(modzcta)
 df1 <- read.csv("rats_cleaned.csv")
 df <- df1 %>%
   filter(Year > 2014)
+
 #percent of calls in each zip code
 total <- sum(df$count) #total 311 calls
 df <- df %>%
@@ -24,8 +25,6 @@ df <- df %>%
 df$zip<-as.character(df$zip)
 
 all_modzcta <- geo_join(modzcta, df, "modzcta", "zip", how = "inner")
-saveRDS(all_modzcta, "all_modzcta.RDS")
-
 all_modzcta <-all_modzcta %>%
   st_transform(crs = "+init=epsg:4326")
 
