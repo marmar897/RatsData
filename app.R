@@ -56,7 +56,6 @@ ui <- navbarPage("NYC Rat Population Estimate",
     tabPanel("Other Data Visualizations")
 )
 
-
 server <- function(input, output, session) {
 
     output$percent_map <- renderLeaflet({  
