@@ -61,3 +61,7 @@ qplot(x = factor(2011:2021),
        y = "estimated rat population") +
   theme_bw()
 
+#Mariana's edits to R script for more graphs, plots and get familiar
+# R, Rstudio and data :)
+
+
