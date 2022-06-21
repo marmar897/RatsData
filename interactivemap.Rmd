@@ -60,6 +60,7 @@ map_interactive <-all_modzcta %>%
                     fillOpacity = 1,
                     opacity = 1,
                     bringToFront = TRUE))%>%
+   addLegend("topleft",
           pal = pal,
           values = ~percent,
           title = "% of Total 311 Rat Sightings Reported",
