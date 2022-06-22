@@ -15,8 +15,9 @@ unzip("Modified Zip Code Tabulation Areas (MODZCTA).zip")
 modzcta <- st_read("geo_export_9d592ba8-7629-4558-9e78-e1e536b453d9.shp")
 head(modzcta)
 
-
+#
 df1 <- read.csv("rats_cleaned.csv")
+
 #total <- sum(df1$count)
 
 #df2 <-
@@ -26,50 +27,34 @@ df1 <- read.csv("rats_cleaned.csv")
 #newTotal <-sum(df2$count)
 
 
-# creating 2019 and 2020 dataframes
-zips_year_1 <- df1 %>% filter(Year == 2019) 
-zips_year_2 <- df1 %>% filter(Year == 2020)
+# creating 2021 and 2020 dataframes
+zips_year_1 <- df1 %>% filter(Year == 2020) 
+zips_year_2 <- df1 %>% filter(Year == 2021)
 
 # estimate number of rats in each zipcode
-#capture_recapture <- function(zipcode)
-
+#capture_recapture function with zipcode filter and addition year 2019-2020 dataset
+#
 count_per_zip <- function(zipcode){
-  num_y1 <- zips_year_1 %>% filter(zip == zipcode)
-  num_y2 <- zips_year_2 %>% filter (zip == zipcode)
-  number_in_year_1 <- sum(num_y1$count)
+  lots_y2020 <- zips_year_1 %>% filter(zip == zipcode)  %>%pull(BBL)
+  lots_y2021 <- zips_year_2 %>% filter (zip == zipcode) %>%pull(BBL)
+  number_in_year_1 <- length(lots_y2020)
   #print(number_in_year_1)
-  number_in_year_2 <- sum(num_y2$count)
+  number_in_year_2 <- length(lots_y2021)
   #print(number_in_year_2)
-  number_in_year_1_and_2 <- sum(num_y1$count %in% num_y2$count)
+  number_in_year_1_and_2 <- sum(lots_y2021 %in% lots_y2020)
+  #sum(lots_year_1 %in% lots_year_2)
   #print(number_in_year_2)
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
-  
 }
 
-#count_per_zip(10003)
+# testing function count_per_zip(10003)
 
-  #number_in_year_1_and_2 <- sum( %in% zips_year_2)
 
-#number_in_year_1 <- nrow(zips_year_1)
-#number_in_year_2 <- nrow(zips_year_2)
-#number_in_year_1_and_2 <- sum(zips_year_1 %in% zips_year_2)
-#number_in_year_1_and_2 <- newTotal
 
-#num_zipcodes_w_rats <- number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
-
-# Estimated number of rats if each lot has 50 rats
-#50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
-
-#num_zipcodes_w_rats * 50 
-
-  #summarize(numRats = (sum)) %>%
-
-#total <- sum(df1$count) #total 311 calls
-#percent of calls in each zip code
-
+#data processing
 df <- df1 %>%
       group_by(zip) %>%
-      summarize(percent = (count_per_zip(zip))/100) 
+      summarize(population = (count_per_zip(zip))) 
 df$zip<-as.character(df$zip)
 head(df)
 
@@ -83,9 +68,9 @@ all_modzcta <- geo_join(modzcta, df, "modzcta", "zip", how = "inner")
 
 labels <-sprintf(
   "<strong>%s</strong><br/>%g%% ",
-  all_modzcta$modzcta,all_modzcta$percent) %>%
+  all_modzcta$modzcta,all_modzcta$population) %>%
   lapply(htmltools::HTML)
-pal <-colorBin(palette="Reds", 9, domain = all_modzcta$percent)
+pal <-colorBin(palette="Reds", 9, domain = all_modzcta$population)
 #OrRd
 #build interactive map
 map_interactive <-all_modzcta %>%
@@ -97,7 +82,7 @@ map_interactive <-all_modzcta %>%
               smoothFactor = 0.5,
               opacity = 1,
               fillOpacity = 0.7,
-              fillColor = ~pal(percent),
+              fillColor = ~pal(population),
               highlightOptions = highlightOptions(
                     weight = 5,
                     color = "black",
@@ -106,8 +91,8 @@ map_interactive <-all_modzcta %>%
                     bringToFront = TRUE))%>%
   addLegend("topleft",
           pal = pal,
-          values = ~percent,
-          title = "Estimated number of rat population by zipcodes 2019-2020",
+          values = ~population,
+          title = "Estimated number of rat population by zipcodes 2020-2021",
           opacity = 0.7)
 map_interactive
 #saveWidget(map_interactive, "nyc_average_rats.html")
