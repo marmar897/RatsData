@@ -1,0 +1,114 @@
+```{r}
+#install.packages("shiny")
+library(shiny)
+install.packages("leaflet")
+install.packages("sf")
+library(sf)
+library(leaflet)
+
+install.packages("tigris")
+library(tigris)
+library("tidyverse")
+
+#modzcta shapefiles from NYC open data
+unzip("Modified Zip Code Tabulation Areas (MODZCTA).zip")
+modzcta <- st_read("geo_export_9d592ba8-7629-4558-9e78-e1e536b453d9.shp")
+head(modzcta)
+
+
+df1 <- read.csv("rats_cleaned.csv")
+#total <- sum(df1$count)
+
+#df2 <-
+  # df1 %>% 
+  #filter(Year == 2020 & 2019)
+    #group_by(zip)
+#newTotal <-sum(df2$count)
+
+
+# creating 2019 and 2020 dataframes
+zips_year_1 <- df1 %>% filter(Year == 2019) 
+zips_year_2 <- df1 %>% filter(Year == 2020)
+
+# estimate number of rats in each zipcode
+#capture_recapture <- function(zipcode)
+
+count_per_zip <- function(zipcode){
+  num_y1 <- zips_year_1 %>% filter(zip == zipcode)
+  num_y2 <- zips_year_2 %>% filter (zip == zipcode)
+  number_in_year_1 <- sum(num_y1$count)
+  #print(number_in_year_1)
+  number_in_year_2 <- sum(num_y2$count)
+  #print(number_in_year_2)
+  number_in_year_1_and_2 <- sum(num_y1$count %in% num_y2$count)
+  #print(number_in_year_2)
+  50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
+  
+}
+
+#count_per_zip(10003)
+
+  #number_in_year_1_and_2 <- sum( %in% zips_year_2)
+
+#number_in_year_1 <- nrow(zips_year_1)
+#number_in_year_2 <- nrow(zips_year_2)
+#number_in_year_1_and_2 <- sum(zips_year_1 %in% zips_year_2)
+#number_in_year_1_and_2 <- newTotal
+
+#num_zipcodes_w_rats <- number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
+
+# Estimated number of rats if each lot has 50 rats
+#50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
+
+#num_zipcodes_w_rats * 50 
+
+  #summarize(numRats = (sum)) %>%
+
+#total <- sum(df1$count) #total 311 calls
+#percent of calls in each zip code
+
+df <- df1 %>%
+      group_by(zip) %>%
+      summarize(percent = (count_per_zip(zip))/100) 
+df$zip<-as.character(df$zip)
+head(df)
+
+
+
+all_modzcta <- geo_join(modzcta, df, "modzcta", "zip", how = "inner")
+
+#head(all_modzcta)
+#saveRDS(all_modzcta, "all_modzcta.RDS")
+#labels when you hover over a zip block
+
+labels <-sprintf(
+  "<strong>%s</strong><br/>%g%% ",
+  all_modzcta$modzcta,all_modzcta$percent) %>%
+  lapply(htmltools::HTML)
+pal <-colorBin(palette="Reds", 9, domain = all_modzcta$percent)
+#OrRd
+#build interactive map
+map_interactive <-all_modzcta %>%
+  st_transform(crs = "+init=epsg:4326") %>% #transform data into coordinate system
+  leaflet() %>%
+  addProviderTiles(provider = "CartoDB.Positron") %>%
+  addPolygons(label = labels,
+              stroke = FALSE,
+              smoothFactor = 0.5,
+              opacity = 1,
+              fillOpacity = 0.7,
+              fillColor = ~pal(percent),
+              highlightOptions = highlightOptions(
+                    weight = 5,
+                    color = "black",
+                    fillOpacity = 1,
+                    opacity = 1,
+                    bringToFront = TRUE))%>%
+  addLegend("topleft",
+          pal = pal,
+          values = ~percent,
+          title = "Estimated number of rat population by zipcodes 2019-2020",
+          opacity = 0.7)
+map_interactive
+#saveWidget(map_interactive, "nyc_average_rats.html")
+```
