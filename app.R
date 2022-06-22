@@ -26,9 +26,39 @@ rats_percent <- df %>%
   summarize(percent = (sum(count)/total)*100) 
 rats_percent$zip<-as.character(rats_percent$zip)
 
-all_modzcta <- geo_join(modzcta, rats_percent, "modzcta", "zip", how = "inner")
+
+#ORGANIZING DATA FOR POPULATION MAP (mari)
+
+# creating 2019 and 2020 dataframes
+zips_year_1 <- df %>% filter(Year == 2019) 
+zips_year_2 <- df %>% filter(Year == 2020)
+
+# estimate number of rats in each zipcode
+# count_per_zip <- function(zipcode){
+#   num_y1 <- zips_year_1 %>% filter(zip == zipcode)
+#   num_y2 <- zips_year_2 %>% filter (zip == zipcode)
+#   number_in_year_1 <- sum(num_y1$count)
+#   #print(number_in_year_1)
+#   number_in_year_2 <- sum(num_y2$count)
+#   #print(number_in_year_2)
+#   number_in_year_1_and_2 <- sum(num_y1$count %in% num_y2$count)
+#   #print(number_in_year_2)
+#   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
+# }
+
+#THIS NEEDS UPDATING
+rats_pop <- df %>%
+  group_by(zip) %>%
+  summarize(total = sum(count)*50)  
+rats_pop$zip<-as.character(rats_pop$zip)
+
+
+#final dataframes to use
+rats <- merge(rats_percent, rats_pop)
+all_modzcta <- geo_join(modzcta, rats, "modzcta", "zip", how = "inner")
 all_modzcta <-all_modzcta %>%
   st_transform(crs = "+init=epsg:4326")
+
 
 #Palettes and Labels for percent map
 labels_percent <-sprintf(
@@ -36,39 +66,24 @@ labels_percent <-sprintf(
   all_modzcta$modzcta,all_modzcta$percent) %>%
   lapply(htmltools::HTML)
 
-pal <-colorBin(palette="Reds", 9, domain = all_modzcta$percent)
+pal1 <-colorBin(palette="Blues", 9, domain = all_modzcta$percent)
 
+#Palettes and Labels for pop map
+labels_pop <-sprintf(
+  "<strong>%s</strong><br/>%g rats ",
+  all_modzcta$modzcta,all_modzcta$total) %>%
+  lapply(htmltools::HTML)
 
-#ORGANIZING DATA FOR POPULATION MAP (mari)
-# creating 2019 and 2020 dataframes
-zips_year_1 <- df %>% filter(Year == 2019) 
-zips_year_2 <- df %>% filter(Year == 2020)
+pal2 <-colorBin(palette="Reds", 9, domain = all_modzcta$total)
 
-# estimate number of rats in each zipcode
-count_per_zip <- function(zipcode){
-  num_y1 <- zips_year_1 %>% filter(zip == zipcode)
-  num_y2 <- zips_year_2 %>% filter (zip == zipcode)
-  number_in_year_1 <- sum(num_y1$count)
-  #print(number_in_year_1)
-  number_in_year_2 <- sum(num_y2$count)
-  #print(number_in_year_2)
-  number_in_year_1_and_2 <- sum(num_y1$count %in% num_y2$count)
-  #print(number_in_year_2)
-  50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
-}
-
-rats_pop <- df %>%
-  group_by(zip) %>%
-  summarize(total = count_per_zip(zip))  
-rats_pop$zip<-as.character(rats_pop$zip)
-
-all_modzcta_pop <- geo_join(modzcta, rats_pop, "modzcta", "zip", how = "inner")
-
-# 3 tabs
+# shinyapp with tabs
 ui <- navbarPage("NYC Rat Population Estimate",
   
     tabPanel("Rat Sighting Reports by ZIP",
              leafletOutput("percent_map")),
+    
+    tabPanel("Estimated 2020 Rat Population by ZIP",
+            leafletOutput("pop_map")),
     
     tabPanel("Estimated Rat Population by ZIP",
               sidebarLayout(
@@ -95,7 +110,7 @@ server <- function(input, output, session) {
                     smoothFactor = 0.5,
                     opacity = 1,
                     fillOpacity = 0.7,
-                    fillColor = ~pal(percent),
+                    fillColor = ~pal1(percent),
                     highlightOptions = highlightOptions(
                       weight = 5,
                       color = "black",
@@ -104,11 +119,35 @@ server <- function(input, output, session) {
                       bringToFront = TRUE)
         )%>%
         addLegend("topleft",
-                  pal = pal,
+                  pal = pal1,
                   values = ~percent,
                   title = "% of Total 311 Rat Sightings Reported",
                   opacity = 0.7)
  
+    })
+    
+    output$pop_map <- renderLeaflet({
+      leaflet(all_modzcta) %>%
+        addProviderTiles(provider = "CartoDB.Positron") %>%
+        addPolygons(label = labels_pop,
+                    stroke = FALSE,
+                    smoothFactor = 0.5,
+                    opacity = 1,
+                    fillOpacity = 0.7,
+                    fillColor = ~pal2(total),
+                    highlightOptions = highlightOptions(
+                      weight = 5,
+                      color = "black",
+                      fillOpacity = 1,
+                      opacity = 1,
+                      bringToFront = TRUE)
+        )%>%
+        addLegend("topleft",
+                  pal = pal2,
+                  values = ~total,
+                  title = "Estimated Number of Rats",
+                  opacity = 0.7)
+
     })
     
     output$rats <- renderPlot({
