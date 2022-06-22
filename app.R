@@ -13,12 +13,10 @@ unzip("Modified Zip Code Tabulation Areas (MODZCTA).zip")
 modzcta <- st_read("geo_export_9d592ba8-7629-4558-9e78-e1e536b453d9.shp")
 
 df <- read.csv("rats_cleaned.csv")
-
-#ORGANIZING DATA FOR PERCENT MAP (angela)
-
 df <- df %>%
   filter(Year > 2014)
 
+#ORGANIZING DATA FOR PERCENT MAP (angela)
 #percent of calls in each zip code
 total <- sum(df$count) #total 311 calls
 rats_percent <- df %>%
