@@ -7,26 +7,42 @@ output: html_document
 
 ```{r}
 library("tidyverse")
-library(dplyr)
 ```
 
 ```{r}
 calls <- read_csv("nyc_rodent_compliants.csv")
-rename(calls, Incident_Zip = "Incident Zip")
 ```
 
 ```{r}
+# df <-
+#   calls %>%
+#   mutate(Date = as.Date(`Created Date`, format = "%m/%d/%Y"),
+#          Month_Year = format(Date, "%m/%y")) %>%
+#   filter(Descriptor == "Rat Sighting",
+#          Month_Year != 01/22, Month_Year >= 01/14) %>%
+#   select( BBL, Borough, `Incident Zip`, Month_Year) %>%
+#   na.omit() %>%
+#   group_by(BBL, Borough, `Incident Zip`, Month_Year) %>%
+#   summarize(count = n()) %>% 
+#   filter(BBL != 0, Borough > 10000)
+
 df <-
   calls %>%
   mutate(Date = as.Date(`Created Date`, format = "%m/%d/%Y"),
          Year = format(Date, "%y")) %>%
   filter(Descriptor == "Rat Sighting",
-         Year != 22, Year >= 14) %>%
-  select(Year, BBL, Borough) %>%
+         Year != 01/22, Year >= 01/14) %>%
+  select( BBL, Borough, `Incident Zip`, Year) %>%
   na.omit() %>%
-  group_by(BBL, Year, Borough, Incident_Zip) %>%
+  group_by(BBL, Borough, `Incident Zip`, Year) %>%
   summarize(count = n()) %>% 
   filter(BBL != 0, Borough > 10000)
+
+```
+
+```{r}
+
+
 ```
 
 ```{r}
@@ -68,12 +84,12 @@ library(ggplot2)
 ggplot(df, aes(fill= Borough, y = count , x = Year)) +
   geom_bar(position = "stack", stat = "identity") 
 ```
-```{r}
-lots_year_18 <- df %>% filter(Year == "18") %>% select(BBL, Year, Borough, `Incident Zip`)
-lots_year_19 <- df %>% filter(Year == "19") %>% select(BBL, Year, Borough, `Incident Zip`)
-number_in_year_18 <- length(lots_year_18)
-number_in_year_19 <- length(lots_year_19)
-number_in_year_18_and_19 <- sum(lots_year_18 %in% lots_year_19)
-  
-number_in_year_18 * number_in_year_19 / number_in_year_18_and_19
+
+```{r replicating capture recapture but for datafram not just an integer}
+lots_year_18 <- df %>% filter(Year == "18") %>% select(BBL, Borough, `Incident Zip`)
+lots_year_19 <- df %>% filter(Year == "19") %>% select(BBL, Borough, `Incident Zip`)
+
+common_lots_18_19 <- inner_join(lots_year_18, lots_year_19)
+```
+
 ```
