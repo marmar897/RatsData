@@ -5,10 +5,9 @@ account: icaro-bacelar
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 6536474
-bundleId: 6035062
+bundleId: 6037286
 url: https://icaro-bacelar.shinyapps.io/icaroTentativeHeatMap/
-when: 1655970728.32066
-lastSyncTime: 1655970728.32066
+when: 1656013091.5354
+lastSyncTime: 1656013091.53541
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: modzcta.csv
