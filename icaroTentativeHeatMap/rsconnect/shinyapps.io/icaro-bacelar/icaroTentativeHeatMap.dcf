@@ -1,0 +1,14 @@
+name: icaroTentativeHeatMap
+title: icaroTentativeHeatMap
+username:
+account: icaro-bacelar
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 6536474
+bundleId: 6035062
+url: https://icaro-bacelar.shinyapps.io/icaroTentativeHeatMap/
+when: 1655970728.32066
+lastSyncTime: 1655970728.32066
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: modzcta.csv

@@ -1,0 +1,13 @@
+name: RatsTest2-icaroB
+title: RatsTest2-icaroB
+username:
+account: icaro-bacelar
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 6523158
+bundleId: 6026792
+url: https://icaro-bacelar.shinyapps.io/RatsTest2-icaroB/
+when: 1655798095.38073
+lastSyncTime: 1655798095.38074
+asMultiple: FALSE
+asStatic: FALSE
