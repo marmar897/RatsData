@@ -1,0 +1,3 @@
+Here we use the capture-reqcapture across NYC and reduce it to a ZIP - Big assumption
+Too many files used in the app
+App is a bit slow
