@@ -41,10 +41,6 @@ df <-
 ```
 
 ```{r}
-
-```
-
-```{r}
 lots_year_1 <- df %>% filter(Year == "14") %>% pull(BBL)
 lots_year_2 <- df %>% filter(Year == "15") %>% pull(BBL)
 number_in_year_1 <- length(lots_year_1)
@@ -84,11 +80,19 @@ ggplot(df, aes(fill= Borough, y = count , x = Year)) +
   geom_bar(position = "stack", stat = "identity") 
 ```
 
-```{r replicating capture recapture but for datafram not just an integer}
+```{r replicating capture recapture but for dataframe not just an integer}
 lots_year_18 <- df %>% filter(Year == "18") %>% select(BBL, Borough, `Incident Zip`)
 lots_year_19 <- df %>% filter(Year == "19") %>% select(BBL, Borough, `Incident Zip`)
 
 common_lots_18_19 <- inner_join(lots_year_18, lots_year_19)
 ```
 
+```{r calls by borough}
+dfManhattan <- df %>% filter(Borough == "MANHATTAN")
+dfBronx <- df %>% filter(Borough == "BRONX")
+dfBrooklyn <- df %>% filter(Borough == "BROOKLYN")
+dfStatIsl <- df %>% filter(Borough == "STATEN ISLAND")
+dfQueens <- df %>% filter(Borough == "QUEENS")
+
 ```
+
