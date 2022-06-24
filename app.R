@@ -23,7 +23,7 @@ icaro <- read.csv("ratsComplete3.csv")
 #percent of calls in each zip code
 total <- sum(df$count) #total 311 calls
 rats_percent <- df %>%
-  filter(Year > 13) %>%
+  filter(Year == 20) %>%
   group_by(Zip) %>%
   summarize(percent = (sum(count)/total)*100) 
 rats_percent$Zip<-as.character(rats_percent$Zip)
@@ -169,7 +169,7 @@ pal2 <-colorBin(palette="Reds", 9, domain = all_modzcta$total)
 ui <- navbarPage("NYC Rat Population Estimate",
     
     #angela
-    tabPanel("Rat Sighting Reports by ZIP",
+    tabPanel("2020 Rat Sighting Reports by ZIP",
              leafletOutput("percent_map")),
     
     #mari
