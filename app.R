@@ -7,54 +7,144 @@ library(sf)
 library(leaflet)
 #install.packages("tigris")
 library(tigris)
+library(dplyr)
+library(magrittr)
+#install.packages('rsconnect')
 
 #modzcta shapefiles from NYC open data
-unzip("Modified Zip Code Tabulation Areas (MODZCTA).zip")
+#unzip("Modified Zip Code Tabulation Areas (MODZCTA).zip")
 modzcta <- st_read("geo_export_9d592ba8-7629-4558-9e78-e1e536b453d9.shp")
 
-df <- read.csv("rats_cleaned.csv")
-df <- df %>%
-  filter(Year > 2014)
+df <- read.csv("dfNYC.csv")
+icaro <- read.csv("ratsComplete3.csv")
+#df <- df %>% rename(zip = Incident.Zip)
 
 #ORGANIZING DATA FOR PERCENT MAP (angela)
 #percent of calls in each zip code
 total <- sum(df$count) #total 311 calls
 rats_percent <- df %>%
-  group_by(zip) %>%
+  filter(Year > 13) %>%
+  group_by(Zip) %>%
   summarize(percent = (sum(count)/total)*100) 
-rats_percent$zip<-as.character(rats_percent$zip)
+rats_percent$Zip<-as.character(rats_percent$Zip)
 
 
 #ORGANIZING DATA FOR POPULATION MAP (mari)
 
-# creating 2019 and 2020 dataframes
-zips_year_1 <- df %>% filter(Year == 2019) 
-zips_year_2 <- df %>% filter(Year == 2020)
+# creating 2020 and 2021 dataframes
+zips_year_1 <- df %>% filter(Year == 20) 
+zips_year_2 <- df %>% filter(Year == 21)
 
 # estimate number of rats in each zipcode
-# count_per_zip <- function(zipcode){
-#   num_y1 <- zips_year_1 %>% filter(zip == zipcode)
-#   num_y2 <- zips_year_2 %>% filter (zip == zipcode)
-#   number_in_year_1 <- sum(num_y1$count)
-#   #print(number_in_year_1)
-#   number_in_year_2 <- sum(num_y2$count)
-#   #print(number_in_year_2)
-#   number_in_year_1_and_2 <- sum(num_y1$count %in% num_y2$count)
-#   #print(number_in_year_2)
-#   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
-# }
+#capture_recapture function with zipcode filter and addition year 2019-2020 dataset
 
-#THIS NEEDS UPDATING
+count_per_zip <- function(zipcode){
+  lots_y2020 <- zips_year_1 %>% filter(Zip == zipcode)  %>%pull(BBL)
+  lots_y2021 <- zips_year_2 %>% filter (Zip == zipcode) %>%pull(BBL)
+  number_in_year_1 <- length(lots_y2020)
+  #print(number_in_year_1)
+  number_in_year_2 <- length(lots_y2021)
+  #print(number_in_year_2)
+  number_in_year_1_and_2 <- sum(lots_y2021 %in% lots_y2020)
+  #sum(lots_year_1 %in% lots_year_2)
+  #print(number_in_year_2)
+  50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
+}
+
+#data processing
 rats_pop <- df %>%
-  group_by(zip) %>%
-  summarize(total = sum(count)*50)  
-rats_pop$zip<-as.character(rats_pop$zip)
+  group_by(Zip) %>%
+  summarize(total = (count_per_zip(Zip))) 
+rats_pop$Zip<-as.character(rats_pop$Zip)
+
+#ORGANIZING DATA FOR YEAR MAP (icaro)
+#separate dataframes for rat count each year 
+
+df4 <- read.csv("ratsComplete3.csv")
+df4$Zip<-as.character(df4$Zip)
+
+df11 <- read.csv("ratsComplete11.csv")
+df11$Zip<-as.character(df11$Zip)
+
+df12 <- read.csv("ratsComplete12.csv")
+df12$Zip<-as.character(df12$Zip)
+
+df13 <- read.csv("ratsComplete13.csv")
+df13$Zip<-as.character(df13$Zip)
+
+df14 <- read.csv("ratsComplete14.csv")
+df14$Zip<-as.character(df14$Zip)
+
+df15 <- read.csv("ratsComplete15.csv")
+df15$Zip<-as.character(df15$Zip)
+
+df16 <- read.csv("ratsComplete16.csv")
+df16$Zip<-as.character(df16$Zip)
+
+df17 <- read.csv("ratsComplete17.csv")
+df17$Zip<-as.character(df17$Zip)
+
+df18 <- read.csv("ratsComplete18.csv")
+df18$Zip<-as.character(df18$Zip)
+
+df19 <- read.csv("ratsComplete19.csv")
+df19$Zip<-as.character(df19$Zip)
+
+df20 <- read.csv("ratsComplete20.csv")
+df20$Zip<-as.character(df20$Zip)
+
+df21 <- read.csv("ratsComplete21.csv")
+df21$Zip<-as.character(df21$Zip)
 
 
 #final dataframes to use
 rats <- merge(rats_percent, rats_pop)
-all_modzcta <- geo_join(modzcta, rats, "modzcta", "zip", how = "inner")
+all_modzcta <- geo_join(modzcta, rats, "modzcta", "Zip", how = "inner")
 all_modzcta <-all_modzcta %>%
+  st_transform(crs = "+init=epsg:4326")
+
+all_modzcta11 <- geo_join(modzcta, df11, "modzcta", "Zip", how = "inner")
+all_modzcta11 <- all_modzcta11 %>%
+  st_transform(crs = "+init=epsg:4326")
+
+all_modzcta12 <- geo_join(modzcta, df12, "modzcta", "Zip", how = "inner")
+all_modzcta12 <- all_modzcta12 %>%
+  st_transform(crs = "+init=epsg:4326")
+
+all_modzcta13 <- geo_join(modzcta, df13, "modzcta", "Zip", how = "inner")
+all_modzcta13 <- all_modzcta13 %>%
+  st_transform(crs = "+init=epsg:4326")
+
+all_modzcta14 <- geo_join(modzcta, df14, "modzcta", "Zip", how = "inner")
+all_modzcta14 <- all_modzcta14 %>%
+  st_transform(crs = "+init=epsg:4326")
+
+all_modzcta15 <- geo_join(modzcta, df15, "modzcta", "Zip", how = "inner")
+all_modzcta15 <- all_modzcta15 %>%
+  st_transform(crs = "+init=epsg:4326")
+
+all_modzcta16 <- geo_join(modzcta, df16, "modzcta", "Zip", how = "inner")
+all_modzcta16 <- all_modzcta16 %>%
+  st_transform(crs = "+init=epsg:4326")
+
+all_modzcta17 <- geo_join(modzcta, df17, "modzcta", "Zip", how = "inner")
+all_modzcta17 <- all_modzcta17 %>%
+  st_transform(crs = "+init=epsg:4326")
+
+all_modzcta18 <- geo_join(modzcta, df18, "modzcta", "Zip", how = "inner")
+all_modzcta18 <- all_modzcta18 %>%
+  st_transform(crs = "+init=epsg:4326")
+
+all_modzcta19 <- geo_join(modzcta, df19, "modzcta", "Zip", how = "inner")
+all_modzcta19 <- all_modzcta19 %>%
+  st_transform(crs = "+init=epsg:4326")
+
+all_modzcta20 <- geo_join(modzcta, df20, "modzcta", "Zip", how = "inner")
+all_modzcta20 <- all_modzcta20 %>%
+  st_transform(crs = "+init=epsg:4326")
+
+all_modzcta21 <- geo_join(modzcta, df21, "modzcta", "Zip", how = "inner")
+all_modzcta21 <- all_modzcta21 %>%
   st_transform(crs = "+init=epsg:4326")
 
 
@@ -74,25 +164,31 @@ labels_pop <-sprintf(
 
 pal2 <-colorBin(palette="Reds", 9, domain = all_modzcta$total)
 
+
 # shinyapp with tabs
 ui <- navbarPage("NYC Rat Population Estimate",
-  
+    
+    #angela
     tabPanel("Rat Sighting Reports by ZIP",
              leafletOutput("percent_map")),
     
+    #mari
     tabPanel("Estimated 2020 Rat Population by ZIP",
             leafletOutput("pop_map")),
     
-    tabPanel("Estimated Rat Population by ZIP",
-              sidebarLayout(
-                sidebarPanel(
-                  numericInput("zip", 
-                  label = "Which ZIP code are you interested in?", 
-                  value = 00000)
+    #icaro
+    tabPanel("Estimated Rat Population by Year",
+             sidebarLayout(
+               sidebarPanel(
+                 sliderInput("year",
+                             "Year:",
+                             min = 11,
+                             max = 21,
+                             value = 11)
                ),
                mainPanel(
-                 plotOutput("rats")),
-               )
+                 leafletOutput("year_map")),
+             )
              ),
     tabPanel("Other Data Visualizations")
 )
@@ -148,19 +244,74 @@ server <- function(input, output, session) {
 
     })
     
-    output$rats <- renderPlot({
-      plotRats <- df %>% 
-        filter(zip == input$zip) %>%
-        group_by(Year) %>%
-        summarize(Count = sum(count))
+    output$year_map <- renderLeaflet({
+      time <- input$year
       
-      ggplot(plotRats, aes(x=Year, y=Count)) +
-        geom_bar(stat="identity") +
-        labs(title = paste("Estimated Rat Population in the zip code: ", input$zip)) +
-        theme(panel.grid = element_blank(), 
-              axis.line.x = element_line(), 
-              axis.line.y = element_line(), 
-              panel.background = element_rect(fill = "white"))
+      
+      if(time == 11){
+        all_modzcta <- all_modzcta11
+        
+      } else if(time == 12){
+        all_modzcta <- all_modzcta12
+        
+      } else if(time == 13){
+        all_modzcta <- all_modzcta13
+        
+      } else if(time == 14){
+        all_modzcta <- all_modzcta14
+        
+      } else if(time == 15){
+        all_modzcta <- all_modzcta15
+        
+      } else if(time == 16){
+        all_modzcta <- all_modzcta16
+        
+      } else if(time == 17){
+        all_modzcta <- all_modzcta17
+        
+      } else if(time == 18){
+        all_modzcta <- all_modzcta18
+        
+      } else if(time == 19){
+        all_modzcta <- all_modzcta19
+        
+      } else if(time == 20){
+        all_modzcta <- all_modzcta20
+        
+      } else if(time == 21){
+        all_modzcta <- all_modzcta21
+        
+      }
+      
+      #Palettes and Labels for pop map
+      labels_year <-sprintf(
+        "<strong>%s</strong><br/>%g RATS!",
+        all_modzcta$modzcta,all_modzcta$RatsN) %>%
+        lapply(htmltools::HTML)
+      
+      pal3 <-colorBin(palette="Reds", 9, domain = all_modzcta$RatsN)
+      
+      
+      leaflet(all_modzcta) %>%
+        addProviderTiles(provider = "CartoDB.Positron") %>%
+        addPolygons(label = labels_year,
+                    stroke = FALSE,
+                    smoothFactor = 0.5,
+                    opacity = 1,
+                    fillOpacity = 0.7,
+                    fillColor = ~pal3(RatsN),
+                    highlightOptions = highlightOptions(
+                      weight = 5,
+                      color = "black",
+                      fillOpacity = 1,
+                      opacity = 1,
+                      bringToFront = TRUE)
+        )%>%
+        addLegend("topleft",
+                  pal = pal3,
+                  values = ~RatsN,
+                  title = "Estimated Number of Rats",
+                  opacity = 0.7)
     })
 }
 
