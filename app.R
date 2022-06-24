@@ -15,7 +15,7 @@ library(magrittr)
 #unzip("Modified Zip Code Tabulation Areas (MODZCTA).zip")
 modzcta <- st_read("geo_export_9d592ba8-7629-4558-9e78-e1e536b453d9.shp")
 
-df <- read.csv("dfNYC.csv")
+df <- read.csv("Dataframes/dfNYC.csv")
 icaro <- read.csv("ratsComplete3.csv")
 #df <- df %>% rename(zip = Incident.Zip)
 
@@ -60,40 +60,40 @@ rats_pop$Zip<-as.character(rats_pop$Zip)
 #ORGANIZING DATA FOR YEAR MAP (icaro)
 #separate dataframes for rat count each year 
 
-df4 <- read.csv("ratsComplete3.csv")
+df4 <- read.csv("Dataframes/ratsComplete3.csv")
 df4$Zip<-as.character(df4$Zip)
 
-df11 <- read.csv("ratsComplete11.csv")
+df11 <- read.csv("Dataframes/ratsComplete11.csv")
 df11$Zip<-as.character(df11$Zip)
 
-df12 <- read.csv("ratsComplete12.csv")
+df12 <- read.csv("Dataframes/ratsComplete12.csv")
 df12$Zip<-as.character(df12$Zip)
 
-df13 <- read.csv("ratsComplete13.csv")
+df13 <- read.csv("Dataframes/ratsComplete13.csv")
 df13$Zip<-as.character(df13$Zip)
 
-df14 <- read.csv("ratsComplete14.csv")
+df14 <- read.csv("Dataframes/ratsComplete14.csv")
 df14$Zip<-as.character(df14$Zip)
 
-df15 <- read.csv("ratsComplete15.csv")
+df15 <- read.csv("Dataframes/ratsComplete15.csv")
 df15$Zip<-as.character(df15$Zip)
 
-df16 <- read.csv("ratsComplete16.csv")
+df16 <- read.csv("Dataframes/ratsComplete16.csv")
 df16$Zip<-as.character(df16$Zip)
 
-df17 <- read.csv("ratsComplete17.csv")
+df17 <- read.csv("Dataframes/ratsComplete17.csv")
 df17$Zip<-as.character(df17$Zip)
 
-df18 <- read.csv("ratsComplete18.csv")
+df18 <- read.csv("Dataframes/ratsComplete18.csv")
 df18$Zip<-as.character(df18$Zip)
 
-df19 <- read.csv("ratsComplete19.csv")
+df19 <- read.csv("Dataframes/ratsComplete19.csv")
 df19$Zip<-as.character(df19$Zip)
 
-df20 <- read.csv("ratsComplete20.csv")
+df20 <- read.csv("Dataframes/ratsComplete20.csv")
 df20$Zip<-as.character(df20$Zip)
 
-df21 <- read.csv("ratsComplete21.csv")
+df21 <- read.csv("Dataframes/ratsComplete21.csv")
 df21$Zip<-as.character(df21$Zip)
 
 
