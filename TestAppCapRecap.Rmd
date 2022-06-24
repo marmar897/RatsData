@@ -14,29 +14,21 @@ calls <- read_csv("nyc_rodent_compliants.csv")
 ```
 
 ```{r}
-# df <-
-#   calls %>%
-#   mutate(Date = as.Date(`Created Date`, format = "%m/%d/%Y"),
-#          Month_Year = format(Date, "%m/%y")) %>%
-#   filter(Descriptor == "Rat Sighting",
-#          Month_Year != 01/22, Month_Year >= 01/14) %>%
-#   select( BBL, Borough, `Incident Zip`, Month_Year) %>%
-#   na.omit() %>%
-#   group_by(BBL, Borough, `Incident Zip`, Month_Year) %>%
-#   summarize(count = n()) %>% 
-#   filter(BBL != 0, Borough > 10000)
+ df <-
+   calls %>%
+   mutate(Date = as.Date(`Created Date`, format = "%m/%d/%Y"),
+          Month_Year = format(Date, "%m/%y")) %>%
+   filter(Descriptor == "Rat Sighting",
+          Month_Year != 01/22, Month_Year >= 01/14) %>%
+   select( BBL, Borough, `Incident Zip`, Month_Year) %>%
+   na.omit() %>%
+   group_by(BBL, Borough, `Incident Zip`, Month_Year) %>%
+   summarize(count = n()) %>% 
+   filter(BBL != 0, Borough > 10000)
 
-df <-
-  calls %>%
-  mutate(Date = as.Date(`Created Date`, format = "%m/%d/%Y"),
-         Year = format(Date, "%y")) %>%
-  filter(Descriptor == "Rat Sighting",
-         Year != 22, Year >= 14) %>%
-  select( BBL, Borough, `Incident Zip`, Year) %>%
-  na.omit() %>%
-  group_by(BBL, Borough, `Incident Zip`, Year) %>%
-  summarize(count = n()) %>% 
-  filter(BBL != 0, Borough > 10000)
+df <- rename(df, Zip  = `Incident Zip` )
+df <- separate(df, "Month_Year", c("Month","Year"), sep = "/")
+df <- df[order(df$Year),]
 
 write.csv(df, "C:\\Users\\Admin\\Desktop\\dfNYC.csv", row.names=FALSE)
 ```
@@ -82,8 +74,8 @@ ggplot(df, aes(fill= Borough, y = count , x = Year)) +
 ```
 
 ```{r replicating capture recapture but for dataframe not just an integer}
-lots_year_18 <- df %>% filter(Year == "18") %>% select(BBL, Borough, `Incident Zip`)
-lots_year_19 <- df %>% filter(Year == "19") %>% select(BBL, Borough, `Incident Zip`)
+lots_year_18 <- df %>% filter(Year == "18") %>% select(BBL, Borough, Zip)
+lots_year_19 <- df %>% filter(Year == "19") %>% select(BBL, Borough, Zip)
 
 common_lots_18_19 <- inner_join(lots_year_18, lots_year_19)
 ```
@@ -129,10 +121,10 @@ qplot(x = factor(2015:2021),
 
 ```
 
-```{r Bronx}
-capture_recapture_bronx <- function(year) {
-  lots_year_1 <- dfBronx %>% filter(Year == year - 1) %>% pull(BBL)
-  lots_year_2 <- dfBronx %>% filter(Year == year) %>% pull(BBL)
+```{r Brooklyn}
+capture_recapture_brooklyn <- function(year) {
+  lots_year_1 <- dfBrooklyn %>% filter(Year == year - 1) %>% pull(BBL)
+  lots_year_2 <- dfBrooklyn %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
   number_in_year_2 <- length(lots_year_2)
   number_in_year_1_and_2 <- sum(lots_year_1 %in% lots_year_2)
@@ -140,7 +132,7 @@ capture_recapture_bronx <- function(year) {
 }
 
 qplot(x = factor(2015:2021),
-      weight = sapply(15:21, capture_recapture_bronx),
+      weight = sapply(15:21, capture_recapture_brooklyn),
       geom = "bar")  +
   labs(x = "year",
        y = "estimated rat population") +
