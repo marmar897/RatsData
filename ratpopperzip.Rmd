@@ -19,13 +19,13 @@ modzcta <- st_read("geo_export_9d592ba8-7629-4558-9e78-e1e536b453d9.shp")
 head(modzcta)
 
 #importing dataset
-df1 <- read.csv("https://raw.githubusercontent.com/marmar897/RatsData/chris-branch/DataSets/dfNYC.csv")
+df1 <- read.csv("https://raw.githubusercontent.com/marmar897/RatsData/chris-branch/DataSets/df_NYC.csv")
 
-ziplots <- df1 %>%
-          group_by(Zip) %>%
-          summarise(totallots = n())
+# ziplots <- df1 %>%
+#           group_by(Zip) %>%
+#           summarise(totallots = n())
 
-#merge(ziplots, df1, by = "Zip")
+
 
 #the number of lots that had reports in both years *50 in zipcode.
   #grouping by zip and bbl to get number of reported calls in years 2020 and 2021
@@ -35,30 +35,42 @@ df2 <- df1 %>%
       summarize(reports2020 = (sum(Year==20)),
                 reports2021 = (sum(Year==21)), 
                 both = (reports2020 > 0 & reports2021 > 0)
-                #totalbbls = n(BBL)
                 )
-
-
 
 # grouping by zip to count total lots in each zipcode and capture recapture for each lot
 df3 <- df2 %>% 
-      #full_join(y = ziplots, by = c("totallots"))%>%
-      #cbind(df2, )
+
       group_by(Zip) %>%
-     # ziplots$totallots <- totallots %>%
-      #full_join(y = ziplots, by = "Zip") %>%
-      #geo_join( ziplots, "totallots", "zip", how = "inner")
+
       summarize(markedlotstotal2020 = sum(reports2020 > 0), 
-                markedlotstotal2021 = sum(reports2021 > 0), 
-                both = (markedlotstotal2020+markedlotstotal2021),
-                totallots = n(),
+                markedlotstotal2021 = sum(reports2021 > 0),
+                
+                #number of identical lots in both years 
+                #figure out rat sightings in identical lots in both years
+                both = (sum(both > 0)),
+
                 estpopulation = ifelse(markedlotstotal2021 == 0 | both == 0,
-                                      totallots*50,
-                                       50*totallots*markedlotstotal2021/both)) %>% 
-               #estpopulation = 50*totallots*markedlotstotal2021/both
+                                      0,
+                                       50*markedlotstotal2020*markedlotstotal2021/both)) %>% 
       mutate(zip = as.character(Zip))
 
-#testing my sum below outputs around 1.9 million rats
+
+# # Function to estimate number of rats in any year (%y between 11 and 21) 
+# capture_recapture <- function(year) {
+#   lots_year_1 <- df %>% filter(Year == year - 1) %>% pull(BBL)
+#   lots_year_2 <- df %>% filter(Year == year) %>% pull(BBL)
+#   number_in_year_1 <- length(lots_year_1)
+#   number_in_year_2 <- length(lots_year_2)
+#   number_in_year_1_and_2 <- sum(lots_year_1 %in% lots_year_2)
+#   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
+# }
+# 
+# 
+# 
+
+
+
+#testing my sum below outputs around 3.4 million rats
 sum(df3$estpopulation)
 
 #joining dataset with modzcta by zipcodes
@@ -97,5 +109,5 @@ map_interactive <-all_modzcta %>%
           opacity = 0.7)
 #displaying map :)
 map_interactive
-#saveWidget(map_interactive, "nyc_average_rats.html")
+
 ```
