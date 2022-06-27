@@ -30,10 +30,23 @@ rats_percent$Zip<-as.character(rats_percent$Zip)
 
 
 #ORGANIZING DATA FOR POPULATION MAP (mari)
+rat <- df %>%
+  group_by(Zip,BBL) %>%
+  summarize(reports2020 = (sum(Year==20)), 
+            reports2021 = (sum(Year==21)), 
+            both = (reports2020 > 0 & reports2021 > 0))
+rats_pop <- rat %>%
+  group_by(Zip) %>%
+  summarize(markedlotstotal2020 = sum(reports2020 > 0), 
+            markedlotstotal2021 = sum(reports2021 > 0), 
+            both = (markedlotstotal2020+markedlotstotal2021), 
+            total= (50*markedlotstotal2020*markedlotstotal2021/both)) %>%
+  mutate(zip = as.character(Zip)) %>%
+  select(Zip, total)
 
 # creating 2020 and 2021 dataframes
-zips_year_1 <- df %>% filter(Year == 20) 
-zips_year_2 <- df %>% filter(Year == 21)
+# zips_year_1 <- df %>% filter(Year == 20) 
+#zips_year_2 <- df %>% filter(Year == 21)
 
 # estimate number of rats in each zipcode
 #capture_recapture function with zipcode filter and addition year 2019-2020 dataset
@@ -52,10 +65,10 @@ count_per_zip <- function(zipcode){
 }
 
 #data processing
-rats_pop <- df %>%
-  group_by(Zip) %>%
-  summarize(total = (count_per_zip(Zip))) 
-rats_pop$Zip<-as.character(rats_pop$Zip)
+# rats_pop <- df %>%
+#   group_by(Zip) %>%
+#   summarize(total = (count_per_zip(Zip))) 
+# rats_pop$Zip<-as.character(rats_pop$Zip)
 
 #ORGANIZING DATA FOR YEAR MAP (icaro)
 #separate dataframes for rat count each year 
