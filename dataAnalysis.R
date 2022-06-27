@@ -60,6 +60,21 @@ capture_recapture <- function(Yearr, Zop) {
   
 }
 
+
+capture_recaptureB2 <- function(Yearr, Zop) {
+  Bo <- ratsN %>% filter(Year == Yearr - 1) %>% filter(zip == Zop) %>% pull(Borough)
+  lots_year_1 <- ratsN %>% filter(Year == Yearr - 1) %>% filter(Month < 7) %>% filter(Borough %in% Bo) %>% pull(BBL)
+  lots_year_2 <- ratsN %>% filter(Year == Yearr) %>% filter(Month < 7) %>% filter(Borough %in% Bo) %>% pull(BBL)
+  lots_year_1Zop <- ratsN %>% filter(Year == Yearr - 1) %>% filter(zip == Zop) %>% pull(BBL)
+  number_in_year_1 <- length(unique(lots_year_1))
+  number_in_year_1Zop <- length(unique(lots_year_1Zop))
+  number_in_year_2 <- length(unique(lots_year_2))
+  number_in_year_1_and_2 <- sum(unique(lots_year_1) %in% unique(lots_year_2))
+  
+  50 * number_in_year_1Zop * number_in_year_2/number_in_year_1_and_2
+  
+}
+
   
 df2 <-
   ratsN %>% select(Year, zip) %>% group_by(Year, zip) %>%
@@ -67,85 +82,13 @@ df2 <-
 
 df3 <- df2 %>% mutate(RatsN = mapply(capture_recapture, Yearr = Year, Zop = zip))
 
-ratsN2 <- read_csv("ratsComplete3.csv")
-
-all_modzcta <- geo_join(modzcta, ratsN2, "modzcta", "Zip", how = "inner")
-all_modzcta <-all_modzcta %>%
-  st_transform(crs = "+init=epsg:4326")
-
-saveRDS(all_modzcta, "all_modzcta.RDS")
-
-#Palettes and Labels for percent map
-labels_percent <-sprintf(
-  "<strong>%s</strong><br/>%g%% ",
-  all_modzcta$modzcta,all_modzcta$percent) %>%
-  lapply(htmltools::HTML)
-
-pal <-colorBin(palette="Blues", 9, domain = all_modzcta$percent)
-
-#Palettes and Labels for pop map
-labels_pop <-sprintf(
-  "<strong>%s</strong><br/>%g rats ",
-  all_modzcta$modzcta,all_modzcta$total) %>%
-  lapply(htmltools::HTML)
-
-pal2 <-colorBin(palette="Reds", 9, domain = all_modzcta$total)
-
-map_interactive <-all_modzcta %>%
-  st_transform(crs = "+init=epsg:4326") %>% #transform data into coordinate system
-  leaflet() %>%
-  addProviderTiles(provider = "CartoDB.Positron") %>%
-  addPolygons(label = labels,
-              stroke = FALSE,
-              smoothFactor = 0.5,
-              opacity = 1,
-              fillOpacity = 0.7,
-              fillColor = ~pal(percent),
-              highlightOptions = highlightOptions(
-                weight = 5,
-                color = "black",
-                fillOpacity = 1,
-                opacity = 1,
-                bringToFront = TRUE))%>%
-  addLegend("topleft",
-            pal = pal,
-            values = ~percent,
-            title = "% of Total 311 Rat Sightings Reported",
-            opacity = 0.7)
-map_interactive
-
 
 
 df4 <- read.csv("ratsComplete3.csv")
-df4$Zip<-as.character(df4$Zip)
 
+df5 <- df2 %>% mutate(RatsN = mapply(capture_recaptureB, Yearr = Year, Zop = zip))
 
-
-#final dataframes to use
-all_modzcta <- geo_join(modzcta, df4, "modzcta", "Zip", how = "inner")
-all_modzcta <-all_modzcta %>%
-  st_transform(crs = "+init=epsg:4326")
-all_modzcta <- all_modzcta %>% filter(Year > 10)
-
-
-
-
-
-
-get_Year <- function(year) {
-  
-  df4 %>% filter(Year == year)
-  
-}
-
-df7 = get_Year(12)
-
-
-all_modzcta <- geo_join(modzcta, df7, "modzcta", "Zip", how = "inner")
-all_modzcta <-all_modzcta %>%
-  st_transform(crs = "+init=epsg:4326")
-all_modzcta <- all_modzcta %>% filter(Year > 10)
-
+df6 <- df2 %>% mutate(RatsN = mapply(capture_recaptureB2, Yearr = Year, Zop = zip))
 
 
 
@@ -160,6 +103,8 @@ df18 <- df4 %>% filter(Year == 18)
 df19 <- df4 %>% filter(Year == 19)
 df20 <- df4 %>% filter(Year == 20)
 df21 <- df4 %>% filter(Year == 21)
+df21_2 <- df5 %>% filter(Year == 21)
+df21_3 <- df6 %>% filter(Year == 21)
 
 
 write.csv(df11, file="C:\\Users\\Icaro\\Documents\\ratsComplete11.csv", row.names = FALSE)
@@ -173,6 +118,8 @@ write.csv(df18, file="C:\\Users\\Icaro\\Documents\\ratsComplete18.csv", row.name
 write.csv(df19, file="C:\\Users\\Icaro\\Documents\\ratsComplete19.csv", row.names = FALSE)
 write.csv(df20, file="C:\\Users\\Icaro\\Documents\\ratsComplete20.csv", row.names = FALSE)
 write.csv(df21, file="C:\\Users\\Icaro\\Documents\\ratsComplete21.csv", row.names = FALSE)
+write.csv(df21_2, file="C:\\Users\\Icaro\\Documents\\ratsComplete21_2.csv", row.names = FALSE)
+write.csv(df21_3, file="C:\\Users\\Icaro\\Documents\\ratsComplete21_3.csv", row.names = FALSE)
 
 
 
