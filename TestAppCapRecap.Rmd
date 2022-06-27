@@ -6,14 +6,16 @@ output: html_document
 ---
 
 ```{r}
-install.packages("gganimate")
-
-library("tidyverse")
-library("ggplot2")
-library("gganimate")
-library("dplyr")
-library("gapminder")
-library("ggthemes")
+# install.packages("gganimate")
+# install.packages("gapminder")
+# install.packages("ggthemes")
+# 
+# library("tidyverse")
+# library("ggplot2")
+# library("gganimate")
+# library("dplyr")
+# library("gapminder")
+# library("ggthemes")
 ```
 
 ```{r}
@@ -124,12 +126,12 @@ df_The_Bronx_Num_Rats <- sapply(11:21, capture_recapture_the_bronx)
 df_The_Bronx_Num_Rats <- as.data.frame(df_The_Bronx_Num_Rats)
 
 df_The_Bronx_Num_Rats <- df_The_Bronx_Num_Rats %>%
-  add_column(Group = "BRONX",
+  add_column(Borough = "BRONX",
              .after = "df_The_Bronx_Num_Rats") 
   
 df_The_Bronx_Num_Rats <- df_The_Bronx_Num_Rats %>%
   add_column(Year = 11:21,
-             .after = "Group") 
+             .after = "Borough") 
 
 df_The_Bronx_Num_Rats <- rename(df_The_Bronx_Num_Rats, numRats = df_The_Bronx_Num_Rats)
 ```
@@ -148,12 +150,12 @@ df_Brooklyn_Num_Rats <- sapply(11:21, capture_recapture_brooklyn)
 df_Brooklyn_Num_Rats <- as.data.frame(df_Brooklyn_Num_Rats)
 
 df_Brooklyn_Num_Rats <- df_Brooklyn_Num_Rats %>%
-  add_column(Group = "BROOKLYN",
+  add_column(Borough = "BROOKLYN",
              .after = "df_Brooklyn_Num_Rats") 
   
 df_Brooklyn_Num_Rats <- df_Brooklyn_Num_Rats %>%
   add_column(Year = 11:21,
-             .after = "Group") 
+             .after = "Borough") 
 
 df_Brooklyn_Num_Rats <- rename(df_Brooklyn_Num_Rats, numRats = df_Brooklyn_Num_Rats)
 ```
@@ -172,12 +174,12 @@ df_Manhattan_Num_Rats <- sapply(11:21, capture_recapture_manhattan)
 df_Manhattan_Num_Rats <- as.data.frame(df_Manhattan_Num_Rats)
 
 df_Manhattan_Num_Rats <- df_Manhattan_Num_Rats %>%
-  add_column(Group = "MANHATTAN",
+  add_column(Borough = "MANHATTAN",
              .after = "df_Manhattan_Num_Rats") 
   
 df_Manhattan_Num_Rats <- df_Manhattan_Num_Rats %>%
   add_column(Year = 11:21,
-             .after = "Group") 
+             .after = "Borough") 
 
 df_Manhattan_Num_Rats <- rename(df_Manhattan_Num_Rats, numRats = df_Manhattan_Num_Rats)
 ```
@@ -196,12 +198,12 @@ df_Queens_Num_Rats <- sapply(11:21, capture_recapture_queens)
 df_Queens_Num_Rats <- as.data.frame(df_Queens_Num_Rats)
 
 df_Queens_Num_Rats <- df_Queens_Num_Rats %>%
-  add_column(Group = "QUEENS",
+  add_column(Borough = "QUEENS",
              .after = "df_Queens_Num_Rats") 
   
 df_Queens_Num_Rats <- df_Queens_Num_Rats %>%
   add_column(Year = 11:21,
-             .after = "Group") 
+             .after = "Borough") 
 
 df_Queens_Num_Rats <- rename(df_Queens_Num_Rats, numRats = df_Queens_Num_Rats)
 ```
@@ -220,12 +222,12 @@ df_Staten_Island_Num_Rats <- sapply(11:21, capture_recapture_staten_island)
 df_Staten_Island_Num_Rats <- as.data.frame(df_Staten_Island_Num_Rats)
 
 df_Staten_Island_Num_Rats <- df_Staten_Island_Num_Rats %>%
-  add_column(Group = "STATEN ISLAND",
+  add_column(Borough = "STATEN ISLAND",
              .after = "df_Staten_Island_Num_Rats") 
   
 df_Staten_Island_Num_Rats <- df_Staten_Island_Num_Rats %>%
   add_column(Year = 11:21,
-             .after = "Group") 
+             .after = "Borough") 
 
 df_Staten_Island_Num_Rats <- rename(df_Staten_Island_Num_Rats, numRats = df_Staten_Island_Num_Rats)
 ```
@@ -262,10 +264,14 @@ df_NYC_Num_Rats <- Reduce(function(x,y) merge(x,y, all = TRUE), df_NYC_Num_Rats)
 
 df_NYC_Num_Rats <- df_NYC_Num_Rats[order(df_NYC_Num_Rats$numRats),]
 
-ggplot(df_NYC_Num_Rats, aes(x = Year, y = numRats, color = Group)) +
-  geom_line(size = 2) + scale_x_continuous(breaks = seq(11,21, by = 1))
+ggplot(df_NYC_Num_Rats, aes(x = Year, y = numRats, color = Borough)) +
+  geom_line(size = 1.5) + 
+  scale_x_continuous(breaks = seq(11,21, by = 1)) + 
+  scale_y_continuous(breaks = seq(0,1500000, by = 200000)) +
+  labs (title = "Rat Population In NYC Boroughs Over Time", x = "Year", y = "Population" ) +
+  theme_fivethirtyeight()
 
-ggplot(df_NYC_Num_Rats, aes(x = Year, y = numRats, fill = Group)) + geom_area() + scale_x_continuous(breaks = seq(11,21, by = 1))
+ggplot(df_NYC_Num_Rats, aes(x = Year, y = numRats, fill = Borough)) + geom_area() + scale_x_continuous(breaks = seq(11,21, by = 1))
 
 ```
 
