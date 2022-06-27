@@ -6,7 +6,14 @@ output: html_document
 ---
 
 ```{r}
+install.packages("gganimate")
+
 library("tidyverse")
+library("ggplot2")
+library("gganimate")
+library("dplyr")
+library("gapminder")
+library("ggthemes")
 ```
 
 ```{r}
@@ -249,9 +256,6 @@ df_Staten_Island_Num_Rats <- rename(df_Staten_Island_Num_Rats, numRats = df_Stat
 
 ```{r Cumulative}
 
-library(ggplot2)
-library(gganimate)
-
 df_NYC_Num_Rats <- list( df_Brooklyn_Num_Rats, df_Queens_Num_Rats,  df_Manhattan_Num_Rats, df_The_Bronx_Num_Rats, df_Staten_Island_Num_Rats)
 
 df_NYC_Num_Rats <- Reduce(function(x,y) merge(x,y, all = TRUE), df_NYC_Num_Rats)
@@ -260,11 +264,6 @@ df_NYC_Num_Rats <- df_NYC_Num_Rats[order(df_NYC_Num_Rats$numRats),]
 
 ggplot(df_NYC_Num_Rats, aes(x = Year, y = numRats, color = Group)) +
   geom_line(size = 2) + scale_x_continuous(breaks = seq(11,21, by = 1))
-
-ggplot(df_NYC_Num_Rats, aes(x = Year, y = numRats, color = Group)) +
-  geom_line(size = 2) + scale_x_continuous(breaks = seq(11,21, by = 1)) + transition_reveal(Year) + view_follow(fixed_y = TRUE)
-
-anim_save("animation.gif")
 
 ggplot(df_NYC_Num_Rats, aes(x = Year, y = numRats, fill = Group)) + geom_area() + scale_x_continuous(breaks = seq(11,21, by = 1))
 
