@@ -6,16 +6,16 @@ output: html_document
 ---
 
 ```{r}
-# install.packages("gganimate")
-# install.packages("gapminder")
-# install.packages("ggthemes")
-# 
-# library("tidyverse")
-# library("ggplot2")
-# library("gganimate")
-# library("dplyr")
-# library("gapminder")
-# library("ggthemes")
+install.packages("gganimate")
+install.packages("gapminder")
+install.packages("ggthemes")
+
+library("tidyverse")
+library("ggplot2")
+library("gganimate")
+library("dplyr")
+library("gapminder")
+library("ggthemes")
 ```
 
 ```{r}
@@ -273,6 +273,8 @@ graph1.anim <- ggplot(df_NYC_Num_Rats, aes(x = Year, y = numRats, color = Boroug
   theme(axis.title = element_text())
 
 graph1
+
+dev.print(jpg, 'graph1.jpg')
 
 graph2.anim <- ggplot(df_NYC_Num_Rats, aes(x = Year, y = numRats, fill = Borough)) + 
   geom_area(alpha=0.725) + 
