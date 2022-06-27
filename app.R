@@ -30,45 +30,32 @@ rats_percent$Zip<-as.character(rats_percent$Zip)
 
 
 #ORGANIZING DATA FOR POPULATION MAP (mari)
-rat <- df %>%
+ziplots <- df %>%
+  group_by(Zip) %>%
+  summarise(totallots = n())
+
+#the number of lots that had reports in both years *50 in zipcode.
+#grouping by zip and bbl to get number of reported calls in years 2020 and 2021
+df2 <- df %>%
   group_by(Zip,BBL) %>%
-  summarize(reports2020 = (sum(Year==20)), 
+  summarize(reports2020 = (sum(Year==20)),
             reports2021 = (sum(Year==21)), 
-            both = (reports2020 > 0 & reports2021 > 0))
-rats_pop <- rat %>%
+            both = (reports2020 > 0 & reports2021 > 0)
+  )
+
+# grouping by zip to count total lots in each zipcode and capture recapture for each lot
+rats_pop <- df2 %>% 
   group_by(Zip) %>%
   summarize(markedlotstotal2020 = sum(reports2020 > 0), 
-            markedlotstotal2021 = sum(reports2021 > 0), 
-            both = (markedlotstotal2020+markedlotstotal2021), 
-            total= (50*markedlotstotal2020*markedlotstotal2021/both)) %>%
-  mutate(zip = as.character(Zip)) %>%
-  select(Zip, total)
-
-# creating 2020 and 2021 dataframes
-# zips_year_1 <- df %>% filter(Year == 20) 
-#zips_year_2 <- df %>% filter(Year == 21)
-
-# estimate number of rats in each zipcode
-#capture_recapture function with zipcode filter and addition year 2019-2020 dataset
-
-count_per_zip <- function(zipcode){
-  lots_y2020 <- zips_year_1 %>% filter(Zip == zipcode)  %>%pull(BBL)
-  lots_y2021 <- zips_year_2 %>% filter (Zip == zipcode) %>%pull(BBL)
-  number_in_year_1 <- length(lots_y2020)
-  #print(number_in_year_1)
-  number_in_year_2 <- length(lots_y2021)
-  #print(number_in_year_2)
-  number_in_year_1_and_2 <- sum(lots_y2021 %in% lots_y2020)
-  #sum(lots_year_1 %in% lots_year_2)
-  #print(number_in_year_2)
-  50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
-}
-
-#data processing
-# rats_pop <- df %>%
-#   group_by(Zip) %>%
-#   summarize(total = (count_per_zip(Zip))) 
-# rats_pop$Zip<-as.character(rats_pop$Zip)
+            markedlotstotal2021 = sum(reports2021 > 0),
+            
+            #number of identical lots in both years 
+            #figure out rat sightings in identical lots in both years
+            both = (sum(both > 0)),
+            total = ifelse(markedlotstotal2021 == 0 | both == 0,
+                                   0,
+                                   50*markedlotstotal2020*markedlotstotal2021/both)) %>% 
+  mutate(zip = as.character(Zip)) 
 
 #ORGANIZING DATA FOR YEAR MAP (icaro)
 #separate dataframes for rat count each year 
@@ -203,7 +190,9 @@ ui <- navbarPage("NYC Rat Population Estimate",
                  leafletOutput("year_map")),
              )
              ),
-    tabPanel("Other Data Visualizations")
+    tabPanel("Other Data Visualizations",
+            img(src="graph2anim.gif", align = "left", height='300px', width='600px'),
+            img(src="graph1.png", align = "left", height='300px', width='600px'))
 )
 
 
