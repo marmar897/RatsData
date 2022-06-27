@@ -23,7 +23,7 @@ calls <- read_csv("nyc_rodent_compliants.csv")
 ```
 
 ```{r}
- df <-
+ df_NYC <-
    calls %>%
    mutate(Date = as.Date(`Created Date`, format = "%m/%d/%Y"),
           Month_Year = format(Date, "%m/%y")) %>%
@@ -35,22 +35,20 @@ calls <- read_csv("nyc_rodent_compliants.csv")
    summarize(count = n()) %>% 
    filter(BBL != 0, Borough > 10000)
 
-df <- rename(df, Zip  = `Incident Zip` )
-df <- separate(df, "Month_Year", c("Month","Year"), sep = "/")
-df <- df[order(df$Year),]
+df_NYC <- rename(df_NYC, Zip  = `Incident Zip` )
+df_NYC <- separate(df_NYC, "Month_Year", c("Month","Year"), sep = "/")
+df_NYC <- df_NYC[order(df_NYC$Year),]
 
 write.csv(df, "C:\\Users\\Admin\\Desktop\\df_NYC.csv", row.names=FALSE)
-
-df_NYC <- df
 ```
 
 ```{r test_cap_recap_function}
-# lots_year_1 <- df %>% filter(Year == "14") %>% pull(BBL)
-# lots_year_2 <- df %>% filter(Year == "15") %>% pull(BBL)
+# lots_year_1 <- df_NYC %>% filter(Year == "20") %>% pull(BBL)
+# lots_year_2 <- df_NYC %>% filter(Year == "21") %>% pull(BBL)
 # number_in_year_1 <- length(lots_year_1)
 # number_in_year_2 <- length(lots_year_2)
 # number_in_year_1_and_2 <- sum(lots_year_1 %in% lots_year_2)
-#   
+# 
 # number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 ```
 
@@ -59,44 +57,44 @@ df_NYC <- df
 ```
 
 ```{r cap_recap_function}
-capture_recapture <- function(year) {
-  lots_year_1 <- df %>% filter(Year == year - 1) %>% pull(BBL)
-  lots_year_2 <- df %>% filter(Year == year) %>% pull(BBL)
-  number_in_year_1 <- length(lots_year_1)
-  number_in_year_2 <- length(lots_year_2)
-  number_in_year_1_and_2 <- sum(lots_year_1 %in% lots_year_2)
-  50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
-}
+# capture_recapture <- function(year) {
+#   lots_year_1 <- df_NYC %>% filter(Year == year - 1) %>% pull(BBL)
+#   lots_year_2 <- df_NYC %>% filter(Year == year) %>% pull(BBL)
+#   number_in_year_1 <- length(lots_year_1)
+#   number_in_year_2 <- length(lots_year_2)
+#   number_in_year_1_and_2 <- sum(lots_year_1 %in% lots_year_2)
+#   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
+# }
 ```
 
 ```{r jonathan_rat_pop}
-qplot(x = factor(2011:2021),
-      weight = sapply(11:21, capture_recapture),
-      geom = "bar")  +
-  labs(x = "year",
-       y = "estimated rat population") +
-  theme_bw()
+# qplot(x = factor(2011:2021),
+#       weight = sapply(11:21, capture_recapture),
+#       geom = "bar")  +
+#   labs(x = "year",
+#        y = "estimated rat population") +
+#   theme_bw()
 ```
 
 ```{r calls}
-library(ggplot2)
-ggplot(df, aes(fill= Borough, y = count , x = Year)) +
-  geom_bar(position = "stack", stat = "identity") 
+# library(ggplot2)
+# ggplot(df_NYC, aes(fill= Borough, y = count , x = Year)) +
+#   geom_bar(position = "stack", stat = "identity") 
 ```
 
 ```{r replicating capture recapture but for dataframe not just an integer}
-# lots_year_18 <- df %>% filter(Year == "18") %>% select(BBL, Borough, Zip)
-# lots_year_19 <- df %>% filter(Year == "19") %>% select(BBL, Borough, Zip)
+# lots_year_18 <- df_NYC %>% filter(Year == "18") %>% select(BBL, Borough, Zip)
+# lots_year_19 <- df_NYC %>% filter(Year == "19") %>% select(BBL, Borough, Zip)
 # 
 # common_lots_18_19 <- inner_join(lots_year_18, lots_year_19)
 ```
 
 ```{r calls by borough}
-df_The_Bronx <- df %>% filter(Borough == "BRONX")
-df_Brooklyn <- df %>% filter(Borough == "BROOKLYN")
-df_Manhattan <- df %>% filter(Borough == "MANHATTAN")
-df_Queens <- df %>% filter(Borough == "QUEENS")
-df_Staten_Island <- df %>% filter(Borough == "STATEN ISLAND")
+df_The_Bronx <- df_NYC %>% filter(Borough == "BRONX")
+df_Brooklyn <- df_NYC %>% filter(Borough == "BROOKLYN")
+df_Manhattan <- df_NYC %>% filter(Borough == "MANHATTAN")
+df_Queens <- df_NYC %>% filter(Borough == "QUEENS")
+df_Staten_Island <- df_NYC %>% filter(Borough == "STATEN ISLAND")
 ```
 
 ```{r calls}
@@ -247,11 +245,11 @@ df_Staten_Island_Num_Rats <- rename(df_Staten_Island_Num_Rats, numRats = df_Stat
 # 
 # df_NYC_Num_Rats <- df_NYC_Num_Rats %>%
 #   add_column(Group = "NYC",
-#              .after = "df_NYC_Num_Rats") 
-#   
+#              .after = "df_NYC_Num_Rats")
+# 
 # df_NYC_Num_Rats <- df_NYC_Num_Rats %>%
 #   add_column(Year = 11:21,
-#              .after = "Group") 
+#              .after = "Group")
 # 
 # df_NYC_Num_Rats <- rename(df_NYC_Num_Rats, numRats = df_NYC_Num_Rats)
 ```
@@ -265,19 +263,21 @@ df_NYC_Num_Rats <- Reduce(function(x,y) merge(x,y, all = TRUE), df_NYC_Num_Rats)
 df_NYC_Num_Rats <- df_NYC_Num_Rats[order(df_NYC_Num_Rats$numRats),]
 
 graph1 <- ggplot(df_NYC_Num_Rats, aes(x = Year, y = numRats, color = Borough)) +
-  geom_line(size = 1.5) + 
-  scale_x_continuous(breaks = seq(11,21, by = 1)) + 
+  geom_line(size = 1.5) +
+  scale_x_continuous(breaks = seq(11,21, by = 1)) +
   scale_y_continuous(breaks = seq(0,1500000, by = 200000)) +
   labs (title = "Rat Population In Each Borough Over Time", subtitle = "Do rats proliferate faster in certain Boroughs?", x = "Year", y = "Population" ) +
   theme_fivethirtyeight() +
-  theme(axis.title = element_text()) 
+  theme(axis.title = element_text())
 
   ggsave("graph1.png", height = 1440, width = 2560, units = "px")
-
-graph2.anim <- ggplot(df_NYC_Num_Rats, aes(x = Year, y = numRats, fill = Borough)) + 
-  geom_area(alpha=0.725) + 
-  scale_x_continuous(breaks = seq(11,21, by = 1)) + 
-  scale_y_continuous(breaks = seq(0, 4000000, by = 500000)) + 
+  
+  graph1
+  
+graph2.anim <- ggplot(df_NYC_Num_Rats, aes(x = Year, y = numRats, fill = Borough)) +
+  geom_area(alpha=0.725) +
+  scale_x_continuous(breaks = seq(11,21, by = 1)) +
+  scale_y_continuous(breaks = seq(0, 4000000, by = 500000)) +
   labs (title = "Rat Population In NYC", subtitle = "Year: {frame_along}", x = "Year", y = "Population" ) +
   theme_fivethirtyeight() +
   theme(axis.title.y = element_text(), axis.title.x = element_blank(), axis.text.x = element_blank(), axis.ticks.x = element_blank()) +
