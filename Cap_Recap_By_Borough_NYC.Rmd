@@ -38,7 +38,6 @@ df_NYC <- rename(df_NYC, Zip  = `Incident Zip` )
 df_NYC <- df_NYC %>% filter(Zip %in% (10001:11697))
 df_NYC <- separate(df_NYC, "Month_Year", c("Month","Year"), sep = "/")
 df_NYC <- df_NYC[order(df_NYC$Year),]
-df_NYC <- df_NYC %>% select(-count)
   
 write.csv(df_NYC, "C:\\Users\\Admin\\Desktop\\df_NYC.csv", row.names=FALSE)
 ```
