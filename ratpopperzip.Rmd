@@ -49,10 +49,12 @@ df3 <- df2 %>%
                 #figure out rat sightings in identical lots in both years
                 both = (sum(both > 0)),
 
-                estpopulation = ifelse( both > 0 & markedlotstotal2021 > 0 & markedlotstotal2020 > 0, 50*markedlotstotal2020*markedlotstotal2021/both,
-                                    ifelse(both == 0 & markedlotstotal2021 >0 & markedlotstotal2020 >0,  50*markedlotstotal2020*markedlotstotal2021,
-                                          ifelse(markedlotstotal2020 == 0,  50*markedlotstotal2021,
-                                                      ifelse(markedlotstotal2021 == 0,  50*markedlotstotal2020))))) %>% 
+                estpopulation = ifelse( both == 0, 0, 50*markedlotstotal2020*markedlotstotal2021/both)) %>%
+                
+              #  ifelse( both > 0 & markedlotstotal2021 > 0 & markedlotstotal2020 > 0,       #50*markedlotstotal2020*markedlotstotal2021/both,
+              #  ifelse(both == 0 & markedlotstotal2021 >0 & markedlotstotal2020 >0,  50*markedlotstotal2020*markedlotstotal2021,
+               # ifelse(markedlotstotal2020 == 0,  50*markedlotstotal2021,
+              #  ifelse(markedlotstotal2021 == 0,  50*markedlotstotal2020))))) %>% 
       mutate(zip = as.character(Zip))
 
 
