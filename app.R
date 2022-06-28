@@ -15,14 +15,17 @@ library(magrittr)
 #unzip("Modified Zip Code Tabulation Areas (MODZCTA).zip")
 modzcta <- st_read("geo_export_9d592ba8-7629-4558-9e78-e1e536b453d9.shp")
 
-df <- read.csv("dfNYC.csv")
+df <- read.csv("df_NYC.csv")
 icaro <- read.csv("ratsComplete3.csv")
 
 #ORGANIZING DATA FOR PERCENT MAP (angela)
 #percent of calls in each zip code
 total <- sum(df$count) #total 311 calls
-rats_percent <- df %>%
-  filter(Year == 20) %>%
+df21 <- df %>%
+  filter(Year == 2021) 
+total <- sum(df21$count)
+
+rats_percent <- df21 %>%
   group_by(Zip) %>%
   summarize(percent = (sum(count)/total)*100) 
 rats_percent$Zip<-as.character(rats_percent$Zip)
@@ -31,8 +34,8 @@ rats_percent$Zip<-as.character(rats_percent$Zip)
 #ORGANIZING DATA FOR POPULATION MAP (mari)
 df2 <- df %>%
   group_by(Zip,BBL) %>%
-  summarize(reports2020 = (sum(Year==20)),
-            reports2021 = (sum(Year==21)), 
+  summarize(reports2020 = (sum(Year==2020)),
+            reports2021 = (sum(Year==2021)), 
             both = (reports2020 > 0 & reports2021 > 0)
   )
 
@@ -45,10 +48,12 @@ rats_pop <- df2 %>%
             #number of identical lots in both years 
             #figure out rat sightings in identical lots in both years
             both = (sum(both > 0)),
-            total = ifelse( both > 0 & markedlotstotal2021 > 0 & markedlotstotal2020 > 0, 50*markedlotstotal2020*markedlotstotal2021/both,
-                                    ifelse(both == 0 & markedlotstotal2021 >0 & markedlotstotal2020 >0,  50*markedlotstotal2020*markedlotstotal2021,
-                                           ifelse(markedlotstotal2020 == 0,  50*markedlotstotal2021,
-                                                  ifelse(markedlotstotal2021 == 0,  50*markedlotstotal2020))))) %>% 
+            total = ifelse( both == 0, 0, 50*markedlotstotal2020*markedlotstotal2021/both)) %>%
+  
+  #  ifelse( both > 0 & markedlotstotal2021 > 0 & markedlotstotal2020 > 0,       #50*markedlotstotal2020*markedlotstotal2021/both,
+  #  ifelse(both == 0 & markedlotstotal2021 >0 & markedlotstotal2020 >0,  50*markedlotstotal2020*markedlotstotal2021,
+  # ifelse(markedlotstotal2020 == 0,  50*markedlotstotal2021,
+  #  ifelse(markedlotstotal2021 == 0,  50*markedlotstotal2020))))) %>% 
   mutate(zip = as.character(Zip)) %>%
   select(Zip, total)
 
@@ -164,14 +169,38 @@ pal2 <-colorBin(palette="Reds", 9, domain = all_modzcta$total)
 ui <- navbarPage("NYC Rat Population Estimate",
     
     #angela
-    tabPanel("2020 Rat Sighting Reports by ZIP",
-            textOutput("d1"),
-            leafletOutput("percent_map")),
+    tabPanel("2021 Rat Sighting Reports by ZIP",
+             sidebarLayout(
+               sidebarPanel(p("This interactive map shows the frequency of rat sightings reported to New York City's service request hotline in 2021 by ZIP code.
+                              Darker blue areas indicate more calls. As seen, there are more reported sightings in the Upper West Side and Queens."),
+                            p("However, it is important to note the discrepancy between 311 call rates and the estimated rat population in the zip codes. For instance, upon comparing the maps, the zip code 10025 in the Upper West Side had high call rates but relatively low rates of rat infested lots. This indicates that, at least for the rat problem, 311 calls are not completely representative.")
+                            ),
+               mainPanel(
+                 leafletOutput("percent_map")
+                 )
+               )
+             ),
     
     #mari
-    tabPanel("Estimated 2020 Rat Population by ZIP",
-             textOutput("d2"),
-            leafletOutput("pop_map")),
+    tabPanel("Estimated 2021 Rat Population by ZIP",
+             sidebarLayout(
+               sidebarPanel(p("Estimating the rat population in 2021 using 311 calls and the mark-recapture method."),
+                            p("For this map, we are using cleaned and processed 311 call data from NYC opendata. We are also using the Mark recapture technique which is used to estimate the size of a population where it is impractical to count every individual. The basic idea is that you capture a small number of individuals, put a harmless mark on them, and release them back into the population. At a later date, you catch another small group, and record how many have a mark. In a small population, you are more likely to recapture marked individuals, whereas in a large population, you are less likely."),
+                            p("We are using this technique in a slightly different way, instead of capturing and marking rats, we are using BBLs, building block lots, and 311 calls. In place of marking rats, we are marking bbls that have a rat sighting, and the recapture is if the same BBL is called in again 1 year later with another rat sighting."),
+                            p("Assumptions: If any of the following assumptions or conditions are violated, it may affect the accuracy of the population estimate. "),
+                            p("1. If no marked individuals are recaptured, R = 0 and your result is undefined. Mark more individuals and try again."),
+                            p("2. Each called in BBL contains a colony of 50 rats"),
+                            p("3. There must be no immigration into or emigration out of the population"),
+                            p("4. The marking experience must not make an individual more or less likely to be recaptured."),
+                            p("The first and last assumption is one to think about, if in some zip codes people are more likely to call 311 then there is more data and a more accurately estimated population can arise from it. But as we can see in this map, some zip codes have an estimated zero rat population. Surely this cannot be correct, this occurs when there are no identical BBLs that are reported in either year or when R = 0. This does not mean no rat population but that 311 calls may not be the best way to estimate numbers for this zip code."),
+                            p("There are 38 zip codes that returned a zero rat population: let's examine why this happened"),
+                            p("8 zip codes had no calls in 2020 and 2021(these are very small zip codes with no real lots in them) and 8 other zip codes had no calls reported in either 2020 or 2021. The remaining 22 zip codes had calls from both years but none of the BBLs were identical (R = 0)")
+               ),
+               mainPanel(
+                 leafletOutput("pop_map")
+               )
+             )
+    ),
     
     #icaro
     tabPanel("Estimated Rat Population by Year",
@@ -182,23 +211,33 @@ ui <- navbarPage("NYC Rat Population Estimate",
                              min = 11,
                              max = 21,
                              value = 11),
-                 htmlOutput("d3")
+                 p("A HeatMap showing the number of rats in NYC’s neighborhoods from 2011 to 2021. 
+      The numbers were obtained using a Capture-Recapture based method and the recapture factor was assumed to be constant throughout NYC. 
+      Also, a buffer period of 6 months was taken into account."),
+                 br(),
+                 p("Notable observations:"),
+                 p("     - Red regions are not abrupt but gradual → within expectations"),
+                 p("     - The number of rats decreased from 2012 to 2015, but the improvement proved to be short-lived."),
+                 p("     - Queens and Brooklyn show higher rats density"),
+                 p("     - In Manhattan and The Bronx, the neighborhoods with a higher number of rats seem to be located close to parks")
                ),
                mainPanel(
                  leafletOutput("year_map")),
              )
              ),
     tabPanel("Other Data Visualizations",
-            img(src="graph2anim.gif", align = "left", height='300px', width='600px'),
-            img(src="graph1.png", align = "left", height='300px', width='600px'))
+             sidebarLayout(
+               sidebarPanel(
+                 p("Rats are a part of New York, whether we like it or not. From the iconic Pizza rat to their mascot Buddy the Rat, who dons a suit and a giant rat mask, New York has no shortage of rats. But how many Rats are there really in New York? Which borough harbors the most rats? Which boroughs have had their rat neighbors grow the most? Here we have two animated graphs showing just that. The first graph shows the cumulative number of rats separated into boroughs over the years. While the first graph better shows the total number of rats, it is difficult to see the population growth by borough. The second graph better represents how much the rat population has grown in each borough."),
+                 p("Disclaimer: The methods used in estimating the number of rats may differ depending on how the data is processed. For example, aplying the capture_recapture function to the New York City as a whole gives a total rat population of 3.1 million. However, applying the previously mentioned function on each of the  New York City Boroughs and then adding their results, gives a total of 3.3 million rats. Acceptable varaince still needs to be discussed. So, take these values with a grain of salt and a ±10% range of error.")
+               ),
+               mainPanel(img(src="graph2anim.gif", align = "left", height='300px', width='600px'),
+                        img(src="graph1.png", align = "left", height='300px', width='600px')))
+             )
 )
 
 
 server <- function(input, output, session) {
-    output$d1 <- renderText ({
-      ("This interactive map shows the frequency of rat sightings reported to New York City's service request hotline by ZIP code.
-      Darker blue areas indicate more calls. Grey areas represent parks or other areas excluded from this analysis.")
-    })
     
     output$percent_map <- renderLeaflet({  
       leaflet(all_modzcta) %>%
@@ -252,17 +291,6 @@ server <- function(input, output, session) {
 
     })
     
-    output$d3 <- renderUI({
-      str1 <- paste("A HeatMap showing the number of rats in NYC’s neighborhoods from 2011 to 2021. 
-      The numbers were obtained using a Capture-Recapture based method and the recapture factor was assumed to be constant throughout NYC. 
-      Also, a buffer period of 6 months was taken into account.")
-      str2 <- paste("Notable observations:")
-      str3 <- paste("     - Red regions are not abrupt but gradual → within expectations") 
-      str4 <- paste("     - The number of rats decreased from 2012 to 2015, but the improvement proved to be short-lived.")
-      str5 <- paste("     - Queens and Brooklyn show higher rats density")
-      str6 <- paste("     - In Manhattan and The Bronx, the neighborhoods with a higher number of rats seem to be located close to parks")
-      HTML(paste(str1, str2, str3, str4, str5, str6, sep = '<br/>'))
-    })
     output$text <- renderUI({
       str1 <- paste("You have selected", input$var)
       str2 <- paste("You have chosen a range that goes from",
