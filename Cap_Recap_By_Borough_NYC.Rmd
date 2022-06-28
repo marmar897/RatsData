@@ -6,16 +6,16 @@ output: html_document
 ---
 
 ```{r}
-# install.packages("gganimate")
-# install.packages("gapminder")
-# install.packages("ggthemes")
-# 
-# library("tidyverse")
-# library("ggplot2")
-# library("gganimate")
-# library("dplyr")
-# library("gapminder")
-# library("ggthemes")
+install.packages("gganimate")
+install.packages("gapminder")
+install.packages("ggthemes")
+
+library("tidyverse")
+library("ggplot2")
+library("gganimate")
+library("dplyr")
+library("gapminder")
+library("ggthemes")
 ```
 
 ```{r}
@@ -266,28 +266,52 @@ df_Staten_Island_Num_Rats <- rename(df_Staten_Island_Num_Rats, numRats = df_Stat
 
 ```{r Cumulative}
 
+options(scipen = 999)
+
 df_NYC_Num_Rats <- list( df_Brooklyn_Num_Rats, df_Queens_Num_Rats,  df_Manhattan_Num_Rats, df_The_Bronx_Num_Rats, df_Staten_Island_Num_Rats)
 
 df_NYC_Num_Rats <- Reduce(function(x,y) merge(x,y, all = TRUE), df_NYC_Num_Rats)
 
 df_NYC_Num_Rats <- df_NYC_Num_Rats[order(df_NYC_Num_Rats$numRats),]
 
-graph1 <- ggplot(df_NYC_Num_Rats, aes(x = Year, y = numRats, color = Borough)) +
+graph1.static <- ggplot(df_NYC_Num_Rats, aes(x = Year, y = numRats, color = Borough)) +
   geom_line(size = 1.5) +
   scale_x_continuous(breaks = seq(2011,2021, by = 1)) +
   scale_y_continuous(breaks = seq(0,1500000, by = 200000)) +
   labs (title = "Rat Population In Each Borough Over Time", subtitle = "Do rats proliferate faster in certain Boroughs?", x = "Year", y = "Population" ) +
   theme_fivethirtyeight() +
-  theme(axis.title = element_text())
+  theme(axis.title = element_text()) 
 
   ggsave("graph1.png", height = 1440, width = 2560, units = "px")
+
+graph2.static <- ggplot(df_NYC_Num_Rats, aes(x = Year, y = numRats, fill = Borough)) +
+  geom_area(alpha=0.725) +
+  scale_x_continuous(breaks = seq(2011,2021, by = 1)) +
+  scale_y_continuous(breaks = seq(0,4000000, by = 500000)) +
+  labs (title = "Rat Population In NYC", subtitle = "Year: {frame_along}", x = "Year", y = "Population" ) +
+  theme_fivethirtyeight() +
+  theme(axis.title.y = element_text(), axis.title.x = element_text())
   
-  graph1
+  ggsave("graph2.png", height = 1440, width = 2560, units = "px")
+  
+graph1.anim <- ggplot(df_NYC_Num_Rats, aes(x = Year, y = numRats, color = Borough)) +
+  geom_line(size = 1.5) +
+  scale_x_continuous(breaks = seq(2011,2021, by = 1)) +
+  scale_y_continuous(breaks = seq(0,1500000, by = 100000)) +
+  labs (title = "Do Rats Proliferate Faster in Certain Boroughs?", subtitle = "Year: {frame_along}", x = "Year", y = "Population" ) +
+  theme_fivethirtyeight() +
+  theme(axis.title = element_text()) + 
+  theme(axis.title.y = element_text(), axis.title.x = element_blank(), axis.text.x = element_blank(), axis.ticks.x = element_blank()) +
+  transition_reveal(Year) +
+  view_follow()
+
+animate(graph1.anim, height = 720, width = 1280, fps = 30, duration = 15, end_pause = 90, res = 100)
+anim_save("graph1anim.gif")
   
 graph2.anim <- ggplot(df_NYC_Num_Rats, aes(x = Year, y = numRats, fill = Borough)) +
   geom_area(alpha=0.725) +
   scale_x_continuous(breaks = seq(2011,2021, by = 1)) +
-  scale_y_continuous(breaks = seq(0,4000000, by = 500000)) +
+  scale_y_continuous(breaks = seq(0,4000000, by = 250000)) +
   labs (title = "Rat Population In NYC", subtitle = "Year: {frame_along}", x = "Year", y = "Population" ) +
   theme_fivethirtyeight() +
   theme(axis.title.y = element_text(), axis.title.x = element_blank(), axis.text.x = element_blank(), axis.ticks.x = element_blank()) +
