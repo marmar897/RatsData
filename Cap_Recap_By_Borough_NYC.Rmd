@@ -6,16 +6,16 @@ output: html_document
 ---
 
 ```{r}
-install.packages("gganimate")
-install.packages("gapminder")
-install.packages("ggthemes")
-
-library("tidyverse")
-library("ggplot2")
-library("gganimate")
-library("dplyr")
-library("gapminder")
-library("ggthemes")
+# install.packages("gganimate")
+# install.packages("gapminder")
+# install.packages("ggthemes")
+# 
+# library("tidyverse")
+# library("ggplot2")
+# library("gganimate")
+# library("dplyr")
+# library("gapminder")
+# library("ggthemes")
 ```
 
 ```{r}
@@ -23,18 +23,19 @@ calls <- read_csv("nyc_rodent_compliants.csv")
 ```
 
 ```{r}
- df_NYC <-
-   calls %>%
-   mutate(Date = as.Date(`Created Date`, format = "%m/%d/%Y"),
-          Month_Year = format(Date, "%m/%Y")) %>%
-   filter(Descriptor == "Rat Sighting") %>%
-   select( BBL, Borough, `Incident Zip`, Month_Year) %>%
-   na.omit() %>%
-   group_by(BBL, Borough, `Incident Zip`, Month_Year) %>%
-   summarize(count = n()) %>% 
-   filter(BBL != 0, Borough > 10000)
-
+df_NYC <-
+  calls %>%
+  mutate(Date = as.Date(`Created Date`, format = "%m/%d/%Y"),
+        Month_Year = format(Date, "%m/%Y")) %>%
+  filter(Descriptor == "Rat Sighting") %>%
+  select( BBL, Borough, `Incident Zip`, Month_Year) %>%
+  na.omit() %>%
+  group_by(BBL, Borough, `Incident Zip`, Month_Year) %>%
+  summarize(count = n()) %>% 
+  filter(BBL != 0, Borough > 10000)
+  
 df_NYC <- rename(df_NYC, Zip  = `Incident Zip` )
+df_NYC <- df_NYC %>% filter(Zip %in% (10001:11697))
 df_NYC <- separate(df_NYC, "Month_Year", c("Month","Year"), sep = "/")
 df_NYC <- df_NYC[order(df_NYC$Year),]
 df_NYC <- df_NYC %>% select(-count)
@@ -43,8 +44,8 @@ write.csv(df_NYC, "C:\\Users\\Admin\\Desktop\\df_NYC.csv", row.names=FALSE)
 ```
 
 ```{r test_cap_recap_function}
-# lots_year_1 <- df_NYC %>% filter(Year == "20") %>% pull(BBL)
-# lots_year_2 <- df_NYC %>% filter(Year == "21") %>% pull(BBL)
+# lots_year_1 <- df_NYC %>% filter(Year == "2020") %>% pull(BBL)
+# lots_year_2 <- df_NYC %>% filter(Year == "2021") %>% pull(BBL)
 # number_in_year_1 <- length(lots_year_1)
 # number_in_year_2 <- length(lots_year_2)
 # number_in_year_1_and_2 <- sum(lots_year_1 %in% lots_year_2)
@@ -69,7 +70,7 @@ write.csv(df_NYC, "C:\\Users\\Admin\\Desktop\\df_NYC.csv", row.names=FALSE)
 
 ```{r jonathan_rat_pop}
 # qplot(x = factor(2011:2021),
-#       weight = sapply(11:21, capture_recapture),
+#       weight = sapply(2011:2021, capture_recapture),
 #       geom = "bar")  +
 #   labs(x = "year",
 #        y = "estimated rat population") +
@@ -91,10 +92,19 @@ write.csv(df_NYC, "C:\\Users\\Admin\\Desktop\\df_NYC.csv", row.names=FALSE)
 
 ```{r calls by borough}
 df_The_Bronx <- df_NYC %>% filter(Borough == "BRONX")
+  df_The_Bronx <- df_The_Bronx %>% filter(Zip%in%(10451:10475))
+  
 df_Brooklyn <- df_NYC %>% filter(Borough == "BROOKLYN")
+  df_Brooklyn <- df_Brooklyn %>% filter(Zip%in%(11201:11256))
+  
 df_Manhattan <- df_NYC %>% filter(Borough == "MANHATTAN")
+  df_Manhattan <- df_Manhattan %>% filter(Zip%in%(10001:10282))
+  
 df_Queens <- df_NYC %>% filter(Borough == "QUEENS")
+  df_Queens <- df_Queens %>% filter(Zip%in%(11101:11697))
+  
 df_Staten_Island <- df_NYC %>% filter(Borough == "STATEN ISLAND")
+  df_Staten_Island <- df_Staten_Island %>% filter(Zip%in%(10301:10314))
 ```
 
 ```{r calls}
