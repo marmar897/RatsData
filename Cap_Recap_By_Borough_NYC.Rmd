@@ -276,7 +276,7 @@ df_NYC_Num_Rats <- df_NYC_Num_Rats[order(df_NYC_Num_Rats$numRats),]
 graph1.static <- ggplot(df_NYC_Num_Rats, aes(x = Year, y = numRats, color = Borough)) +
   geom_line(size = 1.5) +
   scale_x_continuous(breaks = seq(2011,2021, by = 1)) +
-  scale_y_continuous(breaks = seq(0,1500000, by = 200000)) +
+  scale_y_continuous(breaks = seq(0,1500000, by = 100000)) +
   labs (title = "Rat Population In Each Borough Over Time", subtitle = "Do rats proliferate faster in certain Boroughs?", x = "Year", y = "Population" ) +
   theme_fivethirtyeight() +
   theme(axis.title = element_text()) 
@@ -286,7 +286,7 @@ ggsave("graph1.png", height = 1440, width = 2560, units = "px")
 graph2.static <- ggplot(df_NYC_Num_Rats, aes(x = Year, y = numRats, fill = Borough)) +
   geom_area(alpha=0.725) +
   scale_x_continuous(breaks = seq(2011,2021, by = 1)) +
-  scale_y_continuous(breaks = seq(0,4000000, by = 500000)) +
+  scale_y_continuous(breaks = seq(0,4000000, by = 250000)) +
   labs (title = "Rat Population In NYC", x = "Year", y = "Population" ) +
   theme_fivethirtyeight() +
   theme(axis.title.y = element_text(), axis.title.x = element_text())
