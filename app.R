@@ -17,7 +17,6 @@ modzcta <- st_read("geo_export_9d592ba8-7629-4558-9e78-e1e536b453d9.shp")
 
 df <- read.csv("dfNYC.csv")
 icaro <- read.csv("ratsComplete3.csv")
-#df <- df %>% rename(zip = Incident.Zip)
 
 #ORGANIZING DATA FOR PERCENT MAP (angela)
 #percent of calls in each zip code
@@ -30,12 +29,6 @@ rats_percent$Zip<-as.character(rats_percent$Zip)
 
 
 #ORGANIZING DATA FOR POPULATION MAP (mari)
-ziplots <- df %>%
-  group_by(Zip) %>%
-  summarise(totallots = n())
-
-#the number of lots that had reports in both years *50 in zipcode.
-#grouping by zip and bbl to get number of reported calls in years 2020 and 2021
 df2 <- df %>%
   group_by(Zip,BBL) %>%
   summarize(reports2020 = (sum(Year==20)),
@@ -52,10 +45,12 @@ rats_pop <- df2 %>%
             #number of identical lots in both years 
             #figure out rat sightings in identical lots in both years
             both = (sum(both > 0)),
-            total = ifelse(markedlotstotal2021 == 0 | both == 0,
-                                   0,
-                                   50*markedlotstotal2020*markedlotstotal2021/both)) %>% 
-  mutate(zip = as.character(Zip)) 
+            total = ifelse( both > 0 & markedlotstotal2021 > 0 & markedlotstotal2020 > 0, 50*markedlotstotal2020*markedlotstotal2021/both,
+                                    ifelse(both == 0 & markedlotstotal2021 >0 & markedlotstotal2020 >0,  50*markedlotstotal2020*markedlotstotal2021,
+                                           ifelse(markedlotstotal2020 == 0,  50*markedlotstotal2021,
+                                                  ifelse(markedlotstotal2021 == 0,  50*markedlotstotal2020))))) %>% 
+  mutate(zip = as.character(Zip)) %>%
+  select(Zip, total)
 
 #ORGANIZING DATA FOR YEAR MAP (icaro)
 #separate dataframes for rat count each year 
@@ -170,10 +165,12 @@ ui <- navbarPage("NYC Rat Population Estimate",
     
     #angela
     tabPanel("2020 Rat Sighting Reports by ZIP",
-             leafletOutput("percent_map")),
+            textOutput("d1"),
+            leafletOutput("percent_map")),
     
     #mari
     tabPanel("Estimated 2020 Rat Population by ZIP",
+             textOutput("d2"),
             leafletOutput("pop_map")),
     
     #icaro
@@ -184,7 +181,8 @@ ui <- navbarPage("NYC Rat Population Estimate",
                              "Year:",
                              min = 11,
                              max = 21,
-                             value = 11)
+                             value = 11),
+                 htmlOutput("d3")
                ),
                mainPanel(
                  leafletOutput("year_map")),
@@ -197,7 +195,11 @@ ui <- navbarPage("NYC Rat Population Estimate",
 
 
 server <- function(input, output, session) {
-
+    output$d1 <- renderText ({
+      ("This interactive map shows the frequency of rat sightings reported to New York City's service request hotline by ZIP code.
+      Darker blue areas indicate more calls. Grey areas represent parks or other areas excluded from this analysis.")
+    })
+    
     output$percent_map <- renderLeaflet({  
       leaflet(all_modzcta) %>%
         addProviderTiles(provider = "CartoDB.Positron") %>%
@@ -222,6 +224,10 @@ server <- function(input, output, session) {
  
     })
     
+    output$d2 <- renderText ({
+      ("description")
+    })
+    
     output$pop_map <- renderLeaflet({
       leaflet(all_modzcta) %>%
         addProviderTiles(provider = "CartoDB.Positron") %>%
@@ -244,6 +250,25 @@ server <- function(input, output, session) {
                   title = "Estimated Number of Rats",
                   opacity = 0.7)
 
+    })
+    
+    output$d3 <- renderUI({
+      str1 <- paste("A HeatMap showing the number of rats in NYC’s neighborhoods from 2011 to 2021. 
+      The numbers were obtained using a Capture-Recapture based method and the recapture factor was assumed to be constant throughout NYC. 
+      Also, a buffer period of 6 months was taken into account.")
+      str2 <- paste("Notable observations:")
+      str3 <- paste("     - Red regions are not abrupt but gradual → within expectations") 
+      str4 <- paste("     - The number of rats decreased from 2012 to 2015, but the improvement proved to be short-lived.")
+      str5 <- paste("     - Queens and Brooklyn show higher rats density")
+      str6 <- paste("     - In Manhattan and The Bronx, the neighborhoods with a higher number of rats seem to be located close to parks")
+      HTML(paste(str1, str2, str3, str4, str5, str6, sep = '<br/>'))
+    })
+    output$text <- renderUI({
+      str1 <- paste("You have selected", input$var)
+      str2 <- paste("You have chosen a range that goes from",
+                    input$range[1], "to", input$range[2])
+      HTML(paste(str1, str2, sep = '<br/>'))
+      
     })
     
     output$year_map <- renderLeaflet({
