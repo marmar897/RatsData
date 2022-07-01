@@ -94,12 +94,9 @@ ui <- fluidPage("NYC Rat Population Estimate",
                 tabPanel("Estimated Rat Population by ZIP",
                          sidebarLayout(
                            sidebarPanel(
-                             sliderInput("year",
-                                         "Year:",
-                                         min = 11,
-                                         max = 21,
-                                         value = 11)
-                           ),
+                             selectInput("year", "Year:",
+                                         c(2011,2012,2013,2014,2015,2016,
+                                           2017,2018,2019,2020,2021))),
                            mainPanel(
                              leafletOutput("pop_map")),
                          )
@@ -116,37 +113,37 @@ server <- function(input, output, session) {
     time <- input$year
     
     
-    if(time == 11){
+    if(time == 2011){
       all_modzcta <- all_modzcta11
       
-    } else if(time == 12){
+    } else if(time == 2012){
       all_modzcta <- all_modzcta12
       
-    } else if(time == 13){
+    } else if(time == 2013){
       all_modzcta <- all_modzcta13
       
-    } else if(time == 14){
+    } else if(time == 2014){
       all_modzcta <- all_modzcta14
       
-    } else if(time == 15){
+    } else if(time == 2015){
       all_modzcta <- all_modzcta15
       
-    } else if(time == 16){
+    } else if(time == 2016){
       all_modzcta <- all_modzcta16
       
-    } else if(time == 17){
+    } else if(time == 2017){
       all_modzcta <- all_modzcta17
       
-    } else if(time == 18){
+    } else if(time == 2018){
       all_modzcta <- all_modzcta18
       
-    } else if(time == 19){
+    } else if(time == 2019){
       all_modzcta <- all_modzcta19
       
-    } else if(time == 20){
+    } else if(time == 2020){
       all_modzcta <- all_modzcta20
       
-    } else if(time == 21){
+    } else if(time == 2021){
       all_modzcta <- all_modzcta21
       
     }
