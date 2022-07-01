@@ -16,7 +16,6 @@ library(magrittr)
 modzcta <- st_read("geo_export_9d592ba8-7629-4558-9e78-e1e536b453d9.shp")
 
 df <- read.csv("df_NYC.csv")
-icaro <- read.csv("ratsComplete3.csv")
 
 #ORGANIZING DATA FOR PERCENT MAP (angela)
 #percent of calls in each zip code
@@ -57,11 +56,10 @@ rats_pop <- df2 %>%
   mutate(zip = as.character(Zip)) %>%
   select(Zip, total)
 
+rats_pop$total <- round(rats_pop$total,-2)
+
 #ORGANIZING DATA FOR YEAR MAP (icaro)
 #separate dataframes for rat count each year 
-
-df4 <- read.csv("ratsComplete3.csv")
-df4$Zip<-as.character(df4$Zip)
 
 df11 <- read.csv("ratsComplete11.csv")
 df11$Zip<-as.character(df11$Zip)
@@ -206,11 +204,9 @@ ui <- navbarPage("NYC Rat Population Estimate",
     tabPanel("Estimated Rat Population by Year",
              sidebarLayout(
                sidebarPanel(
-                 sliderInput("year",
-                             "Year:",
-                             min = 11,
-                             max = 21,
-                             value = 11),
+                 selectInput("year", "Year:",
+                             c(2011,2012,2013,2014,2015,
+                                2016,2017,2018,2019,2020,2021)),
                  p("A HeatMap showing the number of rats in NYC’s neighborhoods from 2011 to 2021. 
       The numbers were obtained using a Capture-Recapture based method and the recapture factor was assumed to be constant throughout NYC. 
       Also, a buffer period of 6 months was taken into account."),
@@ -232,6 +228,7 @@ ui <- navbarPage("NYC Rat Population Estimate",
                  p("Disclaimer: The methods used in estimating the number of rats may differ depending on how the data is processed. For example, aplying the capture_recapture function to the New York City as a whole gives a total rat population of 3.1 million. However, applying the previously mentioned function on each of the  New York City Boroughs and then adding their results, gives a total of 3.3 million rats. Acceptable varaince still needs to be discussed. So, take these values with a grain of salt and a ±10% range of error.")
                ),
                mainPanel(img(src="graph2anim.gif", align = "left", height='300px', width='600px'),
+                         img(src="graph1anim.gif", align = "left", height='300px', width='600px'),
                         img(src="graph1.png", align = "left", height='300px', width='600px')))
              )
 )
@@ -263,10 +260,6 @@ server <- function(input, output, session) {
  
     })
     
-    output$d2 <- renderText ({
-      ("description")
-    })
-    
     output$pop_map <- renderLeaflet({
       leaflet(all_modzcta) %>%
         addProviderTiles(provider = "CartoDB.Positron") %>%
@@ -291,49 +284,42 @@ server <- function(input, output, session) {
 
     })
     
-    output$text <- renderUI({
-      str1 <- paste("You have selected", input$var)
-      str2 <- paste("You have chosen a range that goes from",
-                    input$range[1], "to", input$range[2])
-      HTML(paste(str1, str2, sep = '<br/>'))
-      
-    })
     
     output$year_map <- renderLeaflet({
       time <- input$year
       
       
-      if(time == 11){
+      if(time == 2011){
         all_modzcta <- all_modzcta11
         
-      } else if(time == 12){
+      } else if(time == 2012){
         all_modzcta <- all_modzcta12
         
-      } else if(time == 13){
+      } else if(time == 2013){
         all_modzcta <- all_modzcta13
         
-      } else if(time == 14){
+      } else if(time == 2014){
         all_modzcta <- all_modzcta14
         
-      } else if(time == 15){
+      } else if(time == 2015){
         all_modzcta <- all_modzcta15
         
-      } else if(time == 16){
+      } else if(time == 2016){
         all_modzcta <- all_modzcta16
         
-      } else if(time == 17){
+      } else if(time == 2017){
         all_modzcta <- all_modzcta17
         
-      } else if(time == 18){
+      } else if(time == 2018){
         all_modzcta <- all_modzcta18
         
-      } else if(time == 19){
+      } else if(time == 2019){
         all_modzcta <- all_modzcta19
         
-      } else if(time == 20){
+      } else if(time == 2020){
         all_modzcta <- all_modzcta20
         
-      } else if(time == 21){
+      } else if(time == 2021){
         all_modzcta <- all_modzcta21
         
       }
