@@ -61,6 +61,7 @@ rats_pop$total <- round(rats_pop$total,-2)
 #ORGANIZING DATA FOR YEAR MAP (icaro)
 #separate dataframes for rat count each year 
 
+#capture recapture by nyc 
 df11 <- read.csv("ratsComplete11.csv")
 df11$Zip<-as.character(df11$Zip)
 
@@ -146,6 +147,85 @@ all_modzcta21 <- all_modzcta21 %>%
   st_transform(crs = "+init=epsg:4326")
 
 
+#capture recapture by zip 
+df11_1 <- read.csv("ratsComplete11_10.csv")
+df11_1$Zip<-as.character(df11_1$Zip)
+
+df12_1 <- read.csv("ratsComplete12_10.csv")
+df12_1$Zip<-as.character(df12_1$Zip)
+
+df13_1 <- read.csv("ratsComplete13_10.csv")
+df13_1$Zip<-as.character(df13_1$Zip)
+
+df14_1 <- read.csv("ratsComplete14_10.csv")
+df14_1$Zip<-as.character(df14_1$Zip)
+
+df15_1 <- read.csv("ratsComplete15_10.csv")
+df15_1$Zip<-as.character(df15_1$Zip)
+
+df16_1 <- read.csv("ratsComplete16_10.csv")
+df16_1$Zip<-as.character(df16_1$Zip)
+
+df17_1 <- read.csv("ratsComplete17_10.csv")
+df17_1$Zip<-as.character(df17_1$Zip)
+
+df18_1 <- read.csv("ratsComplete18_10.csv")
+df18_1$Zip<-as.character(df18_1$Zip)
+
+df19_1 <- read.csv("ratsComplete19_10.csv")
+df19_1$Zip<-as.character(df19_1$Zip)
+
+df20_1 <- read.csv("ratsComplete20_10.csv")
+df20_1$Zip<-as.character(df20_1$Zip)
+
+df21_1 <- read.csv("ratsComplete21_10.csv")
+df21_1$Zip<-as.character(df21_1$Zip)
+
+all_modzcta11_1 <- geo_join(modzcta, df11_1, "modzcta", "Zip", how = "inner")
+all_modzcta11_1 <- all_modzcta11_1 %>%
+  st_transform(crs = "+init=epsg:4326")
+
+all_modzcta12_1 <- geo_join(modzcta, df12_1, "modzcta", "Zip", how = "inner")
+all_modzcta12_1 <- all_modzcta12_1 %>%
+  st_transform(crs = "+init=epsg:4326")
+
+all_modzcta13_1 <- geo_join(modzcta, df13_1, "modzcta", "Zip", how = "inner")
+all_modzcta13_1 <- all_modzcta13_1 %>%
+  st_transform(crs = "+init=epsg:4326")
+
+all_modzcta14_1 <- geo_join(modzcta, df14_1, "modzcta", "Zip", how = "inner")
+all_modzcta14_1 <- all_modzcta14_1 %>%
+  st_transform(crs = "+init=epsg:4326")
+
+all_modzcta15_1 <- geo_join(modzcta, df15_1, "modzcta", "Zip", how = "inner")
+all_modzcta15_1 <- all_modzcta15_1 %>%
+  st_transform(crs = "+init=epsg:4326")
+
+all_modzcta16_1 <- geo_join(modzcta, df16_1, "modzcta", "Zip", how = "inner")
+all_modzcta16_1 <- all_modzcta16_1 %>%
+  st_transform(crs = "+init=epsg:4326")
+
+all_modzcta17_1 <- geo_join(modzcta, df17_1, "modzcta", "Zip", how = "inner")
+all_modzcta17_1 <- all_modzcta17_1 %>%
+  st_transform(crs = "+init=epsg:4326")
+
+all_modzcta18_1 <- geo_join(modzcta, df18_1, "modzcta", "Zip", how = "inner")
+all_modzcta18_1 <- all_modzcta18_1 %>%
+  st_transform(crs = "+init=epsg:4326")
+
+all_modzcta19_1 <- geo_join(modzcta, df19_1, "modzcta", "Zip", how = "inner")
+all_modzcta19_1 <- all_modzcta19_1 %>%
+  st_transform(crs = "+init=epsg:4326")
+
+all_modzcta20_1 <- geo_join(modzcta, df20_1, "modzcta", "Zip", how = "inner")
+all_modzcta20_1 <- all_modzcta20_1 %>%
+  st_transform(crs = "+init=epsg:4326")
+
+all_modzcta21_1 <- geo_join(modzcta, df21_1, "modzcta", "Zip", how = "inner")
+all_modzcta21_1 <- all_modzcta21_1 %>%
+  st_transform(crs = "+init=epsg:4326")
+
+
 #Palettes and Labels for percent map
 labels_percent <-sprintf(
   "<strong>%s</strong><br/>%g%% ",
@@ -201,7 +281,7 @@ ui <- navbarPage("NYC Rat Population Estimate",
     ),
     
     #icaro
-    tabPanel("Estimated Rat Population by Year",
+    tabPanel("Estimated Rat Population by Year (nyc)",
              sidebarLayout(
                sidebarPanel(
                  selectInput("year", "Year:",
@@ -218,9 +298,21 @@ ui <- navbarPage("NYC Rat Population Estimate",
                  p("     - In Manhattan and The Bronx, the neighborhoods with a higher number of rats seem to be located close to parks")
                ),
                mainPanel(
-                 leafletOutput("year_map")),
+                 leafletOutput("year_map"))
              )
              ),
+    
+    tabPanel("Estimated Rat Population by Year (zip)",
+             sidebarLayout(
+               sidebarPanel(
+                 selectInput("year1", "Year:",
+                             c(2011,2012,2013,2014,2015,
+                               2016,2017,2018,2019,2020,2021))),
+               mainPanel(
+                 leafletOutput("year_map_zip"))
+             )
+    ),
+    
     tabPanel("Other Data Visualizations",
              sidebarLayout(
                sidebarPanel(
@@ -350,6 +442,76 @@ server <- function(input, output, session) {
         )%>%
         addLegend("topleft",
                   pal = pal3,
+                  values = ~RatsN,
+                  title = "Estimated Number of Rats",
+                  opacity = 0.7)
+    })
+    
+    output$year_map_zip <- renderLeaflet({
+      time <- input$year1
+      
+      
+      if(time == 2011){
+        all_modzcta <- all_modzcta11_1
+        
+      } else if(time == 2012){
+        all_modzcta <- all_modzcta12_1
+        
+      } else if(time == 2013){
+        all_modzcta <- all_modzcta13_1
+        
+      } else if(time == 2014){
+        all_modzcta <- all_modzcta14_1
+        
+      } else if(time == 2015){
+        all_modzcta <- all_modzcta15_1
+        
+      } else if(time == 2016){
+        all_modzcta <- all_modzcta16_1
+        
+      } else if(time == 2017){
+        all_modzcta <- all_modzcta17_1
+        
+      } else if(time == 2018){
+        all_modzcta <- all_modzcta18_1
+        
+      } else if(time == 2019){
+        all_modzcta <- all_modzcta19_1
+        
+      } else if(time == 2020){
+        all_modzcta <- all_modzcta20_1
+        
+      } else if(time == 2021){
+        all_modzcta <- all_modzcta21_1
+        
+      }
+      
+      #Palettes and Labels for pop map
+      labels_year_zip <-sprintf(
+        "<strong>%s</strong><br/>%g RATS!",
+        all_modzcta$modzcta,all_modzcta$RatsN) %>%
+        lapply(htmltools::HTML)
+      
+      pal4 <-colorBin(palette="Reds", 9, domain = all_modzcta$RatsN)
+      
+      
+      leaflet(all_modzcta) %>%
+        addProviderTiles(provider = "CartoDB.Positron") %>%
+        addPolygons(label = labels_year_zip,
+                    stroke = FALSE,
+                    smoothFactor = 0.5,
+                    opacity = 1,
+                    fillOpacity = 0.7,
+                    fillColor = ~pal4(RatsN),
+                    highlightOptions = highlightOptions(
+                      weight = 5,
+                      color = "black",
+                      fillOpacity = 1,
+                      opacity = 1,
+                      bringToFront = TRUE)
+        )%>%
+        addLegend("topleft",
+                  pal = pal4,
                   values = ~RatsN,
                   title = "Estimated Number of Rats",
                   opacity = 0.7)
