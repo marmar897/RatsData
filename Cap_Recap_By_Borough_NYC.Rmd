@@ -6,16 +6,16 @@ output: html_document
 ---
 
 ```{r}
-install.packages("gganimate")
-install.packages("gapminder")
-install.packages("ggthemes")
-
-library("tidyverse")
-library("ggplot2")
-library("gganimate")
-library("dplyr")
-library("gapminder")
-library("ggthemes")
+# install.packages("gganimate")
+# install.packages("gapminder")
+# install.packages("ggthemes")
+# 
+# library("tidyverse")
+# library("ggplot2")
+# library("gganimate")
+# library("dplyr")
+# library("gapminder")
+# library("ggthemes")
 ```
 
 ```{r}
@@ -300,7 +300,7 @@ graph1.anim <- ggplot(df_NYC_Num_Rats, aes(x = Year, y = numRats, color = Boroug
    labs (title = "Do Rats Proliferate Faster in Certain Boroughs?", subtitle = "Year: {frame_along}", x = "Year", y = "Population" ) +
    theme_fivethirtyeight() +
    theme(axis.title = element_text()) +
-   theme(axis.title.y = element_text(), axis.title.x = element_blank(), axis.text.x = element_blank(), axis.ticks.x = element_blank()) +
+   theme(axis.title.y = element_text(), axis.title.x = element_text()) +
    transition_reveal(Year) +
    view_follow()
 
@@ -313,7 +313,7 @@ graph2.anim <- ggplot(df_NYC_Num_Rats, aes(x = Year, y = numRats, fill = Borough
    scale_y_continuous(breaks = seq(0,4000000, by = 250000)) +
    labs (title = "Rat Population In NYC", subtitle = "Year: {frame_along}", x = "Year", y = "Population" ) +
    theme_fivethirtyeight() +
-   theme(axis.title.y = element_text(), axis.title.x = element_blank(), axis.text.x = element_blank(), axis.ticks.x = element_blank()) +
+   theme(axis.title.y = element_text(), axis.title.x = element_text()) +
    transition_reveal(Year) +
    view_follow()
 
