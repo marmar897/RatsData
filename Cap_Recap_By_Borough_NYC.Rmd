@@ -6,16 +6,16 @@ output: html_document
 ---
 
 ```{r}
-# install.packages("gganimate")
-# install.packages("gapminder")
-# install.packages("ggthemes")
-# 
-# library("tidyverse")
-# library("ggplot2")
-# library("gganimate")
-# library("dplyr")
-# library("gapminder")
-# library("ggthemes")
+install.packages("gganimate")
+install.packages("gapminder")
+install.packages("ggthemes")
+
+library("tidyverse")
+library("ggplot2")
+library("gganimate")
+library("dplyr")
+library("gapminder")
+library("ggthemes")
 ```
 
 ```{r}
@@ -89,21 +89,149 @@ write.csv(df_NYC, "C:\\Users\\Admin\\Desktop\\df_NYC.csv", row.names=FALSE)
 # common_lots_18_19 <- inner_join(lots_year_18, lots_year_19)
 ```
 
-```{r calls by borough}
-df_The_Bronx <- df_NYC %>% filter(Borough == "BRONX")
-  df_The_Bronx <- df_The_Bronx %>% filter(Zip%in%(10451:10475))
+```{r calls Bronx}
+
+df_Central_Bronx <- df_NYC %>% filter(Zip%in% c(10453, 10457, 10460))
+  df_Central_Bronx$Neighborhood <- "CENTRAL BRONX"
+
+df_Bronx_Park_Fordham <- df_NYC %>% filter(Zip%in% c(10458, 10467, 10468))
+  df_Bronx_Park_Fordham$Neighborhood <- "BRONX PARK AND FORDHAM"
+
+df_High_Bridge_Morrisania <- df_NYC %>% filter(Zip%in% c(10451, 10452, 10456))
+  df_High_Bridge_Morrisania$Neighborhood <- "HIGH BRIDGE AND MORRISANIA"
+
+df_Hunts_Point_Mott_Haven <- df_NYC %>% filter(Zip%in% c(10454, 10455, 10459, 10474))
+  df_Hunts_Point_Mott_Haven$Neighborhood <- "HUNTS POINT AND MOTT HAVEN"
+
+df_Kingsbridge_Riverdale <- df_NYC %>% filter(Zip%in% c(10463, 10471))
+  df_Kingsbridge_Riverdale$Neighborhood <- "KINGSBRIDGE AND RIVERDALE"
+
+df_Northeast_Bronx <- df_NYC %>% filter(Zip%in% c(10466, 10469, 10470, 10475))
+  df_Northeast_Bronx$Neighborhood <- "NORTHEAST BRONX"
+
+df_Southeast_Bronx <- df_NYC %>% filter(Zip%in% c(10461, 10462, 10464, 10465, 10472, 10473))
+  df_Southeast_Bronx$Neighborhood <- "SOUTHEAST BRONX"
+
+df_The_Bronx <- rbind(df_Central_Bronx, df_Bronx_Park_Fordham, df_High_Bridge_Morrisania, df_Hunts_Point_Mott_Haven, df_Kingsbridge_Riverdale, df_Northeast_Bronx, df_Southeast_Bronx)
+
+```
+
+```{r calls Brooklyn}
+
+df_Central_Brooklyn <- df_NYC %>% filter(Zip%in% c(11212, 11213, 11216, 11233, 11238))
+  df_Central_Brooklyn$Neighborhood <- "CENTRAL BROOKLYN"
+
+df_Southwest_Brooklyn <- df_NYC %>% filter(Zip%in% c(11209, 11214, 11228))
+  df_Southwest_Brooklyn$Neighborhood <- "SOUTHWEST BROOKLYN"
+
+df_Borough_Park <- df_NYC %>% filter(Zip%in% c(11204, 11218, 11219, 11230))
+  df_Borough_Park$Neighborhood <- "BOROUGH PARK"
+
+df_Southern_Brooklyn <- df_NYC %>% filter(Zip%in% c(11223, 11224, 11229, 11235))
+  df_Southern_Brooklyn$Neighborhood <- "SOUTHERN BROOKLYN"
   
-df_Brooklyn <- df_NYC %>% filter(Borough == "BROOKLYN")
-  df_Brooklyn <- df_Brooklyn %>% filter(Zip%in%(11201:11256))
+df_Northwest_Brooklyn <- df_NYC %>% filter(Zip%in% c(11201, 11205, 11215, 11217, 11231))
+  df_Northwest_Brooklyn$Neighborhood <- "NORTHWEST BROOKLYN"
+
+df_Flatbush <- df_NYC %>% filter(Zip%in% c(11203, 11210, 11225, 11226))
+  df_Flatbush$Neighborhood <- "FLATBUSH"
+
+df_East_NY_New_Lots <- df_NYC %>% filter(Zip%in% c(11207, 11208))
+  df_East_NY_New_Lots$Neighborhood <- "EAST NEW YORK AND NEW LOTS"
   
-df_Manhattan <- df_NYC %>% filter(Borough == "MANHATTAN")
-  df_Manhattan <- df_Manhattan %>% filter(Zip%in%(10001:10282))
+df_Greenpoint <- df_NYC %>% filter(Zip%in% c(11211, 11222))
+  df_Greenpoint$Neighborhood <- "GREENPOINT"
   
-df_Queens <- df_NYC %>% filter(Borough == "QUEENS")
-  df_Queens <- df_Queens %>% filter(Zip%in%(11101:11697))
+df_Bushwick_Williamsburg <- df_NYC %>% filter(Zip%in% c(11220, 11232))
+  df_Bushwick_Williamsburg$Neighborhood <- "BUSHWICK AND WILLIAMSBURG"
   
-df_Staten_Island <- df_NYC %>% filter(Borough == "STATEN ISLAND")
-  df_Staten_Island <- df_Staten_Island %>% filter(Zip%in%(10301:10314))
+df_Sunset_Park <- df_NYC %>% filter(Zip%in% c(11206, 11221, 12237))
+  df_Sunset_Park$Neighborhood <- "SUNSET PARK"
+
+df_Brooklyn <- rbind(df_Central_Brooklyn, df_Southwest_Brooklyn, df_Borough_Park, df_Southern_Brooklyn, df_Northwest_Brooklyn, df_Flatbush, df_East_NY_New_Lots, df_Greenpoint, df_Bushwick_Williamsburg, df_Sunset_Park)
+
+```
+
+
+```{r calls Manhattan}
+
+df_Central_Bronx <- df_NYC %>% filter(Zip%in% c(10453, 10457, 10460))
+  df_Central_Bronx$Neighborhood <- "CENTRAL BRONX"
+
+df_Bronx_Park_Fordham <- df_NYC %>% filter(Zip%in% c(10458, 10467, 10468))
+  df_Bronx_Park_Fordham$Neighborhood <- "BRONX PARK AND FORDHAM"
+
+df_High_Bridge_Morrisania <- df_NYC %>% filter(Zip%in% c(10451, 10452, 10456))
+  df_High_Bridge_Morrisania$Neighborhood <- "HIGH BRIDGE AND MORRISANIA"
+
+df_Hunts_Point_Mott_Haven <- df_NYC %>% filter(Zip%in% c(10454, 10455, 10459, 10474))
+  df_Hunts_Point_Mott_Haven$Neighborhood <- "HUNTS POINT AND MOTT HAVEN"
+
+df_Kingsbridge_Riverdale <- df_NYC %>% filter(Zip%in% c(10463, 10471))
+  df_Kingsbridge_Riverdale$Neighborhood <- "KINGSBRIDGE AND RIVERDALE"
+
+df_Northeast_Bronx <- df_NYC %>% filter(Zip%in% c(10466, 10469, 10470, 10475))
+  df_Northeast_Bronx$Neighborhood <- "NORTHEAST BRONX"
+
+df_Southeast_Bronx <- df_NYC %>% filter(Zip%in% c(10461, 10462, 10464, 10465, 10472, 10473))
+  df_Southeast_Bronx$Neighborhood <- "SOUTHEAST BRONX"
+
+df_The_Bronx <- rbind(df_Central_Bronx, df_Bronx_Park_Fordham, df_High_Bridge_Morrisania, df_Hunts_Point_Mott_Haven, df_Kingsbridge_Riverdale, df_Northeast_Bronx, df_Southeast_Bronx)
+
+```
+
+```{r calls Queens}
+
+df_Central_Bronx <- df_NYC %>% filter(Zip%in% c(10453, 10457, 10460))
+  df_Central_Bronx$Neighborhood <- "CENTRAL BRONX"
+
+df_Bronx_Park_Fordham <- df_NYC %>% filter(Zip%in% c(10458, 10467, 10468))
+  df_Bronx_Park_Fordham$Neighborhood <- "BRONX PARK AND FORDHAM"
+
+df_High_Bridge_Morrisania <- df_NYC %>% filter(Zip%in% c(10451, 10452, 10456))
+  df_High_Bridge_Morrisania$Neighborhood <- "HIGH BRIDGE AND MORRISANIA"
+
+df_Hunts_Point_Mott_Haven <- df_NYC %>% filter(Zip%in% c(10454, 10455, 10459, 10474))
+  df_Hunts_Point_Mott_Haven$Neighborhood <- "HUNTS POINT AND MOTT HAVEN"
+
+df_Kingsbridge_Riverdale <- df_NYC %>% filter(Zip%in% c(10463, 10471))
+  df_Kingsbridge_Riverdale$Neighborhood <- "KINGSBRIDGE AND RIVERDALE"
+
+df_Northeast_Bronx <- df_NYC %>% filter(Zip%in% c(10466, 10469, 10470, 10475))
+  df_Northeast_Bronx$Neighborhood <- "NORTHEAST BRONX"
+
+df_Southeast_Bronx <- df_NYC %>% filter(Zip%in% c(10461, 10462, 10464, 10465, 10472, 10473))
+  df_Southeast_Bronx$Neighborhood <- "SOUTHEAST BRONX"
+
+df_The_Bronx <- rbind(df_Central_Bronx, df_Bronx_Park_Fordham, df_High_Bridge_Morrisania, df_Hunts_Point_Mott_Haven, df_Kingsbridge_Riverdale, df_Northeast_Bronx, df_Southeast_Bronx)
+
+```
+
+```{r calls Staten Island}
+
+df_Central_Bronx <- df_NYC %>% filter(Zip%in% c(10453, 10457, 10460))
+  df_Central_Bronx$Neighborhood <- "CENTRAL BRONX"
+
+df_Bronx_Park_Fordham <- df_NYC %>% filter(Zip%in% c(10458, 10467, 10468))
+  df_Bronx_Park_Fordham$Neighborhood <- "BRONX PARK AND FORDHAM"
+
+df_High_Bridge_Morrisania <- df_NYC %>% filter(Zip%in% c(10451, 10452, 10456))
+  df_High_Bridge_Morrisania$Neighborhood <- "HIGH BRIDGE AND MORRISANIA"
+
+df_Hunts_Point_Mott_Haven <- df_NYC %>% filter(Zip%in% c(10454, 10455, 10459, 10474))
+  df_Hunts_Point_Mott_Haven$Neighborhood <- "HUNTS POINT AND MOTT HAVEN"
+
+df_Kingsbridge_Riverdale <- df_NYC %>% filter(Zip%in% c(10463, 10471))
+  df_Kingsbridge_Riverdale$Neighborhood <- "KINGSBRIDGE AND RIVERDALE"
+
+df_Northeast_Bronx <- df_NYC %>% filter(Zip%in% c(10466, 10469, 10470, 10475))
+  df_Northeast_Bronx$Neighborhood <- "NORTHEAST BRONX"
+
+df_Southeast_Bronx <- df_NYC %>% filter(Zip%in% c(10461, 10462, 10464, 10465, 10472, 10473))
+  df_Southeast_Bronx$Neighborhood <- "SOUTHEAST BRONX"
+
+df_The_Bronx <- rbind(df_Central_Bronx, df_Bronx_Park_Fordham, df_High_Bridge_Morrisania, df_Hunts_Point_Mott_Haven, df_Kingsbridge_Riverdale, df_Northeast_Bronx, df_Southeast_Bronx)
+
 ```
 
 ```{r calls}
