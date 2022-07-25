@@ -560,6 +560,8 @@ df_MidIsland <- rename(df_MidIsland, numRats = df_MidIsland)
 
 df_Staten_Island_Neighborhood_Rats <- rbind(df_Port_Richmond, df_South_Shore, df_Stapleton_StGeorge, df_MidIsland)
 
+rm(df_Port_Richmond, df_South_Shore, df_Stapleton_StGeorge, df_MidIsland)
+
 graphStatenTotal.static <- ggplot(df_Staten_Island_Neighborhood_Rats, aes(x = Year, y = numRats, color = Neighborhood)) +
   geom_line(size = 1.5) +
   scale_x_continuous(breaks = seq(2011,2021, by = 1)) +
@@ -731,6 +733,8 @@ df_Southeast_Bronx <- rename(df_Southeast_Bronx, numRats = df_Southeast_Bronx)
 
 df_The_Bronx_Neighborhood_Rats <- rbind(df_Central_Bronx, df_Bronx_Park_Fordham, df_High_Bridge_Morrisania, df_Hunts_Point_Mott_Haven, df_Kingsbridge_Riverdale, df_Northeast_Bronx, df_Southeast_Bronx)
 
+rm(df_Central_Bronx, df_Bronx_Park_Fordham, df_High_Bridge_Morrisania, df_Hunts_Point_Mott_Haven, df_Kingsbridge_Riverdale, df_Northeast_Bronx, df_Southeast_Bronx)
+
 graphBronxTotal.static <- ggplot(df_The_Bronx_Neighborhood_Rats, aes(x = Year, y = numRats, color = Neighborhood)) +
   geom_line(size = 1.5) +
   scale_x_continuous(breaks = seq(2011,2021, by = 1)) +
@@ -768,26 +772,26 @@ df_Central_Brooklyn <- df_Central_Brooklyn %>%
 df_Central_Brooklyn <- rename(df_Central_Brooklyn, numRats = df_Central_Brooklyn)
 
 capture_recapture_brooklyn_n2 <- function(year) {
-  lots_year_1 <- df_Southwest_Queens %>% filter(Year == year - 1) %>% pull(BBL)
-  lots_year_2 <- df_Southwest_Queens %>% filter(Year == year) %>% pull(BBL)
+  lots_year_1 <- df_Southwest_Brooklyn %>% filter(Year == year - 1) %>% pull(BBL)
+  lots_year_2 <- df_Southwest_Brooklyn %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
   number_in_year_2 <- length(lots_year_2)
   number_in_year_1_and_2 <- sum(lots_year_1 %in% lots_year_2)
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 }
 
-df_Southwest_Queens <- sapply(2011:2021, capture_recapture_brooklyn_n2)
-df_Southwest_Queens <- as.data.frame(df_Southwest_Queens)
+df_Southwest_Brooklyn <- sapply(2011:2021, capture_recapture_brooklyn_n2)
+df_Southwest_Brooklyn <- as.data.frame(df_Southwest_Brooklyn)
 
-df_Southwest_Queens <- df_Southwest_Queens %>%
-  add_column(Neighborhood = "SOUTHWEST QUEENS",
-             .after = "df_Southwest_Queens") 
+df_Southwest_Brooklyn <- df_Southwest_Brooklyn %>%
+  add_column(Neighborhood = "SOUTHWEST BROOKLYN",
+             .after = "df_Southwest_Brooklyn") 
   
-df_Southwest_Queens <- df_Southwest_Queens %>%
+df_Southwest_Brooklyn <- df_Southwest_Brooklyn %>%
   add_column(Year = 2011:2021,
              .after = "Neighborhood") 
 
-df_Southwest_Queens <- rename(df_Southwest_Queens, numRats = df_Southwest_Queens)
+df_Southwest_Brooklyn <- rename(df_Southwest_Brooklyn, numRats = df_Southwest_Brooklyn)
 
 capture_recapture_brooklyn_n3 <- function(year) {
   lots_year_1 <- df_Borough_Park %>% filter(Year == year - 1) %>% pull(BBL)
@@ -802,7 +806,7 @@ df_Borough_Park <- sapply(2011:2021, capture_recapture_brooklyn_n3)
 df_Borough_Park <- as.data.frame(df_Borough_Park)
 
 df_Borough_Park <- df_Borough_Park %>%
-  add_column(Neighborhood = "HIGH BRIDGE AND MORRISANIA",
+  add_column(Neighborhood = "BOROUGH PARK",
              .after = "df_Borough_Park") 
   
 df_Borough_Park <- df_Borough_Park %>%
@@ -824,7 +828,7 @@ df_Canarsie_Flatlands <- sapply(2011:2021, capture_recapture_brooklyn_n4)
 df_Canarsie_Flatlands <- as.data.frame(df_Canarsie_Flatlands)
 
 df_Canarsie_Flatlands <- df_Canarsie_Flatlands %>%
-  add_column(Neighborhood = "HUNTS POINT AND MOTT HAVEN",
+  add_column(Neighborhood = "CANARSIE AND FLATLANDS",
              .after = "df_Canarsie_Flatlands") 
   
 df_Canarsie_Flatlands <- df_Canarsie_Flatlands %>%
@@ -847,7 +851,7 @@ df_Southern_Brooklyn <- sapply(2011:2021, capture_recapture_brooklyn_n5)
 df_Southern_Brooklyn <- as.data.frame(df_Southern_Brooklyn)
 
 df_Southern_Brooklyn <- df_Southern_Brooklyn %>%
-  add_column(Neighborhood = "",
+  add_column(Neighborhood = "SOUTHERN BROOKLYN",
              .after = "df_Southern_Brooklyn") 
   
 df_Southern_Brooklyn <- df_Southern_Brooklyn %>%
@@ -988,9 +992,11 @@ df_Bushwick_Williamsburg <- df_Bushwick_Williamsburg %>%
 
 df_Bushwick_Williamsburg <- rename(df_Bushwick_Williamsburg, numRats = df_Bushwick_Williamsburg)
 
-df_The_Bronx_Neighborhood_Rats <- rbind(df_Central_Bronx, df_Bronx_Park_Fordham, df_High_Bridge_Morrisania, df_Hunts_Point_Mott_Haven, df_Kingsbridge_Riverdale, df_Northeast_Bronx, df_Southeast_Bronx)
+df_Brooklyn_Neighborhood_Rats <- rbind(df_Central_Brooklyn, df_Southwest_Brooklyn, df_Borough_Park, df_Canarsie_Flatlands, df_Southern_Brooklyn, df_Northwest_Brooklyn, df_Flatbush, df_East_NY_New_Lots, df_Greenpoint, df_Bushwick_Williamsburg, df_Sunset_Park)
 
-graphBronxTotal.static <- ggplot(df_The_Bronx_Neighborhood_Rats, aes(x = Year, y = numRats, color = Neighborhood)) +
+rm(df_Central_Brooklyn, df_Southwest_Brooklyn, df_Borough_Park, df_Canarsie_Flatlands, df_Southern_Brooklyn, df_Northwest_Brooklyn, df_Flatbush, df_East_NY_New_Lots, df_Greenpoint, df_Bushwick_Williamsburg, df_Sunset_Park)
+
+graphBrooklynTotal.static <- ggplot(df_Brooklyn_Neighborhood_Rats, aes(x = Year, y = numRats, color = Neighborhood)) +
   geom_line(size = 1.5) +
   scale_x_continuous(breaks = seq(2011,2021, by = 1)) +
   scale_y_continuous(breaks = seq(0,250000, by = 25000)) +
@@ -998,6 +1004,6 @@ graphBronxTotal.static <- ggplot(df_The_Bronx_Neighborhood_Rats, aes(x = Year, y
   theme_fivethirtyeight() +
   theme(axis.title = element_text()) 
 
-ggsave("graphBronxTotalN.png", height = 2400, width = 3840, units = "px")
+ggsave("graphBrooklynTotalN.png", height = 2400, width = 3840, units = "px")
 
 ```
