@@ -468,112 +468,6 @@ graph2.anim <- ggplot(df_NYC_Num_Rats, aes(x = Year, y = numRats, fill = Borough
 
 ```
 
-```{r Staten Island Neighborhoods}
-
-capture_recapture_staten_island_n1 <- function(year) {
-  lots_year_1 <- df_Port_Richmond %>% filter(Year == year - 1) %>% pull(BBL)
-  lots_year_2 <- df_Port_Richmond %>% filter(Year == year) %>% pull(BBL)
-  number_in_year_1 <- length(lots_year_1)
-  number_in_year_2 <- length(lots_year_2)
-  number_in_year_1_and_2 <- sum(lots_year_1 %in% lots_year_2)
-  50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
-}
-
-df_Port_Richmond <- sapply(2011:2021, capture_recapture_staten_island_n1)
-df_Port_Richmond <- as.data.frame(df_Port_Richmond)
-
-df_Port_Richmond <- df_Port_Richmond %>%
-  add_column(Neighborhood = "PORT RICHMOND",
-             .after = "df_Port_Richmond") 
-  
-df_Port_Richmond <- df_Port_Richmond %>%
-  add_column(Year = 2011:2021,
-             .after = "Neighborhood") 
-
-df_Port_Richmond <- rename(df_Port_Richmond, numRats = df_Port_Richmond)
-
-capture_recapture_staten_island_n2 <- function(year) {
-  lots_year_1 <- df_South_Shore %>% filter(Year == year - 1) %>% pull(BBL)
-  lots_year_2 <- df_South_Shore %>% filter(Year == year) %>% pull(BBL)
-  number_in_year_1 <- length(lots_year_1)
-  number_in_year_2 <- length(lots_year_2)
-  number_in_year_1_and_2 <- sum(lots_year_1 %in% lots_year_2)
-  50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
-}
-
-df_South_Shore <- sapply(2011:2021, capture_recapture_staten_island_n2)
-df_South_Shore <- as.data.frame(df_South_Shore)
-
-df_South_Shore <- df_South_Shore %>%
-  add_column(Neighborhood = "SOUTH SHORE",
-             .after = "df_South_Shore") 
-  
-df_South_Shore <- df_South_Shore %>%
-  add_column(Year = 2011:2021,
-             .after = "Neighborhood") 
-
-df_South_Shore <- rename(df_South_Shore, numRats = df_South_Shore)
-
-capture_recapture_staten_island_n3 <- function(year) {
-  lots_year_1 <- df_Stapleton_StGeorge %>% filter(Year == year - 1) %>% pull(BBL)
-  lots_year_2 <- df_Stapleton_StGeorge %>% filter(Year == year) %>% pull(BBL)
-  number_in_year_1 <- length(lots_year_1)
-  number_in_year_2 <- length(lots_year_2)
-  number_in_year_1_and_2 <- sum(lots_year_1 %in% lots_year_2)
-  50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
-}
-
-df_Stapleton_StGeorge <- sapply(2011:2021, capture_recapture_staten_island_n3)
-df_Stapleton_StGeorge <- as.data.frame(df_Stapleton_StGeorge)
-
-df_Stapleton_StGeorge <- df_Stapleton_StGeorge %>%
-  add_column(Neighborhood = "STAPLETON AND ST. GEORGE",
-             .after = "df_Stapleton_StGeorge") 
-  
-df_Stapleton_StGeorge <- df_Stapleton_StGeorge %>%
-  add_column(Year = 2011:2021,
-             .after = "Neighborhood") 
-
-df_Stapleton_StGeorge <- rename(df_Stapleton_StGeorge, numRats = df_Stapleton_StGeorge)
-
-capture_recapture_staten_island_n4 <- function(year) {
-  lots_year_1 <- df_MidIsland %>% filter(Year == year - 1) %>% pull(BBL)
-  lots_year_2 <- df_MidIsland %>% filter(Year == year) %>% pull(BBL)
-  number_in_year_1 <- length(lots_year_1)
-  number_in_year_2 <- length(lots_year_2)
-  number_in_year_1_and_2 <- sum(lots_year_1 %in% lots_year_2)
-  50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
-}
-
-df_MidIsland <- sapply(2011:2021, capture_recapture_staten_island_n4)
-df_MidIsland <- as.data.frame(df_MidIsland)
-
-df_MidIsland <- df_MidIsland %>%
-  add_column(Neighborhood = "MID ISLAND",
-             .after = "df_MidIsland") 
-  
-df_MidIsland <- df_MidIsland %>%
-  add_column(Year = 2011:2021,
-             .after = "Neighborhood") 
-
-df_MidIsland <- rename(df_MidIsland, numRats = df_MidIsland)
-
-df_Staten_Island_Neighborhood_Rats <- rbind(df_Port_Richmond, df_South_Shore, df_Stapleton_StGeorge, df_MidIsland)
-
-rm(df_Port_Richmond, df_South_Shore, df_Stapleton_StGeorge, df_MidIsland)
-
-graphStatenTotal.static <- ggplot(df_Staten_Island_Neighborhood_Rats, aes(x = Year, y = numRats, color = Neighborhood)) +
-  geom_line(size = 1.5) +
-  scale_x_continuous(breaks = seq(2011,2021, by = 1)) +
-  scale_y_continuous(breaks = seq(0,250000, by = 25000)) +
-  labs (title = "Rat Population In Each Borough Over Time", subtitle = "Do rats proliferate faster in certain Boroughs?", x = "Year", y = "Population" ) +
-  theme_fivethirtyeight() +
-  theme(axis.title = element_text()) 
-
-ggsave("graphStatenTotalN.png", height = 2400, width = 3840, units = "px")
-
-```
-
 ```{r Bronx Neighborhoods}
 
 capture_recapture_the_bronx_n1 <- function(year) {
@@ -1005,5 +899,372 @@ graphBrooklynTotal.static <- ggplot(df_Brooklyn_Neighborhood_Rats, aes(x = Year,
   theme(axis.title = element_text()) 
 
 ggsave("graphBrooklynTotalN.png", height = 2400, width = 3840, units = "px")
+
+```
+
+```{r Manhattan Neighborhoods}
+
+capture_recapture_manhattan_n1 <- function(year) {
+  lots_year_1 <- df_Central_Harlem %>% filter(Year == year - 1) %>% pull(BBL)
+  lots_year_2 <- df_Central_Harlem %>% filter(Year == year) %>% pull(BBL)
+  number_in_year_1 <- length(lots_year_1)
+  number_in_year_2 <- length(lots_year_2)
+  number_in_year_1_and_2 <- sum(lots_year_1 %in% lots_year_2)
+  50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
+}
+
+df_Central_Harlem <- sapply(2011:2021, capture_recapture_manhattan_n1)
+df_Central_Harlem <- as.data.frame(df_Central_Harlem)
+
+df_Central_Harlem <- df_Central_Harlem %>%
+  add_column(Neighborhood = "CENTRAL Harlem",
+             .after = "df_Central_Harlem") 
+  
+df_Central_Harlem <- df_Central_Harlem %>%
+  add_column(Year = 2011:2021,
+             .after = "Neighborhood") 
+
+df_Central_Harlem <- rename(df_Central_Harlem, numRats = df_Central_Harlem)
+
+capture_recapture_brooklyn_n2 <- function(year) {
+  lots_year_1 <- df_Southwest_Brooklyn %>% filter(Year == year - 1) %>% pull(BBL)
+  lots_year_2 <- df_Southwest_Brooklyn %>% filter(Year == year) %>% pull(BBL)
+  number_in_year_1 <- length(lots_year_1)
+  number_in_year_2 <- length(lots_year_2)
+  number_in_year_1_and_2 <- sum(lots_year_1 %in% lots_year_2)
+  50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
+}
+
+df_Southwest_Brooklyn <- sapply(2011:2021, capture_recapture_brooklyn_n2)
+df_Southwest_Brooklyn <- as.data.frame(df_Southwest_Brooklyn)
+
+df_Southwest_Brooklyn <- df_Southwest_Brooklyn %>%
+  add_column(Neighborhood = "SOUTHWEST BROOKLYN",
+             .after = "df_Southwest_Brooklyn") 
+  
+df_Southwest_Brooklyn <- df_Southwest_Brooklyn %>%
+  add_column(Year = 2011:2021,
+             .after = "Neighborhood") 
+
+df_Southwest_Brooklyn <- rename(df_Southwest_Brooklyn, numRats = df_Southwest_Brooklyn)
+
+capture_recapture_brooklyn_n3 <- function(year) {
+  lots_year_1 <- df_Borough_Park %>% filter(Year == year - 1) %>% pull(BBL)
+  lots_year_2 <- df_Borough_Park %>% filter(Year == year) %>% pull(BBL)
+  number_in_year_1 <- length(lots_year_1)
+  number_in_year_2 <- length(lots_year_2)
+  number_in_year_1_and_2 <- sum(lots_year_1 %in% lots_year_2)
+  50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
+}
+
+df_Borough_Park <- sapply(2011:2021, capture_recapture_brooklyn_n3)
+df_Borough_Park <- as.data.frame(df_Borough_Park)
+
+df_Borough_Park <- df_Borough_Park %>%
+  add_column(Neighborhood = "BOROUGH PARK",
+             .after = "df_Borough_Park") 
+  
+df_Borough_Park <- df_Borough_Park %>%
+  add_column(Year = 2011:2021,
+             .after = "Neighborhood") 
+
+df_Borough_Park <- rename(df_Borough_Park, numRats = df_Borough_Park)
+
+capture_recapture_brooklyn_n4 <- function(year) {
+  lots_year_1 <- df_Canarsie_Flatlands %>% filter(Year == year - 1) %>% pull(BBL)
+  lots_year_2 <- df_Canarsie_Flatlands %>% filter(Year == year) %>% pull(BBL)
+  number_in_year_1 <- length(lots_year_1)
+  number_in_year_2 <- length(lots_year_2)
+  number_in_year_1_and_2 <- sum(lots_year_1 %in% lots_year_2)
+  50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
+}
+
+df_Canarsie_Flatlands <- sapply(2011:2021, capture_recapture_brooklyn_n4)
+df_Canarsie_Flatlands <- as.data.frame(df_Canarsie_Flatlands)
+
+df_Canarsie_Flatlands <- df_Canarsie_Flatlands %>%
+  add_column(Neighborhood = "CANARSIE AND FLATLANDS",
+             .after = "df_Canarsie_Flatlands") 
+  
+df_Canarsie_Flatlands <- df_Canarsie_Flatlands %>%
+  add_column(Year = 2011:2021,
+             .after = "Neighborhood") 
+
+df_Canarsie_Flatlands <- rename(df_Canarsie_Flatlands, numRats = df_Canarsie_Flatlands)
+
+
+capture_recapture_brooklyn_n5 <- function(year) {
+  lots_year_1 <- df_Southern_Brooklyn %>% filter(Year == year - 1) %>% pull(BBL)
+  lots_year_2 <- df_Southern_Brooklyn %>% filter(Year == year) %>% pull(BBL)
+  number_in_year_1 <- length(lots_year_1)
+  number_in_year_2 <- length(lots_year_2)
+  number_in_year_1_and_2 <- sum(lots_year_1 %in% lots_year_2)
+  50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
+}
+
+df_Southern_Brooklyn <- sapply(2011:2021, capture_recapture_brooklyn_n5)
+df_Southern_Brooklyn <- as.data.frame(df_Southern_Brooklyn)
+
+df_Southern_Brooklyn <- df_Southern_Brooklyn %>%
+  add_column(Neighborhood = "SOUTHERN BROOKLYN",
+             .after = "df_Southern_Brooklyn") 
+  
+df_Southern_Brooklyn <- df_Southern_Brooklyn %>%
+  add_column(Year = 2011:2021,
+             .after = "Neighborhood") 
+
+df_Southern_Brooklyn <- rename(df_Southern_Brooklyn, numRats = df_Southern_Brooklyn)
+
+capture_recapture_brooklyn_n6 <- function(year) {
+  lots_year_1 <- df_Northwest_Brooklyn %>% filter(Year == year - 1) %>% pull(BBL)
+  lots_year_2 <- df_Northwest_Brooklyn %>% filter(Year == year) %>% pull(BBL)
+  number_in_year_1 <- length(lots_year_1)
+  number_in_year_2 <- length(lots_year_2)
+  number_in_year_1_and_2 <- sum(lots_year_1 %in% lots_year_2)
+  50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
+}
+
+df_Northwest_Brooklyn <- sapply(2011:2021, capture_recapture_brooklyn_n6)
+df_Northwest_Brooklyn <- as.data.frame(df_Northwest_Brooklyn)
+
+df_Northwest_Brooklyn <- df_Northwest_Brooklyn %>%
+  add_column(Neighborhood = "NORTHWEST BROOKLYN",
+             .after = "df_Northwest_Brooklyn") 
+  
+df_Northwest_Brooklyn <- df_Northwest_Brooklyn %>%
+  add_column(Year = 2011:2021,
+             .after = "Neighborhood") 
+
+df_Northwest_Brooklyn <- rename(df_Northwest_Brooklyn, numRats = df_Northwest_Brooklyn)
+
+capture_recapture_brooklyn_n7 <- function(year) {
+  lots_year_1 <- df_Flatbush %>% filter(Year == year - 1) %>% pull(BBL)
+  lots_year_2 <- df_Flatbush %>% filter(Year == year) %>% pull(BBL)
+  number_in_year_1 <- length(lots_year_1)
+  number_in_year_2 <- length(lots_year_2)
+  number_in_year_1_and_2 <- sum(lots_year_1 %in% lots_year_2)
+  50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
+}
+
+df_Flatbush <- sapply(2011:2021, capture_recapture_brooklyn_n7)
+df_Flatbush <- as.data.frame(df_Flatbush)
+
+df_Flatbush <- df_Flatbush %>%
+  add_column(Neighborhood = "FLATBUSH",
+             .after = "df_Flatbush") 
+  
+df_Flatbush <- df_Flatbush %>%
+  add_column(Year = 2011:2021,
+             .after = "Neighborhood") 
+
+df_Flatbush <- rename(df_Flatbush, numRats = df_Flatbush)
+
+capture_recapture_brooklyn_n8 <- function(year) {
+  lots_year_1 <- df_East_NY_New_Lots %>% filter(Year == year - 1) %>% pull(BBL)
+  lots_year_2 <- df_East_NY_New_Lots %>% filter(Year == year) %>% pull(BBL)
+  number_in_year_1 <- length(lots_year_1)
+  number_in_year_2 <- length(lots_year_2)
+  number_in_year_1_and_2 <- sum(lots_year_1 %in% lots_year_2)
+  50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
+}
+
+df_East_NY_New_Lots <- sapply(2011:2021, capture_recapture_brooklyn_n8)
+df_East_NY_New_Lots <- as.data.frame(df_East_NY_New_Lots)
+
+df_East_NY_New_Lots <- df_East_NY_New_Lots %>%
+  add_column(Neighborhood = "EAST NEW YORK AND NEW LOTS",
+             .after = "df_East_NY_New_Lots") 
+  
+df_East_NY_New_Lots <- df_East_NY_New_Lots %>%
+  add_column(Year = 2011:2021,
+             .after = "Neighborhood") 
+
+df_East_NY_New_Lots <- rename(df_East_NY_New_Lots, numRats = df_East_NY_New_Lots)
+
+capture_recapture_brooklyn_n9 <- function(year) {
+  lots_year_1 <- df_Greenpoint %>% filter(Year == year - 1) %>% pull(BBL)
+  lots_year_2 <- df_Greenpoint %>% filter(Year == year) %>% pull(BBL)
+  number_in_year_1 <- length(lots_year_1)
+  number_in_year_2 <- length(lots_year_2)
+  number_in_year_1_and_2 <- sum(lots_year_1 %in% lots_year_2)
+  50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
+}
+
+df_Greenpoint <- sapply(2011:2021, capture_recapture_brooklyn_n9)
+df_Greenpoint <- as.data.frame(df_Greenpoint)
+
+df_Greenpoint <- df_Greenpoint %>%
+  add_column(Neighborhood = "GREENPOINT",
+             .after = "df_Greenpoint") 
+  
+df_Greenpoint <- df_Greenpoint %>%
+  add_column(Year = 2011:2021,
+             .after = "Neighborhood") 
+
+df_Greenpoint <- rename(df_Greenpoint, numRats = df_Greenpoint)
+
+capture_recapture_brooklyn_n10 <- function(year) {
+  lots_year_1 <- df_Sunset_Park %>% filter(Year == year - 1) %>% pull(BBL)
+  lots_year_2 <- df_Sunset_Park %>% filter(Year == year) %>% pull(BBL)
+  number_in_year_1 <- length(lots_year_1)
+  number_in_year_2 <- length(lots_year_2)
+  number_in_year_1_and_2 <- sum(lots_year_1 %in% lots_year_2)
+  50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
+}
+
+df_Sunset_Park <- sapply(2011:2021, capture_recapture_brooklyn_n10)
+df_Sunset_Park <- as.data.frame(df_Sunset_Park)
+
+df_Sunset_Park <- df_Sunset_Park %>%
+  add_column(Neighborhood = "SUNSET PARK",
+             .after = "df_Sunset_Park") 
+  
+df_Sunset_Park <- df_Sunset_Park %>%
+  add_column(Year = 2011:2021,
+             .after = "Neighborhood") 
+
+df_Sunset_Park <- rename(df_Sunset_Park, numRats = df_Sunset_Park)
+
+capture_recapture_brooklyn_n11 <- function(year) {
+  lots_year_1 <- df_Bushwick_Williamsburg %>% filter(Year == year - 1) %>% pull(BBL)
+  lots_year_2 <- df_Bushwick_Williamsburg %>% filter(Year == year) %>% pull(BBL)
+  number_in_year_1 <- length(lots_year_1)
+  number_in_year_2 <- length(lots_year_2)
+  number_in_year_1_and_2 <- sum(lots_year_1 %in% lots_year_2)
+  50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
+}
+
+df_Bushwick_Williamsburg <- sapply(2011:2021, capture_recapture_brooklyn_n11)
+df_Bushwick_Williamsburg <- as.data.frame(df_Bushwick_Williamsburg)
+
+df_Bushwick_Williamsburg <- df_Bushwick_Williamsburg %>%
+  add_column(Neighborhood = "BUSHWICK AND WILLIAMSBURG",
+             .after = "df_Bushwick_Williamsburg") 
+  
+df_Bushwick_Williamsburg <- df_Bushwick_Williamsburg %>%
+  add_column(Year = 2011:2021,
+             .after = "Neighborhood") 
+
+df_Bushwick_Williamsburg <- rename(df_Bushwick_Williamsburg, numRats = df_Bushwick_Williamsburg)
+
+df_Brooklyn_Neighborhood_Rats <- rbind(df_Central_Brooklyn, df_Southwest_Brooklyn, df_Borough_Park, df_Canarsie_Flatlands, df_Southern_Brooklyn, df_Northwest_Brooklyn, df_Flatbush, df_East_NY_New_Lots, df_Greenpoint, df_Bushwick_Williamsburg, df_Sunset_Park)
+
+rm(df_Central_Brooklyn, df_Southwest_Brooklyn, df_Borough_Park, df_Canarsie_Flatlands, df_Southern_Brooklyn, df_Northwest_Brooklyn, df_Flatbush, df_East_NY_New_Lots, df_Greenpoint, df_Bushwick_Williamsburg, df_Sunset_Park)
+
+graphBrooklynTotal.static <- ggplot(df_Brooklyn_Neighborhood_Rats, aes(x = Year, y = numRats, color = Neighborhood)) +
+  geom_line(size = 1.5) +
+  scale_x_continuous(breaks = seq(2011,2021, by = 1)) +
+  scale_y_continuous(breaks = seq(0,250000, by = 25000)) +
+  labs (title = "Rat Population In Each Borough Over Time", subtitle = "Do rats proliferate faster in certain Boroughs?", x = "Year", y = "Population" ) +
+  theme_fivethirtyeight() +
+  theme(axis.title = element_text()) 
+
+ggsave("graphBrooklynTotalN.png", height = 2400, width = 3840, units = "px")
+
+```
+
+```{r Staten Island Neighborhoods}
+
+capture_recapture_staten_island_n1 <- function(year) {
+  lots_year_1 <- df_Port_Richmond %>% filter(Year == year - 1) %>% pull(BBL)
+  lots_year_2 <- df_Port_Richmond %>% filter(Year == year) %>% pull(BBL)
+  number_in_year_1 <- length(lots_year_1)
+  number_in_year_2 <- length(lots_year_2)
+  number_in_year_1_and_2 <- sum(lots_year_1 %in% lots_year_2)
+  50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
+}
+
+df_Port_Richmond <- sapply(2011:2021, capture_recapture_staten_island_n1)
+df_Port_Richmond <- as.data.frame(df_Port_Richmond)
+
+df_Port_Richmond <- df_Port_Richmond %>%
+  add_column(Neighborhood = "PORT RICHMOND",
+             .after = "df_Port_Richmond") 
+  
+df_Port_Richmond <- df_Port_Richmond %>%
+  add_column(Year = 2011:2021,
+             .after = "Neighborhood") 
+
+df_Port_Richmond <- rename(df_Port_Richmond, numRats = df_Port_Richmond)
+
+capture_recapture_staten_island_n2 <- function(year) {
+  lots_year_1 <- df_South_Shore %>% filter(Year == year - 1) %>% pull(BBL)
+  lots_year_2 <- df_South_Shore %>% filter(Year == year) %>% pull(BBL)
+  number_in_year_1 <- length(lots_year_1)
+  number_in_year_2 <- length(lots_year_2)
+  number_in_year_1_and_2 <- sum(lots_year_1 %in% lots_year_2)
+  50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
+}
+
+df_South_Shore <- sapply(2011:2021, capture_recapture_staten_island_n2)
+df_South_Shore <- as.data.frame(df_South_Shore)
+
+df_South_Shore <- df_South_Shore %>%
+  add_column(Neighborhood = "SOUTH SHORE",
+             .after = "df_South_Shore") 
+  
+df_South_Shore <- df_South_Shore %>%
+  add_column(Year = 2011:2021,
+             .after = "Neighborhood") 
+
+df_South_Shore <- rename(df_South_Shore, numRats = df_South_Shore)
+
+capture_recapture_staten_island_n3 <- function(year) {
+  lots_year_1 <- df_Stapleton_StGeorge %>% filter(Year == year - 1) %>% pull(BBL)
+  lots_year_2 <- df_Stapleton_StGeorge %>% filter(Year == year) %>% pull(BBL)
+  number_in_year_1 <- length(lots_year_1)
+  number_in_year_2 <- length(lots_year_2)
+  number_in_year_1_and_2 <- sum(lots_year_1 %in% lots_year_2)
+  50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
+}
+
+df_Stapleton_StGeorge <- sapply(2011:2021, capture_recapture_staten_island_n3)
+df_Stapleton_StGeorge <- as.data.frame(df_Stapleton_StGeorge)
+
+df_Stapleton_StGeorge <- df_Stapleton_StGeorge %>%
+  add_column(Neighborhood = "STAPLETON AND ST. GEORGE",
+             .after = "df_Stapleton_StGeorge") 
+  
+df_Stapleton_StGeorge <- df_Stapleton_StGeorge %>%
+  add_column(Year = 2011:2021,
+             .after = "Neighborhood") 
+
+df_Stapleton_StGeorge <- rename(df_Stapleton_StGeorge, numRats = df_Stapleton_StGeorge)
+
+capture_recapture_staten_island_n4 <- function(year) {
+  lots_year_1 <- df_MidIsland %>% filter(Year == year - 1) %>% pull(BBL)
+  lots_year_2 <- df_MidIsland %>% filter(Year == year) %>% pull(BBL)
+  number_in_year_1 <- length(lots_year_1)
+  number_in_year_2 <- length(lots_year_2)
+  number_in_year_1_and_2 <- sum(lots_year_1 %in% lots_year_2)
+  50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
+}
+
+df_MidIsland <- sapply(2011:2021, capture_recapture_staten_island_n4)
+df_MidIsland <- as.data.frame(df_MidIsland)
+
+df_MidIsland <- df_MidIsland %>%
+  add_column(Neighborhood = "MID ISLAND",
+             .after = "df_MidIsland") 
+  
+df_MidIsland <- df_MidIsland %>%
+  add_column(Year = 2011:2021,
+             .after = "Neighborhood") 
+
+df_MidIsland <- rename(df_MidIsland, numRats = df_MidIsland)
+
+df_Staten_Island_Neighborhood_Rats <- rbind(df_Port_Richmond, df_South_Shore, df_Stapleton_StGeorge, df_MidIsland)
+
+rm(df_Port_Richmond, df_South_Shore, df_Stapleton_StGeorge, df_MidIsland)
+
+graphStatenTotal.static <- ggplot(df_Staten_Island_Neighborhood_Rats, aes(x = Year, y = numRats, color = Neighborhood)) +
+  geom_line(size = 1.5) +
+  scale_x_continuous(breaks = seq(2011,2021, by = 1)) +
+  scale_y_continuous(breaks = seq(0,250000, by = 25000)) +
+  labs (title = "Rat Population In Each Borough Over Time", subtitle = "Do rats proliferate faster in certain Boroughs?", x = "Year", y = "Population" ) +
+  theme_fivethirtyeight() +
+  theme(axis.title = element_text()) 
+
+ggsave("graphStatenTotalN.png", height = 2400, width = 3840, units = "px")
 
 ```
