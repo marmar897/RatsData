@@ -48,14 +48,8 @@ rats_pop <- df2 %>%
             #figure out rat sightings in identical lots in both years
             both = (sum(both > 0)),
             total = ifelse( both == 0, 0, 50*markedlotstotal2020*markedlotstotal2021/both)) %>%
-  
-  #  ifelse( both > 0 & markedlotstotal2021 > 0 & markedlotstotal2020 > 0,       #50*markedlotstotal2020*markedlotstotal2021/both,
-  #  ifelse(both == 0 & markedlotstotal2021 >0 & markedlotstotal2020 >0,  50*markedlotstotal2020*markedlotstotal2021,
-  # ifelse(markedlotstotal2020 == 0,  50*markedlotstotal2021,
-  #  ifelse(markedlotstotal2021 == 0,  50*markedlotstotal2020))))) %>% 
   mutate(zip = as.character(Zip)) %>%
   select(Zip, total)
-
 rats_pop$total <- round(rats_pop$total,-2)
 
 #ORGANIZING DATA FOR YEAR MAP (icaro)
@@ -95,8 +89,6 @@ df20$Zip<-as.character(df20$Zip)
 df21 <- read.csv("ratsComplete21.csv")
 df21$Zip<-as.character(df21$Zip)
 
-
-#final dataframes to use
 rats <- merge(rats_percent, rats_pop)
 all_modzcta <- geo_join(modzcta, rats, "modzcta", "Zip", how = "inner")
 all_modzcta <-all_modzcta %>%
@@ -145,7 +137,6 @@ all_modzcta20 <- all_modzcta20 %>%
 all_modzcta21 <- geo_join(modzcta, df21, "modzcta", "Zip", how = "inner")
 all_modzcta21 <- all_modzcta21 %>%
   st_transform(crs = "+init=epsg:4326")
-
 
 #capture recapture by zip 
 df11_1 <- read.csv("ratsComplete11_10.csv")
@@ -225,6 +216,84 @@ all_modzcta21_1 <- geo_join(modzcta, df21_1, "modzcta", "Zip", how = "inner")
 all_modzcta21_1 <- all_modzcta21_1 %>%
   st_transform(crs = "+init=epsg:4326")
 
+#dynamic heatmap
+
+df11_2 <- read.csv("ratsCompleteNeighborhoodBuff11.csv")
+df11_2$zip<-as.character(df11_2$zip)
+
+df12_2 <- read.csv("ratsCompleteNeighborhoodBuff12.csv")
+df12_2$zip<-as.character(df12_2$zip)
+
+df13_2 <- read.csv("ratsCompleteNeighborhoodBuff13.csv")
+df13_2$zip<-as.character(df13_2$zip)
+
+df14_2 <- read.csv("ratsCompleteNeighborhoodBuff14.csv")
+df14_2$zip<-as.character(df14_2$zip)
+
+df15_2 <- read.csv("ratsCompleteNeighborhoodBuff15.csv")
+df15_2$zip<-as.character(df15_2$zip)
+
+df16_2 <- read.csv("ratsCompleteNeighborhoodBuff16.csv")
+df16_2$zip<-as.character(df16_2$zip)
+
+df17_2 <- read.csv("ratsCompleteNeighborhoodBuff17.csv")
+df17_2$zip<-as.character(df17_2$zip)
+
+df18_2 <- read.csv("ratsCompleteNeighborhoodBuff18.csv")
+df18_2$zip<-as.character(df18_2$zip)
+
+df19_2 <- read.csv("ratsCompleteNeighborhoodBuff19.csv")
+df19_2$zip<-as.character(df19_2$zip)
+
+df20_2 <- read.csv("ratsCompleteNeighborhoodBuff20.csv")
+df20_2$zip<-as.character(df20_2$zip)
+
+df21_2 <- read.csv("ratsCompleteNeighborhoodBuff21.csv")
+df21_2$zip<-as.character(df21_2$zip)
+
+all_modzcta11_2 <- geo_join(modzcta, df11_2, "modzcta", "zip", how = "inner")
+all_modzcta11_2 <- all_modzcta11_2 %>%
+  st_transform(crs = "+init=epsg:4326")
+
+all_modzcta12_2 <- geo_join(modzcta, df12_2, "modzcta", "zip", how = "inner")
+all_modzcta12_2 <- all_modzcta12_2 %>%
+  st_transform(crs = "+init=epsg:4326")
+
+all_modzcta13_2 <- geo_join(modzcta, df13_2, "modzcta", "zip", how = "inner")
+all_modzcta13_2 <- all_modzcta13_2 %>%
+  st_transform(crs = "+init=epsg:4326")
+
+all_modzcta14_2 <- geo_join(modzcta, df14_2, "modzcta", "zip", how = "inner")
+all_modzcta14_2 <- all_modzcta14_2 %>%
+  st_transform(crs = "+init=epsg:4326")
+
+all_modzcta15_2 <- geo_join(modzcta, df15_2, "modzcta", "zip", how = "inner")
+all_modzcta15_2 <- all_modzcta15_2 %>%
+  st_transform(crs = "+init=epsg:4326")
+
+all_modzcta16_2 <- geo_join(modzcta, df16_2, "modzcta", "zip", how = "inner")
+all_modzcta16_2 <- all_modzcta16_2 %>%
+  st_transform(crs = "+init=epsg:4326")
+
+all_modzcta17_2 <- geo_join(modzcta, df17_2, "modzcta", "zip", how = "inner")
+all_modzcta17_2 <- all_modzcta17_2 %>%
+  st_transform(crs = "+init=epsg:4326")
+
+all_modzcta18_2 <- geo_join(modzcta, df18_2, "modzcta", "zip", how = "inner")
+all_modzcta18_2 <- all_modzcta18_2 %>%
+  st_transform(crs = "+init=epsg:4326")
+
+all_modzcta19_2 <- geo_join(modzcta, df19_2, "modzcta", "zip", how = "inner")
+all_modzcta19_2 <- all_modzcta19_2 %>%
+  st_transform(crs = "+init=epsg:4326")
+
+all_modzcta20_2 <- geo_join(modzcta, df20_2, "modzcta", "zip", how = "inner")
+all_modzcta20_2 <- all_modzcta20_2 %>%
+  st_transform(crs = "+init=epsg:4326")
+
+all_modzcta21_2 <- geo_join(modzcta, df21_2, "modzcta", "zip", how = "inner")
+all_modzcta21_2 <- all_modzcta21_2 %>%
+  st_transform(crs = "+init=epsg:4326")
 
 #Palettes and Labels for percent map
 labels_percent <-sprintf(
@@ -241,7 +310,6 @@ labels_pop <-sprintf(
   lapply(htmltools::HTML)
 
 pal2 <-colorBin(palette="Reds", 9, domain = all_modzcta$total)
-
 
 # shinyapp with tabs
 ui <- navbarPage("NYC Rat Population Estimate",
@@ -313,6 +381,17 @@ ui <- navbarPage("NYC Rat Population Estimate",
              )
     ),
     
+    tabPanel("Estimated Rat Population by zip (Dynamic)",
+             sidebarLayout(
+               sidebarPanel(
+                 selectInput("year2", "Year:",
+                             c(2011,2012,2013,2014,2015,2016,
+                               2017,2018,2019,2020,2021))),
+               mainPanel(
+                 leafletOutput("dyn_map")),
+             )
+    ),
+             
     tabPanel("Other Data Visualizations",
              sidebarLayout(
                sidebarPanel(
@@ -323,7 +402,8 @@ ui <- navbarPage("NYC Rat Population Estimate",
                          img(src="graph1anim.gif", align = "left", height='300px', width='600px'),
                         img(src="graph1.png", align = "left", height='300px', width='600px')))
              )
-)
+    )
+    
 
 
 server <- function(input, output, session) {
@@ -515,6 +595,78 @@ server <- function(input, output, session) {
                   values = ~RatsN,
                   title = "Estimated Number of Rats",
                   opacity = 0.7)
+    })
+    
+    output$dyn_map <- renderLeaflet({
+      
+      time <- input$year2
+      
+      
+      if(time == 2011){
+        all_modzcta <- all_modzcta11_2
+        
+      } else if(time == 2012){
+        all_modzcta <- all_modzcta12_2
+        
+      } else if(time == 2013){
+        all_modzcta <- all_modzcta13_2
+        
+      } else if(time == 2014){
+        all_modzcta <- all_modzcta14_2
+        
+      } else if(time == 2015){
+        all_modzcta <- all_modzcta15_2
+        
+      } else if(time == 2016){
+        all_modzcta <- all_modzcta16_2
+        
+      } else if(time == 2017){
+        all_modzcta <- all_modzcta17_2
+        
+      } else if(time == 2018){
+        all_modzcta <- all_modzcta18_2
+        
+      } else if(time == 2019){
+        all_modzcta <- all_modzcta19_2
+        
+      } else if(time == 2020){
+        all_modzcta <- all_modzcta20_2
+        
+      } else if(time == 2021){
+        all_modzcta <- all_modzcta21_2
+        
+      }
+      
+      #Palettes and Labels for pop map
+      labels_dyn <-sprintf(
+        "<strong>%s</strong><br/>%g RATS!",
+        all_modzcta$modzcta,all_modzcta$Number) %>%
+        lapply(htmltools::HTML)
+      
+      pal5 <-colorBin(palette="Reds", 9, domain = all_modzcta$Number)
+      
+      
+      leaflet(all_modzcta) %>%
+        addProviderTiles(provider = "CartoDB.Positron") %>%
+        addPolygons(label = labels_dyn,
+                    stroke = FALSE,
+                    smoothFactor = 0.5,
+                    opacity = 1,
+                    fillOpacity = 0.7,
+                    fillColor = ~pal5(Number),
+                    highlightOptions = highlightOptions(
+                      weight = 5,
+                      color = "black",
+                      fillOpacity = 1,
+                      opacity = 1,
+                      bringToFront = TRUE)
+        )%>%
+        addLegend("topleft",
+                  pal = pal5,
+                  values = ~Number,
+                  title = "Estimated Number of Rats",
+                  opacity = 0.7)
+      
     })
 }
 
