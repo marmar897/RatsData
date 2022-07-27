@@ -6,16 +6,16 @@ output: html_document
 ---
 
 ```{r}
-install.packages("gganimate")
-install.packages("gapminder")
-install.packages("ggthemes")
-
-library("tidyverse")
-library("ggplot2")
-library("gganimate")
-library("dplyr")
-library("gapminder")
-library("ggthemes")
+# install.packages("gganimate")
+# install.packages("gapminder")
+# install.packages("ggthemes")
+# 
+# library("tidyverse")
+# library("ggplot2")
+# library("gganimate")
+# library("dplyr")
+# library("gapminder")
+# library("ggthemes")
 ```
 
 ```{r}
@@ -450,8 +450,8 @@ graph1.anim <- ggplot(df_NYC_Num_Rats, aes(x = Year, y = numRats, color = Boroug
    transition_reveal(Year) +
    view_follow()
 
-animate(graph1.anim, height = 1000, width = 1600, fps = 30, duration = 15, end_pause = 90, res = 100)
-anim_save("graph1anim.gif")
+# animate(graph1.anim, height = 1000, width = 1600, fps = 30, duration = 15, end_pause = 90, res = 100)
+# anim_save("graph1anim.gif")
 
 graph2.anim <- ggplot(df_NYC_Num_Rats, aes(x = Year, y = numRats, fill = Borough)) +
    geom_area(alpha=0.725) +
@@ -463,14 +463,14 @@ graph2.anim <- ggplot(df_NYC_Num_Rats, aes(x = Year, y = numRats, fill = Borough
    transition_reveal(Year) +
    view_follow()
 
-animate(graph2.anim, height = 1000, width = 1600, fps = 30, duration = 15, end_pause = 90, res = 100)
-anim_save("graph2anim.gif")
+# animate(graph2.anim, height = 1000, width = 1600, fps = 30, duration = 15, end_pause = 90, res = 100)
+# anim_save("graph2anim.gif")
 
 ```
 
 ```{r Bronx Neighborhoods}
 
-capture_recapture_the_bronx_n1 <- function(year) {
+capture_recapture_the_bronx_n <- function(year) {
   lots_year_1 <- df_Central_Bronx %>% filter(Year == year - 1) %>% pull(BBL)
   lots_year_2 <- df_Central_Bronx %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
@@ -479,7 +479,7 @@ capture_recapture_the_bronx_n1 <- function(year) {
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 }
 
-df_Central_Bronx <- sapply(2011:2021, capture_recapture_the_bronx_n1)
+df_Central_Bronx <- sapply(2011:2021, capture_recapture_the_bronx_n)
 df_Central_Bronx <- as.data.frame(df_Central_Bronx)
 
 df_Central_Bronx <- df_Central_Bronx %>%
@@ -492,7 +492,7 @@ df_Central_Bronx <- df_Central_Bronx %>%
 
 df_Central_Bronx <- rename(df_Central_Bronx, numRats = df_Central_Bronx)
 
-capture_recapture_the_bronx_n2 <- function(year) {
+capture_recapture_the_bronx_n <- function(year) {
   lots_year_1 <- df_Bronx_Park_Fordham %>% filter(Year == year - 1) %>% pull(BBL)
   lots_year_2 <- df_Bronx_Park_Fordham %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
@@ -501,7 +501,7 @@ capture_recapture_the_bronx_n2 <- function(year) {
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 }
 
-df_Bronx_Park_Fordham <- sapply(2011:2021, capture_recapture_the_bronx_n2)
+df_Bronx_Park_Fordham <- sapply(2011:2021, capture_recapture_the_bronx_n)
 df_Bronx_Park_Fordham <- as.data.frame(df_Bronx_Park_Fordham)
 
 df_Bronx_Park_Fordham <- df_Bronx_Park_Fordham %>%
@@ -514,7 +514,7 @@ df_Bronx_Park_Fordham <- df_Bronx_Park_Fordham %>%
 
 df_Bronx_Park_Fordham <- rename(df_Bronx_Park_Fordham, numRats = df_Bronx_Park_Fordham)
 
-capture_recapture_the_bronx_n3 <- function(year) {
+capture_recapture_the_bronx_n <- function(year) {
   lots_year_1 <- df_High_Bridge_Morrisania %>% filter(Year == year - 1) %>% pull(BBL)
   lots_year_2 <- df_High_Bridge_Morrisania %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
@@ -523,7 +523,7 @@ capture_recapture_the_bronx_n3 <- function(year) {
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 }
 
-df_High_Bridge_Morrisania <- sapply(2011:2021, capture_recapture_the_bronx_n3)
+df_High_Bridge_Morrisania <- sapply(2011:2021, capture_recapture_the_bronx_n)
 df_High_Bridge_Morrisania <- as.data.frame(df_High_Bridge_Morrisania)
 
 df_High_Bridge_Morrisania <- df_High_Bridge_Morrisania %>%
@@ -536,7 +536,7 @@ df_High_Bridge_Morrisania <- df_High_Bridge_Morrisania %>%
 
 df_High_Bridge_Morrisania <- rename(df_High_Bridge_Morrisania, numRats = df_High_Bridge_Morrisania)
 
-capture_recapture_the_bronx_n4 <- function(year) {
+capture_recapture_the_bronx_n <- function(year) {
   lots_year_1 <- df_Hunts_Point_Mott_Haven %>% filter(Year == year - 1) %>% pull(BBL)
   lots_year_2 <- df_Hunts_Point_Mott_Haven %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
@@ -545,7 +545,7 @@ capture_recapture_the_bronx_n4 <- function(year) {
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 }
 
-df_Hunts_Point_Mott_Haven <- sapply(2011:2021, capture_recapture_the_bronx_n4)
+df_Hunts_Point_Mott_Haven <- sapply(2011:2021, capture_recapture_the_bronx_n)
 df_Hunts_Point_Mott_Haven <- as.data.frame(df_Hunts_Point_Mott_Haven)
 
 df_Hunts_Point_Mott_Haven <- df_Hunts_Point_Mott_Haven %>%
@@ -559,7 +559,7 @@ df_Hunts_Point_Mott_Haven <- df_Hunts_Point_Mott_Haven %>%
 df_Hunts_Point_Mott_Haven <- rename(df_Hunts_Point_Mott_Haven, numRats = df_Hunts_Point_Mott_Haven)
 
 
-capture_recapture_the_bronx_n5 <- function(year) {
+capture_recapture_the_bronx_n <- function(year) {
   lots_year_1 <- df_Kingsbridge_Riverdale %>% filter(Year == year - 1) %>% pull(BBL)
   lots_year_2 <- df_Kingsbridge_Riverdale %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
@@ -568,7 +568,7 @@ capture_recapture_the_bronx_n5 <- function(year) {
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 }
 
-df_Kingsbridge_Riverdale <- sapply(2011:2021, capture_recapture_the_bronx_n5)
+df_Kingsbridge_Riverdale <- sapply(2011:2021, capture_recapture_the_bronx_n)
 df_Kingsbridge_Riverdale <- as.data.frame(df_Kingsbridge_Riverdale)
 
 df_Kingsbridge_Riverdale <- df_Kingsbridge_Riverdale %>%
@@ -581,7 +581,7 @@ df_Kingsbridge_Riverdale <- df_Kingsbridge_Riverdale %>%
 
 df_Kingsbridge_Riverdale <- rename(df_Kingsbridge_Riverdale, numRats = df_Kingsbridge_Riverdale)
 
-capture_recapture_the_bronx_n6 <- function(year) {
+capture_recapture_the_bronx_n <- function(year) {
   lots_year_1 <- df_Northeast_Bronx %>% filter(Year == year - 1) %>% pull(BBL)
   lots_year_2 <- df_Northeast_Bronx %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
@@ -590,7 +590,7 @@ capture_recapture_the_bronx_n6 <- function(year) {
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 }
 
-df_Northeast_Bronx <- sapply(2011:2021, capture_recapture_the_bronx_n6)
+df_Northeast_Bronx <- sapply(2011:2021, capture_recapture_the_bronx_n)
 df_Northeast_Bronx <- as.data.frame(df_Northeast_Bronx)
 
 df_Northeast_Bronx <- df_Northeast_Bronx %>%
@@ -603,7 +603,7 @@ df_Northeast_Bronx <- df_Northeast_Bronx %>%
 
 df_Northeast_Bronx <- rename(df_Northeast_Bronx, numRats = df_Northeast_Bronx)
 
-capture_recapture_the_bronx_n7 <- function(year) {
+capture_recapture_the_bronx_n <- function(year) {
   lots_year_1 <- df_Southeast_Bronx %>% filter(Year == year - 1) %>% pull(BBL)
   lots_year_2 <- df_Southeast_Bronx %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
@@ -612,7 +612,7 @@ capture_recapture_the_bronx_n7 <- function(year) {
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 }
 
-df_Southeast_Bronx <- sapply(2011:2021, capture_recapture_the_bronx_n7)
+df_Southeast_Bronx <- sapply(2011:2021, capture_recapture_the_bronx_n)
 df_Southeast_Bronx <- as.data.frame(df_Southeast_Bronx)
 
 df_Southeast_Bronx <- df_Southeast_Bronx %>%
@@ -643,7 +643,7 @@ ggsave("graphBronxTotalN.png", height = 2400, width = 3840, units = "px")
 
 ```{r Brooklyn Neighborhoods}
 
-capture_recapture_brooklyn_n1 <- function(year) {
+capture_recapture_brooklyn_n <- function(year) {
   lots_year_1 <- df_Central_Brooklyn %>% filter(Year == year - 1) %>% pull(BBL)
   lots_year_2 <- df_Central_Brooklyn %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
@@ -652,7 +652,7 @@ capture_recapture_brooklyn_n1 <- function(year) {
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 }
 
-df_Central_Brooklyn <- sapply(2011:2021, capture_recapture_brooklyn_n1)
+df_Central_Brooklyn <- sapply(2011:2021, capture_recapture_brooklyn_n)
 df_Central_Brooklyn <- as.data.frame(df_Central_Brooklyn)
 
 df_Central_Brooklyn <- df_Central_Brooklyn %>%
@@ -665,7 +665,7 @@ df_Central_Brooklyn <- df_Central_Brooklyn %>%
 
 df_Central_Brooklyn <- rename(df_Central_Brooklyn, numRats = df_Central_Brooklyn)
 
-capture_recapture_brooklyn_n2 <- function(year) {
+capture_recapture_brooklyn_n <- function(year) {
   lots_year_1 <- df_Southwest_Brooklyn %>% filter(Year == year - 1) %>% pull(BBL)
   lots_year_2 <- df_Southwest_Brooklyn %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
@@ -674,7 +674,7 @@ capture_recapture_brooklyn_n2 <- function(year) {
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 }
 
-df_Southwest_Brooklyn <- sapply(2011:2021, capture_recapture_brooklyn_n2)
+df_Southwest_Brooklyn <- sapply(2011:2021, capture_recapture_brooklyn_n)
 df_Southwest_Brooklyn <- as.data.frame(df_Southwest_Brooklyn)
 
 df_Southwest_Brooklyn <- df_Southwest_Brooklyn %>%
@@ -687,7 +687,7 @@ df_Southwest_Brooklyn <- df_Southwest_Brooklyn %>%
 
 df_Southwest_Brooklyn <- rename(df_Southwest_Brooklyn, numRats = df_Southwest_Brooklyn)
 
-capture_recapture_brooklyn_n3 <- function(year) {
+capture_recapture_brooklyn_n <- function(year) {
   lots_year_1 <- df_Borough_Park %>% filter(Year == year - 1) %>% pull(BBL)
   lots_year_2 <- df_Borough_Park %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
@@ -696,7 +696,7 @@ capture_recapture_brooklyn_n3 <- function(year) {
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 }
 
-df_Borough_Park <- sapply(2011:2021, capture_recapture_brooklyn_n3)
+df_Borough_Park <- sapply(2011:2021, capture_recapture_brooklyn_n)
 df_Borough_Park <- as.data.frame(df_Borough_Park)
 
 df_Borough_Park <- df_Borough_Park %>%
@@ -709,7 +709,7 @@ df_Borough_Park <- df_Borough_Park %>%
 
 df_Borough_Park <- rename(df_Borough_Park, numRats = df_Borough_Park)
 
-capture_recapture_brooklyn_n4 <- function(year) {
+capture_recapture_brooklyn_n <- function(year) {
   lots_year_1 <- df_Canarsie_Flatlands %>% filter(Year == year - 1) %>% pull(BBL)
   lots_year_2 <- df_Canarsie_Flatlands %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
@@ -718,7 +718,7 @@ capture_recapture_brooklyn_n4 <- function(year) {
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 }
 
-df_Canarsie_Flatlands <- sapply(2011:2021, capture_recapture_brooklyn_n4)
+df_Canarsie_Flatlands <- sapply(2011:2021, capture_recapture_brooklyn_n)
 df_Canarsie_Flatlands <- as.data.frame(df_Canarsie_Flatlands)
 
 df_Canarsie_Flatlands <- df_Canarsie_Flatlands %>%
@@ -732,7 +732,7 @@ df_Canarsie_Flatlands <- df_Canarsie_Flatlands %>%
 df_Canarsie_Flatlands <- rename(df_Canarsie_Flatlands, numRats = df_Canarsie_Flatlands)
 
 
-capture_recapture_brooklyn_n5 <- function(year) {
+capture_recapture_brooklyn_n <- function(year) {
   lots_year_1 <- df_Southern_Brooklyn %>% filter(Year == year - 1) %>% pull(BBL)
   lots_year_2 <- df_Southern_Brooklyn %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
@@ -741,7 +741,7 @@ capture_recapture_brooklyn_n5 <- function(year) {
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 }
 
-df_Southern_Brooklyn <- sapply(2011:2021, capture_recapture_brooklyn_n5)
+df_Southern_Brooklyn <- sapply(2011:2021, capture_recapture_brooklyn_n)
 df_Southern_Brooklyn <- as.data.frame(df_Southern_Brooklyn)
 
 df_Southern_Brooklyn <- df_Southern_Brooklyn %>%
@@ -754,7 +754,7 @@ df_Southern_Brooklyn <- df_Southern_Brooklyn %>%
 
 df_Southern_Brooklyn <- rename(df_Southern_Brooklyn, numRats = df_Southern_Brooklyn)
 
-capture_recapture_brooklyn_n6 <- function(year) {
+capture_recapture_brooklyn_n <- function(year) {
   lots_year_1 <- df_Northwest_Brooklyn %>% filter(Year == year - 1) %>% pull(BBL)
   lots_year_2 <- df_Northwest_Brooklyn %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
@@ -763,7 +763,7 @@ capture_recapture_brooklyn_n6 <- function(year) {
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 }
 
-df_Northwest_Brooklyn <- sapply(2011:2021, capture_recapture_brooklyn_n6)
+df_Northwest_Brooklyn <- sapply(2011:2021, capture_recapture_brooklyn_n)
 df_Northwest_Brooklyn <- as.data.frame(df_Northwest_Brooklyn)
 
 df_Northwest_Brooklyn <- df_Northwest_Brooklyn %>%
@@ -776,7 +776,7 @@ df_Northwest_Brooklyn <- df_Northwest_Brooklyn %>%
 
 df_Northwest_Brooklyn <- rename(df_Northwest_Brooklyn, numRats = df_Northwest_Brooklyn)
 
-capture_recapture_brooklyn_n7 <- function(year) {
+capture_recapture_brooklyn_n <- function(year) {
   lots_year_1 <- df_Flatbush %>% filter(Year == year - 1) %>% pull(BBL)
   lots_year_2 <- df_Flatbush %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
@@ -785,7 +785,7 @@ capture_recapture_brooklyn_n7 <- function(year) {
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 }
 
-df_Flatbush <- sapply(2011:2021, capture_recapture_brooklyn_n7)
+df_Flatbush <- sapply(2011:2021, capture_recapture_brooklyn_n)
 df_Flatbush <- as.data.frame(df_Flatbush)
 
 df_Flatbush <- df_Flatbush %>%
@@ -798,7 +798,7 @@ df_Flatbush <- df_Flatbush %>%
 
 df_Flatbush <- rename(df_Flatbush, numRats = df_Flatbush)
 
-capture_recapture_brooklyn_n8 <- function(year) {
+capture_recapture_brooklyn_n <- function(year) {
   lots_year_1 <- df_East_NY_New_Lots %>% filter(Year == year - 1) %>% pull(BBL)
   lots_year_2 <- df_East_NY_New_Lots %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
@@ -807,7 +807,7 @@ capture_recapture_brooklyn_n8 <- function(year) {
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 }
 
-df_East_NY_New_Lots <- sapply(2011:2021, capture_recapture_brooklyn_n8)
+df_East_NY_New_Lots <- sapply(2011:2021, capture_recapture_brooklyn_n)
 df_East_NY_New_Lots <- as.data.frame(df_East_NY_New_Lots)
 
 df_East_NY_New_Lots <- df_East_NY_New_Lots %>%
@@ -820,7 +820,7 @@ df_East_NY_New_Lots <- df_East_NY_New_Lots %>%
 
 df_East_NY_New_Lots <- rename(df_East_NY_New_Lots, numRats = df_East_NY_New_Lots)
 
-capture_recapture_brooklyn_n9 <- function(year) {
+capture_recapture_brooklyn_n <- function(year) {
   lots_year_1 <- df_Greenpoint %>% filter(Year == year - 1) %>% pull(BBL)
   lots_year_2 <- df_Greenpoint %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
@@ -829,7 +829,7 @@ capture_recapture_brooklyn_n9 <- function(year) {
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 }
 
-df_Greenpoint <- sapply(2011:2021, capture_recapture_brooklyn_n9)
+df_Greenpoint <- sapply(2011:2021, capture_recapture_brooklyn_n)
 df_Greenpoint <- as.data.frame(df_Greenpoint)
 
 df_Greenpoint <- df_Greenpoint %>%
@@ -842,7 +842,7 @@ df_Greenpoint <- df_Greenpoint %>%
 
 df_Greenpoint <- rename(df_Greenpoint, numRats = df_Greenpoint)
 
-capture_recapture_brooklyn_n10 <- function(year) {
+capture_recapture_brooklyn_n <- function(year) {
   lots_year_1 <- df_Sunset_Park %>% filter(Year == year - 1) %>% pull(BBL)
   lots_year_2 <- df_Sunset_Park %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
@@ -851,7 +851,7 @@ capture_recapture_brooklyn_n10 <- function(year) {
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 }
 
-df_Sunset_Park <- sapply(2011:2021, capture_recapture_brooklyn_n10)
+df_Sunset_Park <- sapply(2011:2021, capture_recapture_brooklyn_n)
 df_Sunset_Park <- as.data.frame(df_Sunset_Park)
 
 df_Sunset_Park <- df_Sunset_Park %>%
@@ -864,7 +864,7 @@ df_Sunset_Park <- df_Sunset_Park %>%
 
 df_Sunset_Park <- rename(df_Sunset_Park, numRats = df_Sunset_Park)
 
-capture_recapture_brooklyn_n11 <- function(year) {
+capture_recapture_brooklyn_n <- function(year) {
   lots_year_1 <- df_Bushwick_Williamsburg %>% filter(Year == year - 1) %>% pull(BBL)
   lots_year_2 <- df_Bushwick_Williamsburg %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
@@ -873,7 +873,7 @@ capture_recapture_brooklyn_n11 <- function(year) {
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 }
 
-df_Bushwick_Williamsburg <- sapply(2011:2021, capture_recapture_brooklyn_n11)
+df_Bushwick_Williamsburg <- sapply(2011:2021, capture_recapture_brooklyn_n)
 df_Bushwick_Williamsburg <- as.data.frame(df_Bushwick_Williamsburg)
 
 df_Bushwick_Williamsburg <- df_Bushwick_Williamsburg %>%
@@ -904,7 +904,7 @@ ggsave("graphBrooklynTotalN.png", height = 2400, width = 3840, units = "px")
 
 ```{r Manhattan Neighborhoods}
 
-capture_recapture_manhattan_n1 <- function(year) {
+capture_recapture_manhattan_n <- function(year) {
   lots_year_1 <- df_Central_Harlem %>% filter(Year == year - 1) %>% pull(BBL)
   lots_year_2 <- df_Central_Harlem %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
@@ -913,7 +913,7 @@ capture_recapture_manhattan_n1 <- function(year) {
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 }
 
-df_Central_Harlem <- sapply(2011:2021, capture_recapture_manhattan_n1)
+df_Central_Harlem <- sapply(2011:2021, capture_recapture_manhattan_n)
 df_Central_Harlem <- as.data.frame(df_Central_Harlem)
 
 df_Central_Harlem <- df_Central_Harlem %>%
@@ -926,7 +926,7 @@ df_Central_Harlem <- df_Central_Harlem %>%
 
 df_Central_Harlem <- rename(df_Central_Harlem, numRats = df_Central_Harlem)
 
-capture_recapture_manhattan_n2 <- function(year) {
+capture_recapture_manhattan_n <- function(year) {
   lots_year_1 <- df_Chelsea_Clinton %>% filter(Year == year - 1) %>% pull(BBL)
   lots_year_2 <- df_Chelsea_Clinton %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
@@ -935,7 +935,7 @@ capture_recapture_manhattan_n2 <- function(year) {
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 }
 
-df_Chelsea_Clinton <- sapply(2011:2021, capture_recapture_manhattan_n2)
+df_Chelsea_Clinton <- sapply(2011:2021, capture_recapture_manhattan_n)
 df_Chelsea_Clinton <- as.data.frame(df_Chelsea_Clinton)
 
 df_Chelsea_Clinton <- df_Chelsea_Clinton %>%
@@ -948,7 +948,7 @@ df_Chelsea_Clinton <- df_Chelsea_Clinton %>%
 
 df_Chelsea_Clinton <- rename(df_Chelsea_Clinton, numRats = df_Chelsea_Clinton)
 
-capture_recapture_manhattan_n3 <- function(year) {
+capture_recapture_manhattan_n <- function(year) {
   lots_year_1 <- df_East_Harlem %>% filter(Year == year - 1) %>% pull(BBL)
   lots_year_2 <- df_East_Harlem %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
@@ -957,7 +957,7 @@ capture_recapture_manhattan_n3 <- function(year) {
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 }
 
-df_East_Harlem <- sapply(2011:2021, capture_recapture_manhattan_n3)
+df_East_Harlem <- sapply(2011:2021, capture_recapture_manhattan_n)
 df_East_Harlem <- as.data.frame(df_East_Harlem)
 
 df_East_Harlem <- df_East_Harlem %>%
@@ -970,7 +970,7 @@ df_East_Harlem <- df_East_Harlem %>%
 
 df_East_Harlem <- rename(df_East_Harlem, numRats = df_East_Harlem)
 
-capture_recapture_manhattan_n4 <- function(year) {
+capture_recapture_manhattan_n <- function(year) {
   lots_year_1 <- df_Gramercy_Park_Murray_Hill %>% filter(Year == year - 1) %>% pull(BBL)
   lots_year_2 <- df_Gramercy_Park_Murray_Hill %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
@@ -979,7 +979,7 @@ capture_recapture_manhattan_n4 <- function(year) {
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 }
 
-df_Gramercy_Park_Murray_Hill <- sapply(2011:2021, capture_recapture_manhattan_n4)
+df_Gramercy_Park_Murray_Hill <- sapply(2011:2021, capture_recapture_manhattan_n)
 df_Gramercy_Park_Murray_Hill <- as.data.frame(df_Gramercy_Park_Murray_Hill)
 
 df_Gramercy_Park_Murray_Hill <- df_Gramercy_Park_Murray_Hill %>%
@@ -993,7 +993,7 @@ df_Gramercy_Park_Murray_Hill <- df_Gramercy_Park_Murray_Hill %>%
 df_Gramercy_Park_Murray_Hill <- rename(df_Gramercy_Park_Murray_Hill, numRats = df_Gramercy_Park_Murray_Hill)
 
 
-capture_recapture_manhattan_n5 <- function(year) {
+capture_recapture_manhattan_n <- function(year) {
   lots_year_1 <- df_Greenwich_Village_SoHo %>% filter(Year == year - 1) %>% pull(BBL)
   lots_year_2 <- df_Greenwich_Village_SoHo %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
@@ -1002,7 +1002,7 @@ capture_recapture_manhattan_n5 <- function(year) {
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 }
 
-df_Greenwich_Village_SoHo <- sapply(2011:2021, capture_recapture_manhattan_n5)
+df_Greenwich_Village_SoHo <- sapply(2011:2021, capture_recapture_manhattan_n)
 df_Greenwich_Village_SoHo <- as.data.frame(df_Greenwich_Village_SoHo)
 
 df_Greenwich_Village_SoHo <- df_Greenwich_Village_SoHo %>%
@@ -1015,7 +1015,7 @@ df_Greenwich_Village_SoHo <- df_Greenwich_Village_SoHo %>%
 
 df_Greenwich_Village_SoHo <- rename(df_Greenwich_Village_SoHo, numRats = df_Greenwich_Village_SoHo)
 
-capture_recapture_manhattan_n6 <- function(year) {
+capture_recapture_manhattan_n <- function(year) {
   lots_year_1 <- df_Lower_Manhattan %>% filter(Year == year - 1) %>% pull(BBL)
   lots_year_2 <- df_Lower_Manhattan %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
@@ -1024,7 +1024,7 @@ capture_recapture_manhattan_n6 <- function(year) {
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 }
 
-df_Lower_Manhattan <- sapply(2011:2021, capture_recapture_manhattan_n6)
+df_Lower_Manhattan <- sapply(2011:2021, capture_recapture_manhattan_n)
 df_Lower_Manhattan <- as.data.frame(df_Lower_Manhattan)
 
 df_Lower_Manhattan <- df_Lower_Manhattan %>%
@@ -1037,7 +1037,7 @@ df_Lower_Manhattan <- df_Lower_Manhattan %>%
 
 df_Lower_Manhattan <- rename(df_Lower_Manhattan, numRats = df_Lower_Manhattan)
 
-capture_recapture_manhattan_n7 <- function(year) {
+capture_recapture_manhattan_n <- function(year) {
   lots_year_1 <- df_Lower_East %>% filter(Year == year - 1) %>% pull(BBL)
   lots_year_2 <- df_Lower_East %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
@@ -1046,7 +1046,7 @@ capture_recapture_manhattan_n7 <- function(year) {
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 }
 
-df_Lower_East <- sapply(2011:2021, capture_recapture_manhattan_n7)
+df_Lower_East <- sapply(2011:2021, capture_recapture_manhattan_n)
 df_Lower_East <- as.data.frame(df_Lower_East)
 
 df_Lower_East <- df_Lower_East %>%
@@ -1059,7 +1059,7 @@ df_Lower_East <- df_Lower_East %>%
 
 df_Lower_East <- rename(df_Lower_East, numRats = df_Lower_East)
 
-capture_recapture_manhattan_n8 <- function(year) {
+capture_recapture_manhattan_n <- function(year) {
   lots_year_1 <- df_Upper_East %>% filter(Year == year - 1) %>% pull(BBL)
   lots_year_2 <- df_Upper_East %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
@@ -1068,7 +1068,7 @@ capture_recapture_manhattan_n8 <- function(year) {
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 }
 
-df_Upper_East <- sapply(2011:2021, capture_recapture_manhattan_n8)
+df_Upper_East <- sapply(2011:2021, capture_recapture_manhattan_n)
 df_Upper_East <- as.data.frame(df_Upper_East)
 
 df_Upper_East <- df_Upper_East %>%
@@ -1081,7 +1081,7 @@ df_Upper_East <- df_Upper_East %>%
 
 df_Upper_East <- rename(df_Upper_East, numRats = df_Upper_East)
 
-capture_recapture_manhattan_n9 <- function(year) {
+capture_recapture_manhattan_n <- function(year) {
   lots_year_1 <- df_Upper_West %>% filter(Year == year - 1) %>% pull(BBL)
   lots_year_2 <- df_Upper_West %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
@@ -1090,7 +1090,7 @@ capture_recapture_manhattan_n9 <- function(year) {
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 }
 
-df_Upper_West <- sapply(2011:2021, capture_recapture_manhattan_n9)
+df_Upper_West <- sapply(2011:2021, capture_recapture_manhattan_n)
 df_Upper_West <- as.data.frame(df_Upper_West)
 
 df_Upper_West <- df_Upper_West %>%
@@ -1103,7 +1103,7 @@ df_Upper_West <- df_Upper_West %>%
 
 df_Upper_West <- rename(df_Upper_West, numRats = df_Upper_West)
 
-capture_recapture_manhattan_n10 <- function(year) {
+capture_recapture_manhattan_n <- function(year) {
   lots_year_1 <- df_Inwood_Washington_Heights %>% filter(Year == year - 1) %>% pull(BBL)
   lots_year_2 <- df_Inwood_Washington_Heights %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
@@ -1112,7 +1112,7 @@ capture_recapture_manhattan_n10 <- function(year) {
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 }
 
-df_Inwood_Washington_Heights <- sapply(2011:2021, capture_recapture_manhattan_n10)
+df_Inwood_Washington_Heights <- sapply(2011:2021, capture_recapture_manhattan_n)
 df_Inwood_Washington_Heights <- as.data.frame(df_Inwood_Washington_Heights)
 
 df_Inwood_Washington_Heights <- df_Inwood_Washington_Heights %>%
@@ -1143,7 +1143,7 @@ ggsave("graphManhattanTotalN.png", height = 2400, width = 3840, units = "px")
 
 ```{r Queens Neighborhoods}
 
-capture_recapture_queens_n1 <- function(year) {
+capture_recapture_queens_n <- function(year) {
   lots_year_1 <- df_Northeast_Queens %>% filter(Year == year - 1) %>% pull(BBL)
   lots_year_2 <- df_Northeast_Queens %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
@@ -1152,7 +1152,7 @@ capture_recapture_queens_n1 <- function(year) {
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 }
 
-df_Northeast_Queens <- sapply(2011:2021, capture_recapture_queens_n1)
+df_Northeast_Queens <- sapply(2011:2021, capture_recapture_queens_n)
 df_Northeast_Queens <- as.data.frame(df_Northeast_Queens)
 
 df_Northeast_Queens <- df_Northeast_Queens %>%
@@ -1165,7 +1165,7 @@ df_Northeast_Queens <- df_Northeast_Queens %>%
 
 df_Northeast_Queens <- rename(df_Northeast_Queens, numRats = df_Northeast_Queens)
 
-capture_recapture_queens_n2 <- function(year) {
+capture_recapture_queens_n <- function(year) {
   lots_year_1 <- df_North_Queens %>% filter(Year == year - 1) %>% pull(BBL)
   lots_year_2 <- df_North_Queens %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
@@ -1174,7 +1174,7 @@ capture_recapture_queens_n2 <- function(year) {
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 }
 
-df_North_Queens <- sapply(2011:2021, capture_recapture_queens_n2)
+df_North_Queens <- sapply(2011:2021, capture_recapture_queens_n)
 df_North_Queens <- as.data.frame(df_North_Queens)
 
 df_North_Queens <- df_North_Queens %>%
@@ -1187,7 +1187,7 @@ df_North_Queens <- df_North_Queens %>%
 
 df_North_Queens <- rename(df_North_Queens, numRats = df_North_Queens)
 
-capture_recapture_queens_n3 <- function(year) {
+capture_recapture_queens_n <- function(year) {
   lots_year_1 <- df_Central_Queens %>% filter(Year == year - 1) %>% pull(BBL)
   lots_year_2 <- df_Central_Queens %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
@@ -1196,7 +1196,7 @@ capture_recapture_queens_n3 <- function(year) {
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 }
 
-df_Central_Queens <- sapply(2011:2021, capture_recapture_queens_n3)
+df_Central_Queens <- sapply(2011:2021, capture_recapture_queens_n)
 df_Central_Queens <- as.data.frame(df_Central_Queens)
 
 df_Central_Queens <- df_Central_Queens %>%
@@ -1209,7 +1209,7 @@ df_Central_Queens <- df_Central_Queens %>%
 
 df_Central_Queens <- rename(df_Central_Queens, numRats = df_Central_Queens)
 
-capture_recapture_queens_n4 <- function(year) {
+capture_recapture_queens_n <- function(year) {
   lots_year_1 <- df_Jamaica %>% filter(Year == year - 1) %>% pull(BBL)
   lots_year_2 <- df_Jamaica %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
@@ -1218,7 +1218,7 @@ capture_recapture_queens_n4 <- function(year) {
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 }
 
-df_Jamaica <- sapply(2011:2021, capture_recapture_queens_n4)
+df_Jamaica <- sapply(2011:2021, capture_recapture_queens_n)
 df_Jamaica <- as.data.frame(df_Jamaica)
 
 df_Jamaica <- df_Jamaica %>%
@@ -1232,7 +1232,7 @@ df_Jamaica <- df_Jamaica %>%
 df_Jamaica <- rename(df_Jamaica, numRats = df_Jamaica)
 
 
-capture_recapture_queens_n5 <- function(year) {
+capture_recapture_queens_n <- function(year) {
   lots_year_1 <- df_Northwest_Queens %>% filter(Year == year - 1) %>% pull(BBL)
   lots_year_2 <- df_Northwest_Queens %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
@@ -1241,7 +1241,7 @@ capture_recapture_queens_n5 <- function(year) {
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 }
 
-df_Northwest_Queens <- sapply(2011:2021, capture_recapture_queens_n5)
+df_Northwest_Queens <- sapply(2011:2021, capture_recapture_queens_n)
 df_Northwest_Queens <- as.data.frame(df_Northwest_Queens)
 
 df_Northwest_Queens <- df_Northwest_Queens %>%
@@ -1254,7 +1254,7 @@ df_Northwest_Queens <- df_Northwest_Queens %>%
 
 df_Northwest_Queens <- rename(df_Northwest_Queens, numRats = df_Northwest_Queens)
 
-capture_recapture_queens_n6 <- function(year) {
+capture_recapture_queens_n <- function(year) {
   lots_year_1 <- df_West_Central_Queens %>% filter(Year == year - 1) %>% pull(BBL)
   lots_year_2 <- df_West_Central_Queens %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
@@ -1263,7 +1263,7 @@ capture_recapture_queens_n6 <- function(year) {
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 }
 
-df_West_Central_Queens <- sapply(2011:2021, capture_recapture_queens_n6)
+df_West_Central_Queens <- sapply(2011:2021, capture_recapture_queens_n)
 df_West_Central_Queens <- as.data.frame(df_West_Central_Queens)
 
 df_West_Central_Queens <- df_West_Central_Queens %>%
@@ -1276,7 +1276,7 @@ df_West_Central_Queens <- df_West_Central_Queens %>%
 
 df_West_Central_Queens <- rename(df_West_Central_Queens, numRats = df_West_Central_Queens)
 
-capture_recapture_queens_n7 <- function(year) {
+capture_recapture_queens_n <- function(year) {
   lots_year_1 <- df_Rockaways %>% filter(Year == year - 1) %>% pull(BBL)
   lots_year_2 <- df_Rockaways %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
@@ -1285,7 +1285,7 @@ capture_recapture_queens_n7 <- function(year) {
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 }
 
-df_Rockaways <- sapply(2011:2021, capture_recapture_queens_n7)
+df_Rockaways <- sapply(2011:2021, capture_recapture_queens_n)
 df_Rockaways <- as.data.frame(df_Rockaways)
 
 df_Rockaways <- df_Rockaways %>%
@@ -1298,7 +1298,7 @@ df_Rockaways <- df_Rockaways %>%
 
 df_Rockaways <- rename(df_Rockaways, numRats = df_Rockaways)
 
-capture_recapture_queens_n8 <- function(year) {
+capture_recapture_queens_n <- function(year) {
   lots_year_1 <- df_Southeast_Queens %>% filter(Year == year - 1) %>% pull(BBL)
   lots_year_2 <- df_Southeast_Queens %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
@@ -1307,7 +1307,7 @@ capture_recapture_queens_n8 <- function(year) {
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 }
 
-df_Southeast_Queens <- sapply(2011:2021, capture_recapture_queens_n8)
+df_Southeast_Queens <- sapply(2011:2021, capture_recapture_queens_n)
 df_Southeast_Queens <- as.data.frame(df_Southeast_Queens)
 
 df_Southeast_Queens <- df_Southeast_Queens %>%
@@ -1320,7 +1320,7 @@ df_Southeast_Queens <- df_Southeast_Queens %>%
 
 df_Southeast_Queens <- rename(df_Southeast_Queens, numRats = df_Southeast_Queens)
 
-capture_recapture_queens_n9 <- function(year) {
+capture_recapture_queens_n <- function(year) {
   lots_year_1 <- df_Southwest_Queens %>% filter(Year == year - 1) %>% pull(BBL)
   lots_year_2 <- df_Southwest_Queens %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
@@ -1329,7 +1329,7 @@ capture_recapture_queens_n9 <- function(year) {
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 }
 
-df_Southwest_Queens <- sapply(2011:2021, capture_recapture_queens_n9)
+df_Southwest_Queens <- sapply(2011:2021, capture_recapture_queens_n)
 df_Southwest_Queens <- as.data.frame(df_Southwest_Queens)
 
 df_Southwest_Queens <- df_Southwest_Queens %>%
@@ -1342,7 +1342,7 @@ df_Southwest_Queens <- df_Southwest_Queens %>%
 
 df_Southwest_Queens <- rename(df_Southwest_Queens, numRats = df_Southwest_Queens)
 
-capture_recapture_queens_n10 <- function(year) {
+capture_recapture_queens_n <- function(year) {
   lots_year_1 <- df_West_Queens %>% filter(Year == year - 1) %>% pull(BBL)
   lots_year_2 <- df_West_Queens %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
@@ -1351,7 +1351,7 @@ capture_recapture_queens_n10 <- function(year) {
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 }
 
-df_West_Queens <- sapply(2011:2021, capture_recapture_queens_n10)
+df_West_Queens <- sapply(2011:2021, capture_recapture_queens_n)
 df_West_Queens <- as.data.frame(df_West_Queens)
 
 df_West_Queens <- df_West_Queens %>%
@@ -1382,7 +1382,7 @@ ggsave("graphQueensTotalN.png", height = 2400, width = 3840, units = "px")
 
 ```{r Staten Island Neighborhoods}
 
-capture_recapture_staten_island_n1 <- function(year) {
+capture_recapture_staten_island_n <- function(year) {
   lots_year_1 <- df_Port_Richmond %>% filter(Year == year - 1) %>% pull(BBL)
   lots_year_2 <- df_Port_Richmond %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
@@ -1391,7 +1391,7 @@ capture_recapture_staten_island_n1 <- function(year) {
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 }
 
-df_Port_Richmond <- sapply(2011:2021, capture_recapture_staten_island_n1)
+df_Port_Richmond <- sapply(2011:2021, capture_recapture_staten_island_n)
 df_Port_Richmond <- as.data.frame(df_Port_Richmond)
 
 df_Port_Richmond <- df_Port_Richmond %>%
@@ -1404,7 +1404,7 @@ df_Port_Richmond <- df_Port_Richmond %>%
 
 df_Port_Richmond <- rename(df_Port_Richmond, numRats = df_Port_Richmond)
 
-capture_recapture_staten_island_n2 <- function(year) {
+capture_recapture_staten_island_n <- function(year) {
   lots_year_1 <- df_South_Shore %>% filter(Year == year - 1) %>% pull(BBL)
   lots_year_2 <- df_South_Shore %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
@@ -1413,7 +1413,7 @@ capture_recapture_staten_island_n2 <- function(year) {
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 }
 
-df_South_Shore <- sapply(2011:2021, capture_recapture_staten_island_n2)
+df_South_Shore <- sapply(2011:2021, capture_recapture_staten_island_n)
 df_South_Shore <- as.data.frame(df_South_Shore)
 
 df_South_Shore <- df_South_Shore %>%
@@ -1426,7 +1426,7 @@ df_South_Shore <- df_South_Shore %>%
 
 df_South_Shore <- rename(df_South_Shore, numRats = df_South_Shore)
 
-capture_recapture_staten_island_n3 <- function(year) {
+capture_recapture_staten_island_n <- function(year) {
   lots_year_1 <- df_Stapleton_StGeorge %>% filter(Year == year - 1) %>% pull(BBL)
   lots_year_2 <- df_Stapleton_StGeorge %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
@@ -1435,7 +1435,7 @@ capture_recapture_staten_island_n3 <- function(year) {
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 }
 
-df_Stapleton_StGeorge <- sapply(2011:2021, capture_recapture_staten_island_n3)
+df_Stapleton_StGeorge <- sapply(2011:2021, capture_recapture_staten_island_n)
 df_Stapleton_StGeorge <- as.data.frame(df_Stapleton_StGeorge)
 
 df_Stapleton_StGeorge <- df_Stapleton_StGeorge %>%
@@ -1448,7 +1448,7 @@ df_Stapleton_StGeorge <- df_Stapleton_StGeorge %>%
 
 df_Stapleton_StGeorge <- rename(df_Stapleton_StGeorge, numRats = df_Stapleton_StGeorge)
 
-capture_recapture_staten_island_n4 <- function(year) {
+capture_recapture_staten_island_n <- function(year) {
   lots_year_1 <- df_MidIsland %>% filter(Year == year - 1) %>% pull(BBL)
   lots_year_2 <- df_MidIsland %>% filter(Year == year) %>% pull(BBL)
   number_in_year_1 <- length(lots_year_1)
@@ -1457,7 +1457,7 @@ capture_recapture_staten_island_n4 <- function(year) {
   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
 }
 
-df_MidIsland <- sapply(2011:2021, capture_recapture_staten_island_n4)
+df_MidIsland <- sapply(2011:2021, capture_recapture_staten_island_n)
 df_MidIsland <- as.data.frame(df_MidIsland)
 
 df_MidIsland <- df_MidIsland %>%
@@ -1488,5 +1488,15 @@ ggsave("graphStatenTotalN.png", height = 2400, width = 3840, units = "px")
 
 
 ```{r interpolation calculation for inf / undefined / outlier data}
+
+write.csv(df_The_Bronx_Neighborhood_Rats, "C:\\Users\\Admin\\Desktop\\df_The_Bronx_Neighborhoods.csv", row.names=FALSE)
+
+write.csv(df_Brooklyn_Neighborhood_Rats, "C:\\Users\\Admin\\Desktop\\df_Brooklyn_Neighborhoods.csv", row.names=FALSE)
+
+write.csv(df_Manhattan_Neighborhood_Rats, "C:\\Users\\Admin\\Desktop\\df_Manhattan_Neighborhoods.csv", row.names=FALSE)
+
+write.csv(df_Queens_Neighborhood_Rats, "C:\\Users\\Admin\\Desktop\\df_Queens_Neighborhoods.csv", row.names=FALSE)
+
+write.csv(df_Staten_Island_Neighborhood_Rats, "C:\\Users\\Admin\\Desktop\\df_Staten_Island_Neighborhoods.csv", row.names=FALSE)
 
 ```
