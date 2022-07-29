@@ -6,16 +6,16 @@ output: html_document
 ---
 
 ```{r}
-# install.packages("gganimate")
-# install.packages("gapminder")
-# install.packages("ggthemes")
-# 
-# library("tidyverse")
-# library("ggplot2")
-# library("gganimate")
-# library("dplyr")
-# library("gapminder")
-# library("ggthemes")
+install.packages("gganimate")
+install.packages("gapminder")
+install.packages("ggthemes")
+
+library("tidyverse")
+library("ggplot2")
+library("gganimate")
+library("dplyr")
+library("gapminder")
+library("ggthemes")
 ```
 
 ```{r}
@@ -39,7 +39,7 @@ df_NYC <- df_NYC %>% filter(Zip %in% (10001:11697))
 df_NYC <- separate(df_NYC, "Month_Year", c("Month","Year"), sep = "/")
 df_NYC <- df_NYC[order(df_NYC$Year),]
 
-write.csv(df_NYC, "C:\\Users\\Admin\\Desktop\\df_NYC.csv", row.names=FALSE)
+write.csv(df_NYC, "C:\\Users\\Admin\\Desktop\\RatsData\\df_NYC.csv", row.names=FALSE)
 ```
 
 ```{r test_cap_recap_function}
@@ -211,7 +211,7 @@ df_Northwest_Queens <- df_NYC %>% filter(Zip%in% c(11101, 11102, 11103, 11104, 1
 df_West_Central_Queens <- df_NYC %>% filter(Zip%in% c(11374, 11375, 11379, 11385))
   df_West_Central_Queens$Neighborhood <- "WEST CENTRAL QUEENS"
 
-df_Rockaways <- df_NYC %>% filter(Zip%in% c(11691, 11692, 11693, 11694, 11695, 11697))
+df_Rockaways <- df_NYC %>% filter(Zip%in% c(11691, 11692, 11693, 11694, 11697))
   df_Rockaways$Neighborhood <- "ROCKAWAYS"
   
 df_Southeast_Queens <- df_NYC %>% filter(Zip%in% c(11004, 11005, 11411, 11413, 11422, 11426, 11427, 11428, 11429))
@@ -248,20 +248,20 @@ df_Staten_Island <- rbind(df_Port_Richmond, df_South_Shore, df_Stapleton_StGeorg
 ```{r calls NYC}
 
 df_NYC <- rbind(df_The_Bronx, df_Brooklyn, df_Manhattan, df_Queens, df_Staten_Island)
-write.csv(df_NYC, "C:\\Users\\Admin\\Desktop\\df_NYC.csv", row.names=FALSE)
+write.csv(df_NYC, "C:\\Users\\Admin\\Desktop\\RatsData\\df_NYC.csv", row.names=FALSE)
 
 ```
 
 ```{r calls}
-write.csv(df_The_Bronx, "C:\\Users\\Admin\\Desktop\\df_The_Bronx.csv", row.names=FALSE)
+write.csv(df_The_Bronx, "C:\\Users\\Admin\\Desktop\\RatsData\\DataSets\\df_The_Bronx.csv", row.names=FALSE)
 
-write.csv(df_Brooklyn, "C:\\Users\\Admin\\Desktop\\df_Brooklyn.csv", row.names=FALSE)
+write.csv(df_Brooklyn, "C:\\Users\\Admin\\Desktop\\RatsData\\DataSets\\df_Brooklyn.csv", row.names=FALSE)
 
-write.csv(df_Manhattan, "C:\\Users\\Admin\\Desktop\\df_Manhattan.csv", row.names=FALSE)
+write.csv(df_Manhattan, "C:\\Users\\Admin\\Desktop\\RatsData\\DataSets\\f_Manhattan.csv", row.names=FALSE)
 
-write.csv(df_Queens, "C:\\Users\\Admin\\Desktop\\df_Queens.csv", row.names=FALSE)
+write.csv(df_Queens, "C:\\Users\\Admin\\Desktop\\RatsData\\DataSets\\df_Queens.csv", row.names=FALSE)
 
-write.csv(df_Staten_Island, "C:\\Users\\Admin\\Desktop\\df_Staten_Island.csv", row.names=FALSE)
+write.csv(df_Staten_Island, "C:\\Users\\Admin\\Desktop\\RatsData\\DataSets\\df_Staten_Island.csv", row.names=FALSE)
 
 ```
 
@@ -1489,14 +1489,14 @@ ggsave("graphStatenTotalN.png", height = 2400, width = 3840, units = "px")
 
 ```{r interpolation calculation for inf / undefined / outlier data}
 
-write.csv(df_The_Bronx_Neighborhood_Rats, "C:\\Users\\Admin\\Desktop\\df_The_Bronx_Neighborhoods.csv", row.names=FALSE)
+write.csv(df_The_Bronx_Neighborhood_Rats, "C:\\Users\\Admin\\Desktop\\RatsData\\DataSets\\df_The_Bronx_Neighborhoods.csv", row.names=FALSE)
 
-write.csv(df_Brooklyn_Neighborhood_Rats, "C:\\Users\\Admin\\Desktop\\df_Brooklyn_Neighborhoods.csv", row.names=FALSE)
+write.csv(df_Brooklyn_Neighborhood_Rats, "C:\\Users\\Admin\\Desktop\\RatsData\\DataSets\\df_Brooklyn_Neighborhoods.csv", row.names=FALSE)
 
-write.csv(df_Manhattan_Neighborhood_Rats, "C:\\Users\\Admin\\Desktop\\df_Manhattan_Neighborhoods.csv", row.names=FALSE)
+write.csv(df_Manhattan_Neighborhood_Rats, "C:\\Users\\Admin\\Desktop\\RatsData\\DataSets\\df_Manhattan_Neighborhoods.csv", row.names=FALSE)
 
-write.csv(df_Queens_Neighborhood_Rats, "C:\\Users\\Admin\\Desktop\\df_Queens_Neighborhoods.csv", row.names=FALSE)
+write.csv(df_Queens_Neighborhood_Rats, "C:\\Users\\Admin\\Desktop\\RatsData\\DataSets\\df_Queens_Neighborhoods.csv", row.names=FALSE)
 
-write.csv(df_Staten_Island_Neighborhood_Rats, "C:\\Users\\Admin\\Desktop\\df_Staten_Island_Neighborhoods.csv", row.names=FALSE)
+write.csv(df_Staten_Island_Neighborhood_Rats, "C:\\Users\\Admin\\Desktop\\RatsData\\DataSets\\df_Staten_Island_Neighborhoods.csv", row.names=FALSE)
 
 ```
