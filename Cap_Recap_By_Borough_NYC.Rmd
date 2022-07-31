@@ -257,7 +257,7 @@ write.csv(df_The_Bronx, "C:\\Users\\Admin\\Desktop\\RatsData\\DataSets\\df_The_B
 
 write.csv(df_Brooklyn, "C:\\Users\\Admin\\Desktop\\RatsData\\DataSets\\df_Brooklyn.csv", row.names=FALSE)
 
-write.csv(df_Manhattan, "C:\\Users\\Admin\\Desktop\\RatsData\\DataSets\\f_Manhattan.csv", row.names=FALSE)
+write.csv(df_Manhattan, "C:\\Users\\Admin\\Desktop\\RatsData\\DataSets\\df_Manhattan.csv", row.names=FALSE)
 
 write.csv(df_Queens, "C:\\Users\\Admin\\Desktop\\RatsData\\DataSets\\df_Queens.csv", row.names=FALSE)
 
@@ -1486,8 +1486,7 @@ ggsave("graphStatenTotalN.png", height = 2400, width = 3840, units = "px")
 
 ```
 
-
-```{r interpolation calculation for inf / undefined / outlier data}
+```{r Neighborhood Data Sets}
 
 write.csv(df_The_Bronx_Neighborhood_Rats, "C:\\Users\\Admin\\Desktop\\RatsData\\DataSets\\df_The_Bronx_Neighborhoods.csv", row.names=FALSE)
 
@@ -1498,5 +1497,11 @@ write.csv(df_Manhattan_Neighborhood_Rats, "C:\\Users\\Admin\\Desktop\\RatsData\\
 write.csv(df_Queens_Neighborhood_Rats, "C:\\Users\\Admin\\Desktop\\RatsData\\DataSets\\df_Queens_Neighborhoods.csv", row.names=FALSE)
 
 write.csv(df_Staten_Island_Neighborhood_Rats, "C:\\Users\\Admin\\Desktop\\RatsData\\DataSets\\df_Staten_Island_Neighborhoods.csv", row.names=FALSE)
+
+```
+
+```{r Rat per Capita and Rat per sqm}
+
+nyc_capita_area <- read_csv("nyc_pop_zip_area_2020")
 
 ```
