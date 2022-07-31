@@ -9,6 +9,7 @@ output: html_document
 install.packages("gganimate")
 install.packages("gapminder")
 install.packages("ggthemes")
+install.packages("ggrepel")
 
 library("tidyverse")
 library("ggplot2")
@@ -16,6 +17,7 @@ library("gganimate")
 library("dplyr")
 library("gapminder")
 library("ggthemes")
+library("ggrepel")
 ```
 
 ```{r}
@@ -1374,8 +1376,8 @@ graphQueensTotal.static <- ggplot(df_Queens_Neighborhood_Rats, aes(x = Year, y =
   scale_y_continuous(breaks = seq(0,350000, by = 50000)) +
   labs (title = "Rat Population In Each Borough Over Time", subtitle = "Do rats proliferate faster in certain Boroughs?", x = "Year", y = "Population" ) +
   theme_fivethirtyeight() +
-  theme(axis.title = element_text()) 
-
+  theme(axis.title = element_text())
+  
 ggsave("graphQueensTotalN.png", height = 2400, width = 3840, units = "px")
 
 ```
@@ -1502,6 +1504,37 @@ write.csv(df_Staten_Island_Neighborhood_Rats, "C:\\Users\\Admin\\Desktop\\RatsDa
 
 ```{r Rat per Capita and Rat per sqm}
 
-nyc_capita_area <- read_csv("nyc_pop_zip_area_2020")
+nyc_capita_area <- read_csv("nyc_pop_zip_area_2020_by_neigborhood.csv")
+
+nyc_neighborhoods_2020 <- rbind(df_The_Bronx_Neighborhood_Rats, df_Brooklyn_Neighborhood_Rats, df_Manhattan_Neighborhood_Rats, df_Queens_Neighborhood_Rats, df_Staten_Island_Neighborhood_Rats)
+
+nyc_neighborhoods_2020 <- nyc_neighborhoods_2020 %>% filter(Year == 2020)
+
+df_nyc_ratio_and_density <- merge(nyc_capita_area,nyc_neighborhoods_2020)
+
+df_nyc_ratio_and_density <- df_nyc_ratio_and_density %>% mutate(human_rat_ratio = numRats/human_population)
+
+df_nyc_ratio_and_density <- df_nyc_ratio_and_density %>% mutate(rats_per_sqm = numRats/square_meter)
+
+write.csv(df_nyc_ratio_and_density, "C:\\Users\\Admin\\Desktop\\RatsData\\DataSets\\df_nyc_ratio_and_density.csv", row.names=FALSE)
+
+mean(df_nyc_ratio_and_density$human_rat_ratio)
+median(df_nyc_ratio_and_density$human_rat_ratio)
+
+mean(df_nyc_ratio_and_density$rats_per_sqm)
+median(df_nyc_ratio_and_density$rats_per_sqm)
+
+ggplot(df_nyc_ratio_and_density,aes(x = rats_per_sqm, y = human_rat_ratio, color = Neighborhood)) + 
+  geom_point() + 
+  geom_label_repel(aes(label = Neighborhood),
+                  box.padding   = 0.35, 
+                  point.padding = 0.5,
+                  segment.color = 'grey50') +
+  labs (title = "Rat Ratios", subtitle = "2020 Data", x = "Rat / Square Meter", y = "Human-Rat Ratio" ) + 
+  theme_fivethirtyeight() +
+  theme(axis.title = element_text()) +
+  theme(legend.position="none")
+
+ggsave("graphNYCRatio.png", height = 7680, width = 3840, units = "px")
 
 ```
