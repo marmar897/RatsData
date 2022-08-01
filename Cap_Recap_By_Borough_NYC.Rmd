@@ -1461,7 +1461,7 @@ ggplot(df_nyc_ratio_and_density,aes(x = rats_per_sqm, y = human_rat_ratio, color
                   box.padding   = 0.35, 
                   point.padding = 0.5,
                   segment.color = 'grey50') +
-  labs (title = "Rat Ratios", subtitle = "2020", x = "Rat / Square Meter", y = "Human-Rat Ratio" ) + 
+  labs (title = "Rats Ratio 2020", subtitle = "How many Rats are there per person? How many Rats per square meter?", x = "Rat / Square Meter", y = "Rat-Human Ratio" ) + 
   theme_fivethirtyeight() +
   theme(axis.title = element_text()) +
   theme(legend.position="none")
