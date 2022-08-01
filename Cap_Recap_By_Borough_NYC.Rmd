@@ -632,7 +632,8 @@ df_The_Bronx_Neighborhood_Rats <- rbind(df_Central_Bronx, df_Bronx_Park_Fordham,
 rm(df_Central_Bronx, df_Bronx_Park_Fordham, df_High_Bridge_Morrisania, df_Hunts_Point_Mott_Haven, df_Kingsbridge_Riverdale, df_Northeast_Bronx, df_Southeast_Bronx)
 
 graphBronxTotal.static <- ggplot(df_The_Bronx_Neighborhood_Rats, aes(x = Year, y = numRats, color = Neighborhood)) +
-  geom_line(size = 1.5) +
+  geom_line(size = 1.5, aes(alpha = Neighborhood)) +
+  scale_alpha_manual(values=c(0.3,0.3,0.3,0.3,1,0.3,1)) +
   scale_x_continuous(breaks = seq(2011,2021, by = 1)) +
   scale_y_continuous(breaks = seq(0,350000, by = 50000)) +
   labs (title = "Rat Population In Each Borough Over Time", subtitle = "Do rats proliferate faster in certain Boroughs?", x = "Year", y = "Population" ) +
@@ -893,7 +894,8 @@ df_Brooklyn_Neighborhood_Rats <- rbind(df_Central_Brooklyn, df_Southwest_Brookly
 rm(df_Central_Brooklyn, df_Southwest_Brooklyn, df_Borough_Park, df_Canarsie_Flatlands, df_Southern_Brooklyn, df_Northwest_Brooklyn, df_Flatbush, df_East_NY_New_Lots, df_Greenpoint, df_Bushwick_Williamsburg, df_Sunset_Park)
 
 graphBrooklynTotal.static <- ggplot(df_Brooklyn_Neighborhood_Rats, aes(x = Year, y = numRats, color = Neighborhood)) +
-  geom_line(size = 1.5) +
+  geom_line(size = 1.5, aes(alpha = Neighborhood)) +
+  scale_alpha_manual(values=c(0.3,1,1,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3)) +
   scale_x_continuous(breaks = seq(2011,2021, by = 1)) +
   scale_y_continuous(breaks = seq(0,350000, by = 50000)) +
   labs (title = "Rat Population In Each Borough Over Time", subtitle = "Do rats proliferate faster in certain Boroughs?", x = "Year", y = "Population" ) +
@@ -1132,7 +1134,8 @@ df_Manhattan_Neighborhood_Rats <- rbind(df_Central_Harlem, df_Chelsea_Clinton, d
 rm(df_Central_Harlem, df_Chelsea_Clinton, df_East_Harlem, df_Gramercy_Park_Murray_Hill, df_Greenwich_Village_SoHo, df_Lower_Manhattan, df_Lower_East, df_Upper_East, df_Upper_West, df_Inwood_Washington_Heights)
 
 graphManhattanTotal.static <- ggplot(df_Manhattan_Neighborhood_Rats, aes(x = Year, y = numRats, color = Neighborhood)) +
-  geom_line(size = 1.5) +
+  geom_line(size = 1.5, aes(alpha = Neighborhood)) +
+  scale_alpha_manual(values=c(0.3,1,0.3,0.3,1,0.3,0.3,0.3,0.3,0.3)) +
   scale_x_continuous(breaks = seq(2011,2021, by = 1)) +
   scale_y_continuous(breaks = seq(0,350000, by = 50000)) +
   labs (title = "Rat Population In Each Borough Over Time", subtitle = "Do rats proliferate faster in certain Boroughs?", x = "Year", y = "Population" ) +
@@ -1371,9 +1374,10 @@ df_Queens_Neighborhood_Rats <- rbind(df_Northeast_Queens, df_North_Queens, df_Ce
 rm(df_Northeast_Queens, df_North_Queens, df_Central_Queens, df_Jamaica, df_Northwest_Queens, df_West_Central_Queens, df_Rockaways, df_Southeast_Queens, df_Southwest_Queens, df_West_Queens)
 
 graphQueensTotal.static <- ggplot(df_Queens_Neighborhood_Rats, aes(x = Year, y = numRats, color = Neighborhood)) +
-  geom_line(size = 1.5) +
+  geom_line(size = 1.5, aes(alpha = Neighborhood)) +
+  scale_alpha_manual(values=c(1,0.3,0.3,1,0.3,1,1,0.3,0.3,0.3)) +
   scale_x_continuous(breaks = seq(2011,2021, by = 1)) +
-  scale_y_continuous(breaks = seq(0,350000, by = 50000)) +
+  scale_y_continuous(breaks = seq(0,400000, by = 50000)) +
   labs (title = "Rat Population In Each Borough Over Time", subtitle = "Do rats proliferate faster in certain Boroughs?", x = "Year", y = "Population" ) +
   theme_fivethirtyeight() +
   theme(axis.title = element_text())
@@ -1530,11 +1534,11 @@ ggplot(df_nyc_ratio_and_density,aes(x = rats_per_sqm, y = human_rat_ratio, color
                   box.padding   = 0.35, 
                   point.padding = 0.5,
                   segment.color = 'grey50') +
-  labs (title = "Rat Ratios", subtitle = "2020 Data", x = "Rat / Square Meter", y = "Human-Rat Ratio" ) + 
+  labs (title = "Rat Ratios", subtitle = "2020", x = "Rat / Square Meter", y = "Human-Rat Ratio" ) + 
   theme_fivethirtyeight() +
   theme(axis.title = element_text()) +
   theme(legend.position="none")
 
-ggsave("graphNYCRatio.png", height = 7680, width = 3840, units = "px")
+ggsave("graphNYCRatio.png", height = 3840, width = 3840, units = "px")
 
 ```
