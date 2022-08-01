@@ -40,55 +40,6 @@ df_NYC <- rename(df_NYC, Zip  = `Incident Zip` )
 df_NYC <- df_NYC %>% filter(Zip %in% (10001:11697))
 df_NYC <- separate(df_NYC, "Month_Year", c("Month","Year"), sep = "/")
 df_NYC <- df_NYC[order(df_NYC$Year),]
-
-write.csv(df_NYC, "C:\\Users\\Admin\\Desktop\\RatsData\\df_NYC.csv", row.names=FALSE)
-```
-
-```{r test_cap_recap_function}
-# lots_year_1 <- df_NYC %>% filter(Year == "2020") %>% pull(BBL)
-# lots_year_2 <- df_NYC %>% filter(Year == "2021") %>% pull(BBL)
-# number_in_year_1 <- length(lots_year_1)
-# number_in_year_2 <- length(lots_year_2)
-# number_in_year_1_and_2 <- sum(lots_year_1 %in% lots_year_2)
-# 
-# number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
-```
-
-```{r calls_to_numRats}
-# 50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
-```
-
-```{r cap_recap_function}
-# capture_recapture <- function(year) {
-#   lots_year_1 <- df_NYC %>% filter(Year == year - 1) %>% pull(BBL)
-#   lots_year_2 <- df_NYC %>% filter(Year == year) %>% pull(BBL)
-#   number_in_year_1 <- length(lots_year_1)
-#   number_in_year_2 <- length(lots_year_2)
-#   number_in_year_1_and_2 <- sum(lots_year_1 %in% lots_year_2)
-#   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
-# }
-```
-
-```{r jonathan_rat_pop}
-# qplot(x = factor(2011:2021),
-#       weight = sapply(2011:2021, capture_recapture),
-#       geom = "bar")  +
-#   labs(x = "year",
-#        y = "estimated rat population") +
-#   theme_bw()
-```
-
-```{r calls}
-# library(ggplot2)
-# ggplot(df_NYC, aes(fill= Borough, y = count , x = Year)) +
-#   geom_bar(position = "stack", stat = "identity") 
-```
-
-```{r replicating capture recapture but for dataframe not just an integer}
-# lots_year_18 <- df_NYC %>% filter(Year == "18") %>% select(BBL, Borough, Zip)
-# lots_year_19 <- df_NYC %>% filter(Year == "19") %>% select(BBL, Borough, Zip)
-# 
-# common_lots_18_19 <- inner_join(lots_year_18, lots_year_19)
 ```
 
 ```{r calls Bronx}
@@ -250,7 +201,7 @@ df_Staten_Island <- rbind(df_Port_Richmond, df_South_Shore, df_Stapleton_StGeorg
 ```{r calls NYC}
 
 df_NYC <- rbind(df_The_Bronx, df_Brooklyn, df_Manhattan, df_Queens, df_Staten_Island)
-write.csv(df_NYC, "C:\\Users\\Admin\\Desktop\\RatsData\\df_NYC.csv", row.names=FALSE)
+write.csv(df_NYC, "C:\\Users\\Admin\\Desktop\\RatsData\\DataSets\\df_NYC.csv", row.names=FALSE)
 
 ```
 
@@ -387,30 +338,6 @@ df_Staten_Island_Num_Rats <- df_Staten_Island_Num_Rats %>%
 df_Staten_Island_Num_Rats <- rename(df_Staten_Island_Num_Rats, numRats = df_Staten_Island_Num_Rats)
 ```
 
-```{r blanket cap-recap NYC}
-# capture_recapture_nyc <- function(year) {
-#   lots_year_1 <- df_NYC %>% filter(Year == year - 1) %>% pull(BBL)
-#   lots_year_2 <- df_NYC %>% filter(Year == year) %>% pull(BBL)
-#   number_in_year_1 <- length(lots_year_1)
-#   number_in_year_2 <- length(lots_year_2)
-#   number_in_year_1_and_2 <- sum(lots_year_1 %in% lots_year_2)
-#   50 * number_in_year_1 * number_in_year_2 / number_in_year_1_and_2
-# }
-# 
-# df_NYC_Num_Rats <- sapply(11:21, capture_recapture_nyc)
-# df_NYC_Num_Rats <- as.data.frame(df_NYC_Num_Rats)
-# 
-# df_NYC_Num_Rats <- df_NYC_Num_Rats %>%
-#   add_column(Group = "NYC",
-#              .after = "df_NYC_Num_Rats")
-# 
-# df_NYC_Num_Rats <- df_NYC_Num_Rats %>%
-#   add_column(Year = 11:21,
-#              .after = "Group")
-# 
-# df_NYC_Num_Rats <- rename(df_NYC_Num_Rats, numRats = df_NYC_Num_Rats)
-```
-
 ```{r Cumulative}
 
 options(scipen = 999)
@@ -452,8 +379,8 @@ graph1.anim <- ggplot(df_NYC_Num_Rats, aes(x = Year, y = numRats, color = Boroug
    transition_reveal(Year) +
    view_follow()
 
-# animate(graph1.anim, height = 1000, width = 1600, fps = 30, duration = 15, end_pause = 90, res = 100)
-# anim_save("graph1anim.gif")
+animate(graph1.anim, height = 1000, width = 1600, fps = 30, duration = 15, end_pause = 90, res = 100)
+anim_save("graph1anim.gif")
 
 graph2.anim <- ggplot(df_NYC_Num_Rats, aes(x = Year, y = numRats, fill = Borough)) +
    geom_area(alpha=0.725) +
@@ -465,8 +392,8 @@ graph2.anim <- ggplot(df_NYC_Num_Rats, aes(x = Year, y = numRats, fill = Borough
    transition_reveal(Year) +
    view_follow()
 
-# animate(graph2.anim, height = 1000, width = 1600, fps = 30, duration = 15, end_pause = 90, res = 100)
-# anim_save("graph2anim.gif")
+animate(graph2.anim, height = 1000, width = 1600, fps = 30, duration = 15, end_pause = 90, res = 100)
+anim_save("graph2anim.gif")
 
 ```
 
@@ -1540,5 +1467,17 @@ ggplot(df_nyc_ratio_and_density,aes(x = rats_per_sqm, y = human_rat_ratio, color
   theme(legend.position="none")
 
 ggsave("graphNYCRatio.png", height = 3840, width = 3840, units = "px")
+
+```
+
+```{r violation Data Sets}
+
+open_parking_violations <- read_csv("july_11_hydrant_violations.csv")
+
+observed_violations <- read_csv("july_11_observations.csv")
+
+result <- merge(open_parking_violations, observed_violations, by = "Plate")
+
+write.csv(result, "C:\\Users\\Admin\\Desktop\\RatsData\\DataSets\\result.csv", row.names=FALSE)
 
 ```
