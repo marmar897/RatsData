@@ -1481,3 +1481,29 @@ result <- merge(open_parking_violations, observed_violations, by = "Plate")
 write.csv(result, "C:\\Users\\Admin\\Desktop\\RatsData\\DataSets\\result.csv", row.names=FALSE)
 
 ```
+
+```{r violation map}
+install.packages("ggmap")
+
+library("ggmap")
+
+register_google("AIzaSyBw3UEAd20Hs6sAbqqfkSsEFoJXVfPn04U")
+
+Manhattan_observed.map <- get_map(location= 'Manhattan, New York', 
+                       maptype='roadmap', color='bw',source='google',zoom=12)
+ggmap(Manhattan_observed.map) + 
+  geom_point(observed_violations, color='red', size=2, mapping = aes(x=longdd, y=latdd)) +
+  theme(axis.ticks = element_blank(), axis.text = element_blank()) +
+  xlab('') + ylab('')
+
+ggsave("observed_manhattan.png", height = 1920, width = 1920, units = "px")
+
+Manhattan_ticketed.map <- get_map(location= 'Manhattan, New York', 
+                       maptype='roadmap', color='bw',source='google',zoom=12)
+ggmap(Manhattan_ticketed.map) + 
+  geom_point(result, color='red', size=2, mapping = aes(x=longdd, y=latdd)) +
+  theme(axis.ticks = element_blank(), axis.text = element_blank()) +
+  xlab('') + ylab('')
+
+ggsave("ticketed_manhattan.png", height = 1920, width = 1920, units = "px")
+```
