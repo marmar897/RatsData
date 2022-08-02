@@ -16,6 +16,7 @@ library(magrittr)
 modzcta <- st_read("geo_export_9d592ba8-7629-4558-9e78-e1e536b453d9.shp")
 
 df <- read.csv("df_NYC.csv")
+totalnum <- read.csv("ratsTotalNumbers2.csv")
 
 #ORGANIZING DATA FOR PERCENT MAP (angela)
 #percent of calls in each zip code
@@ -366,9 +367,12 @@ ui <- navbarPage("NYC Rat Population Estimate",
                  p("     - In Manhattan and The Bronx, the neighborhoods with a higher number of rats seem to be located close to parks")
                ),
                mainPanel(
-                 leafletOutput("year_map"))
+                 leafletOutput("year_map"),
+                 br(),
+                 img(src="regularPop.png", align = "left", height='300px', width='500px')
+                 )
              )
-             ),
+    ),
     
     tabPanel("Estimated Rat Population by Year (zip)",
              sidebarLayout(
@@ -377,7 +381,9 @@ ui <- navbarPage("NYC Rat Population Estimate",
                              c(2011,2012,2013,2014,2015,
                                2016,2017,2018,2019,2020,2021))),
                mainPanel(
-                 leafletOutput("year_map_zip"))
+                 leafletOutput("year_map_zip"),
+                 br(),
+                 img(src="zipPop.png", align = "left", height='300px', width='500px'))
              )
     ),
     
@@ -388,20 +394,19 @@ ui <- navbarPage("NYC Rat Population Estimate",
                              c(2011,2012,2013,2014,2015,2016,
                                2017,2018,2019,2020,2021))),
                mainPanel(
-                 leafletOutput("dyn_map")),
+                 leafletOutput("dyn_map"),
+                 br(),
+                 img(src="dynamicPop.png", align = "left", height='300px', width='500px')),
              )
     ),
              
     tabPanel("Other Data Visualizations",
-             sidebarLayout(
-               sidebarPanel(
-                 p("Rats are a part of New York, whether we like it or not. From the iconic Pizza rat to their mascot Buddy the Rat, who dons a suit and a giant rat mask, New York has no shortage of rats. But how many Rats are there really in New York? Which borough harbors the most rats? Which boroughs have had their rat neighbors grow the most? Here we have two animated graphs showing just that. The first graph shows the cumulative number of rats separated into boroughs over the years. While the first graph better shows the total number of rats, it is difficult to see the population growth by borough. The second graph better represents how much the rat population has grown in each borough."),
-                 p("Disclaimer: The methods used in estimating the number of rats may differ depending on how the data is processed. For example, aplying the capture_recapture function to the New York City as a whole gives a total rat population of 3.1 million. However, applying the previously mentioned function on each of the  New York City Boroughs and then adding their results, gives a total of 3.3 million rats. Acceptable varaince still needs to be discussed. So, take these values with a grain of salt and a ±10% range of error.")
-               ),
-               mainPanel(img(src="graph2anim.gif", align = "left", height='300px', width='600px'),
-                         img(src="graph1anim.gif", align = "left", height='300px', width='600px'),
-                        img(src="graph1.png", align = "left", height='300px', width='600px')))
-             )
+             mainPanel(
+             img(src="combPop.png", align = "left", height='300px', width='500px'),
+             img(src="variance.jpeg", align = "left", height='300px', width='300px'),
+             img(src="graph2animv2.gif", align = "left", height='400px', width='600px'),
+             img(src="graph1v2.png", align = "left", height='400px', width='600px'),
+             img(src="graphNycRatio.png", align = "left", height='600px', width='600px')))
     )
     
 
