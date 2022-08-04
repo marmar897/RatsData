@@ -7,10 +7,12 @@
 
 <p> http://angelatan222.shinyapps.io/ratsdata</p>
 
-<h3> Heres a link to our PowerPoint Presentation</h3>
+<h3> Heres a link to our PowerPoint Presentation :</h3>
 
 <p> https://docs.google.com/presentation/d/1V_3nK7jyipx02nCeDvNV35CbCPbSxLvKgVDyN_TpqE8/edit?usp=sharing</p>
-<p>https://github.com/jauerbach/estimating-nyc-rat-populationß </p> 
+
+
+<p>This is a link to the original projection mentioned https://github.com/jauerbach/estimating-nyc-rat-populationß </p> 
 
 <h3>Project Outline: </h3>
 <p> 
