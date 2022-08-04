@@ -1,0 +1,72 @@
+---
+title: "interactive map"
+author: "Angela Tan"
+date: '2022-06-20'
+output: html_document
+---
+
+```{r}
+#install.packages("shiny")
+library(shiny)
+install.packages("leaflet")
+install.packages("sf")
+library(sf)
+library(leaflet)
+install.packages("tigris")
+library(tigris)
+
+
+#modzcta shapefiles from NYC open data
+unzip("Data/Modified Zip Code Tabulation Areas (MODZCTA).zip")
+modzcta <- st_read("geo_export_3978893c-1fb8-4e9c-b3b7-93c7014999d4.shp")
+head(modzcta)
+
+df1 <- read.csv("Data/rats_cleaned.csv")
+df <- df1 %>%
+      filter(Year > 2014)
+#percent of calls in each zip code
+total <- sum(df$count) #total 311 calls
+df <- df %>%
+      group_by(zip) %>%
+      summarize(percent = (sum(count)/total)*100) 
+df$zip<-as.character(df$zip)
+
+all_modzcta <- geo_join(modzcta, df, "modzcta", "zip", how = "inner")
+#head(all_modzcta)
+
+saveRDS(all_modzcta, "all_modzcta.RDS")
+
+#labels when you hover over a zip block
+labels <-sprintf(
+  "<strong>%s</strong><br/>%g%% ",
+  all_modzcta$modzcta,all_modzcta$percent) %>%
+  lapply(htmltools::HTML)
+
+pal <-colorBin(palette="Reds", 9, domain = all_modzcta$percent)
+
+#build interactive map
+map_interactive <-all_modzcta %>%
+  st_transform(crs = "+init=epsg:4326") %>% #transform data into coordinate system
+  leaflet() %>%
+  addProviderTiles(provider = "CartoDB.Positron") %>%
+  addPolygons(label = labels,
+              stroke = FALSE,
+              smoothFactor = 0.5,
+              opacity = 1,
+              fillOpacity = 0.7,
+              fillColor = ~pal(percent),
+              highlightOptions = highlightOptions(
+                    weight = 5,
+                    color = "black",
+                    fillOpacity = 1,
+                    opacity = 1,
+                    bringToFront = TRUE))%>%
+addLegend("topleft",
+          pal = pal,
+          values = ~percent,
+          title = "% of Total 311 Rat Sightings Reported",
+          opacity = 0.7)
+map_interactive
+
+#saveWidget(map_interactive, "nyc_average_rats.html")
+```
