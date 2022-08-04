@@ -12,7 +12,7 @@
 <p> https://docs.google.com/presentation/d/1V_3nK7jyipx02nCeDvNV35CbCPbSxLvKgVDyN_TpqE8/edit?usp=sharing</p>
 
 
-<p>This is a link to the original projection mentioned https://github.com/jauerbach/estimating-nyc-rat-populationß </p> 
+<p>This is a link to the original project mentioned https://github.com/jauerbach/estimating-nyc-rat-populationß </p> 
 
 <h3>Project Outline: </h3>
 <p> 
