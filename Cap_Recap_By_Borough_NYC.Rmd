@@ -1457,6 +1457,8 @@ median(df_nyc_ratio_and_density$rats_per_sqm)
 
 ggplot(df_nyc_ratio_and_density,aes(x = rats_per_sqm, y = human_rat_ratio, color = Neighborhood)) + 
   geom_point() + 
+  scale_x_continuous(breaks = seq(0,0.025, by = 0.001)) +
+  scale_y_continuous(breaks = seq(0,1.1, by = 0.05)) +
   geom_label_repel(aes(label = Neighborhood),
                   box.padding   = 0.35, 
                   point.padding = 0.5,
