@@ -98,11 +98,11 @@ df_East_NY_New_Lots <- df_NYC %>% filter(Zip%in% c(11207, 11208))
 df_Greenpoint <- df_NYC %>% filter(Zip%in% c(11211, 11222))
   df_Greenpoint$Neighborhood <- "GREENPOINT"
   
-df_Bushwick_Williamsburg <- df_NYC %>% filter(Zip%in% c(11220, 11232))
-  df_Bushwick_Williamsburg$Neighborhood <- "BUSHWICK AND WILLIAMSBURG"
-  
-df_Sunset_Park <- df_NYC %>% filter(Zip%in% c(11206, 11221, 12237))
+df_Sunset_Park <- df_NYC %>% filter(Zip%in% c(11220, 11232))
   df_Sunset_Park$Neighborhood <- "SUNSET PARK"
+  
+df_Bushwick_Williamsburg <- df_NYC %>% filter(Zip%in% c(11206, 11221, 12237))
+  df_Bushwick_Williamsburg$Neighborhood <- "BUSHWICK AND WILLIAMSBURG"
 
 df_Brooklyn <- rbind(df_Central_Brooklyn, df_Southwest_Brooklyn, df_Borough_Park, df_Canarsie_Flatlands, df_Southern_Brooklyn, df_Northwest_Brooklyn, df_Flatbush, df_East_NY_New_Lots, df_Greenpoint, df_Bushwick_Williamsburg, df_Sunset_Park)
 
@@ -165,7 +165,7 @@ df_West_Central_Queens <- df_NYC %>% filter(Zip%in% c(11374, 11375, 11379, 11385
   df_West_Central_Queens$Neighborhood <- "WEST CENTRAL QUEENS"
 
 df_Rockaways <- df_NYC %>% filter(Zip%in% c(11691, 11692, 11693, 11694, 11697))
-  df_Rockaways$Neighborhood <- "ROCKAWAYS"
+  df_Rockaways$Neighborhood <- "ROCKAWAYS"  #11695 is a PO Box and is excluded
   
 df_Southeast_Queens <- df_NYC %>% filter(Zip%in% c(11004, 11005, 11411, 11413, 11422, 11426, 11427, 11428, 11429))
   df_Southeast_Queens$Neighborhood <- "SOUTHEAST QUEENS"
