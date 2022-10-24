@@ -1479,7 +1479,21 @@ open_parking_violations <- read_csv("july_11_hydrant_violations.csv")
 
 observed_violations <- read_csv("july_11_observations.csv")
 
+called_in <- read_csv("calledin.csv")
+
 result <- merge(open_parking_violations, observed_violations, by = "Plate")
+
+rounded_observed <- observed_violations
+
+rounded_observed$latdd <- round(rounded_observed$latdd, digit = 4)
+rounded_observed$longdd <- round(rounded_observed$longdd, digit = 4)
+
+rounded_calledin <- called_in
+
+rounded_calledin$latdd <- round(called_in$latdd, digit = 4)
+rounded_calledin$longdd <- round(called_in$longdd, digit = 4)
+
+rounded_overlap <- merge(rounded_observed, rounded_calledin, by = c("latdd", "longdd"))
 
 write.csv(result, "C:\\Users\\Admin\\Desktop\\RatsData\\DataSets\\result.csv", row.names=FALSE)
 
@@ -1490,7 +1504,7 @@ install.packages("ggmap")
 
 library("ggmap")
 
-register_google("") #Insert API Key here
+register_google("AIzaSyBw3UEAd20Hs6sAbqqfkSsEFoJXVfPn04U") #Insert API Key here
 
 Manhattan_observed.map <- get_map(location= 'Manhattan, New York', 
                        maptype='roadmap', color='bw',source='google',zoom=12)
@@ -1509,4 +1523,24 @@ ggmap(Manhattan_ticketed.map) +
   xlab('') + ylab('')
 
 ggsave("ticketed_manhattan.png", height = 1920, width = 1920, units = "px")
+
+
+Manhattan_calledin.map <- get_map(location= 'Manhattan, New York', 
+                       maptype='roadmap', color='bw',source='google',zoom=12)
+ggmap(Manhattan_calledin.map) + 
+  geom_point(called_in, color='red', size=2, mapping = aes(x=longdd, y=latdd)) +
+  theme(axis.ticks = element_blank(), axis.text = element_blank()) +
+  xlab('') + ylab('')
+
+ggsave("calledin_manhattan.png", height = 1920, width = 1920, units = "px")
+
+Manhattan_calledin_overlap.map <- get_map(location= 'Manhattan, New York', 
+                       maptype='roadmap', color='bw',source='google',zoom=12)
+ggmap(Manhattan_calledin_overlap.map) + 
+  geom_point(called_in_overlap, color='red', size=2, mapping = aes(x=longdd, y=latdd)) +
+  theme(axis.ticks = element_blank(), axis.text = element_blank()) +
+  xlab('') + ylab('')
+
+ggsave("calledin_overlap_manhattan.png", height = 1920, width = 1920, units = "px")
+
 ```
