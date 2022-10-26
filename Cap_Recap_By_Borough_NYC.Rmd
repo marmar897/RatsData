@@ -1485,13 +1485,13 @@ result <- merge(open_parking_violations, observed_violations, by = "Plate")
 
 rounded_observed <- observed_violations
 
-rounded_observed$latdd <- round(rounded_observed$latdd, digit = 4)
-rounded_observed$longdd <- round(rounded_observed$longdd, digit = 4)
+rounded_observed$latdd <- round(rounded_observed$latdd, digit = 3)
+rounded_observed$longdd <- round(rounded_observed$longdd, digit = 3)
 
 rounded_calledin <- called_in
 
-rounded_calledin$latdd <- round(called_in$latdd, digit = 4)
-rounded_calledin$longdd <- round(called_in$longdd, digit = 4)
+rounded_calledin$latdd <- round(called_in$latdd, digit = 3)
+rounded_calledin$longdd <- round(called_in$longdd, digit = 3)
 
 rounded_overlap <- merge(rounded_observed, rounded_calledin, by = c("latdd", "longdd"))
 
@@ -1537,7 +1537,7 @@ ggsave("calledin_manhattan.png", height = 1920, width = 1920, units = "px")
 Manhattan_calledin_overlap.map <- get_map(location= 'Manhattan, New York', 
                        maptype='roadmap', color='bw',source='google',zoom=12)
 ggmap(Manhattan_calledin_overlap.map) + 
-  geom_point(called_in_overlap, color='red', size=2, mapping = aes(x=longdd, y=latdd)) +
+  geom_point(rounded_overlap, color='red', size=2, mapping = aes(x=longdd, y=latdd)) +
   theme(axis.ticks = element_blank(), axis.text = element_blank()) +
   xlab('') + ylab('')
 
