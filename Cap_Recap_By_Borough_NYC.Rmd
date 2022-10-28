@@ -1504,7 +1504,7 @@ install.packages("ggmap")
 
 library("ggmap")
 
-register_google("AIzaSyBw3UEAd20Hs6sAbqqfkSsEFoJXVfPn04U") #Insert API Key here
+register_google("") #Insert API Key here
 
 Manhattan_observed.map <- get_map(location= 'Manhattan, New York', 
                        maptype='roadmap', color='bw',source='google',zoom=12)
