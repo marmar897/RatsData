@@ -3,6 +3,10 @@
 <h3> Estimating the number of rats in New York City [Rats]
 </h3>
 
+<h3> Link to Data Blog Website </h3>
+<p> https://pit-dsc-rats.github.io/ </p>
+<p> added Oct 27, 2022 </p>
+
 <h3> Heres a link to our RShiny App: </h3>
 
 <p> http://angelatan222.shinyapps.io/ratsdata</p>
